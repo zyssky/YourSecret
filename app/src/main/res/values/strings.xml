@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">YourSecret</string>
+    <string name="app_name">AndroidpnClient</string>
+    <string name="hello">Hello Android, DemoAppActivity!</string>
+    <string name="settings">Settings</string>
 </resources>
