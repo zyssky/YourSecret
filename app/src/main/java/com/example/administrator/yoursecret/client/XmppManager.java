@@ -268,6 +268,17 @@ public class XmppManager {
         Log.d(LOGTAG, "addTask(runnable)... done");
     }
 
+    private void dropTask(int count){
+        synchronized (taskList) {
+            if (count <= taskList.size()) {
+                for (int i = 0; i < count; i++) {
+                    taskList.remove(0);
+                    taskTracker.decrease();
+                }
+            }
+        }
+    }
+
     private void removeAccount() {
         Editor editor = sharedPrefs.edit();
         editor.remove(Constants.XMPP_USERNAME);
@@ -313,6 +324,8 @@ public class XmppManager {
 
                 } catch (XMPPException e) {
                     Log.e(LOGTAG, "XMPP connection failed", e);
+                    xmppManager.dropTask(2);
+                    xmppManager.startReconnectionThread();
                 }
 
                 xmppManager.runTask();
@@ -330,6 +343,10 @@ public class XmppManager {
     private class RegisterTask implements Runnable {
 
         final XmppManager xmppManager;
+
+        boolean isRegisterSucceed = false;
+
+        boolean hasDropTask = false;
 
         private RegisterTask() {
             xmppManager = XmppManager.this;
@@ -378,10 +395,14 @@ public class XmppManager {
                                 editor.putString(Constants.XMPP_PASSWORD,
                                         newPassword);
                                 editor.commit();
-                                Log
-                                        .i(LOGTAG,
-                                                "Account registered successfully");
-                                xmppManager.runTask();
+
+                                synchronized (xmppManager){
+                                    isRegisterSucceed = true;
+                                    Log.i(LOGTAG, "Account registered successfully");
+                                    if(!hasDropTask)
+                                        xmppManager.runTask();
+                                }
+
                             }
                         }
                     }
@@ -398,6 +419,22 @@ public class XmppManager {
                 registration.addAttribute("username", newUsername);
                 registration.addAttribute("password", newPassword);
                 connection.sendPacket(registration);
+                try {
+                    Thread.sleep(10*1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                synchronized (xmppManager){
+                    if(!isRegisterSucceed){
+                        xmppManager.dropTask(1);
+                        startReconnectionThread();
+                        xmppManager.runTask();
+                        hasDropTask = true;
+                    }
+                }
+
+
 
             } else {
                 Log.i(LOGTAG, "Account registered already");
@@ -444,7 +481,7 @@ public class XmppManager {
                             .getNotificationPacketListener();
                     connection.addPacketListener(packetListener, packetFilter);
 
-                    xmppManager.runTask();
+
 
                 } catch (XMPPException e) {
                     Log.e(LOGTAG, "LoginTask.run()... xmpp error");
@@ -465,6 +502,8 @@ public class XmppManager {
                     Log.e(LOGTAG, "Failed to login to xmpp server. Caused by: "
                             + e.getMessage());
                     xmppManager.startReconnectionThread();
+                }finally {
+                    xmppManager.runTask();
                 }
 
             } else {
