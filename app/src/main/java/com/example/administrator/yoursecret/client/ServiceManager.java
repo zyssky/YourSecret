@@ -16,12 +16,14 @@
 package com.example.administrator.yoursecret.client;
 
 import java.util.Properties;
+import java.util.Random;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 /** 
@@ -102,31 +104,26 @@ public final class ServiceManager {
         context.stopService(intent);
     }
 
-    //    private String getMetaDataValue(String name, String def) {
-    //        String value = getMetaDataValue(name);
-    //        return (value == null) ? def : value;
-    //    }
-    //
-    //    private String getMetaDataValue(String name) {
-    //        Object value = null;
-    //        PackageManager packageManager = context.getPackageManager();
-    //        ApplicationInfo applicationInfo;
-    //        try {
-    //            applicationInfo = packageManager.getApplicationInfo(context
-    //                    .getPackageName(), 128);
-    //            if (applicationInfo != null && applicationInfo.metaData != null) {
-    //                value = applicationInfo.metaData.get(name);
-    //            }
-    //        } catch (NameNotFoundException e) {
-    //            throw new RuntimeException(
-    //                    "Could not read the name in the manifest file.", e);
-    //        }
-    //        if (value == null) {
-    //            throw new RuntimeException("The name '" + name
-    //                    + "' is not defined in the manifest file's meta data.");
-    //        }
-    //        return value.toString();
-    //    }
+    public void setDeviceIdByDevice(){
+        if(sharedPrefs.getString(Constants.DEVICE_ID,null)!=null)
+            return;
+        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        String deviceId = telephonyManager.getDeviceId();
+        // Log.d(LOGTAG, "deviceId=" + deviceId);
+        Editor editor = sharedPrefs.edit();
+        editor.putString(Constants.DEVICE_ID, deviceId);
+        editor.commit();
+    }
+
+    public void setDeviceIdByRandom(){
+        if(sharedPrefs.getString(Constants.DEVICE_ID,null)!=null)
+            return;
+        long id = new Random().nextLong();
+        String deviceId = Long.toHexString(id);
+        Editor editor = sharedPrefs.edit();
+        editor.putString(Constants.DEVICE_ID, deviceId);
+        editor.commit();
+    }
 
     private Properties loadProperties() {
         //        InputStream in = null;
