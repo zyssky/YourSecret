@@ -89,11 +89,9 @@ public class NotificationService extends Service {
                 Context.MODE_PRIVATE);
 
         // Get deviceId
-        deviceId = telephonyManager.getDeviceId();
+        deviceId = sharedPrefs.getString(Constants.DEVICE_ID,"");
         // Log.d(LOGTAG, "deviceId=" + deviceId);
         Editor editor = sharedPrefs.edit();
-        editor.putString(Constants.DEVICE_ID, deviceId);
-        editor.commit();
 
         // If running on an emulator
         if (deviceId == null || deviceId.trim().length() == 0
