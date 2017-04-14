@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppContants;
-import com.example.administrator.yoursecret.EventsHandler.LoginHandler;
 import com.example.administrator.yoursecret.R;
 
 /**

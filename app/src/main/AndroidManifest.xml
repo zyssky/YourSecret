@@ -15,32 +15,33 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".Activities.TestActivity">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".client.NotificationDetailsActivity"
-            android:label="Notification Details"></activity>
+            android:label="Notification Details" />
         <activity
             android:name=".client.NotificationSettingsActivity"
-            android:label="Notification Settings"></activity>
+            android:label="Notification Settings" />
 
         <service
             android:name=".client.NotificationService"
             android:enabled="true"
             android:exported="false"
-            android:label="NotificationService"></service>
+            android:label="NotificationService" />
         <!--
             <meta-data android:name="ANDROIDPN_API_KEY"
             android:value="1234567890" />
         -->
 
-        <activity android:name=".Activities.LoginActivity">
+        <activity android:name=".Activities.LoginActivity"></activity>
+        <activity android:name=".Home.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

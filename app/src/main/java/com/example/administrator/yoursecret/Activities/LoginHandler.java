@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.EventsHandler;
+package com.example.administrator.yoursecret.Activities;
 
 import android.os.Bundle;
 import android.util.Log;

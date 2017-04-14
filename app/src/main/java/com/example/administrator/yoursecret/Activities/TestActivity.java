@@ -13,7 +13,7 @@ import android.widget.Button;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.client.ServiceManager;
 
-public class MainActivity extends AppCompatActivity {
+public class TestActivity extends AppCompatActivity {
 
     final int MY_PERMISSION_READ_PHONE_STATE = 0;
 
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         Button okButton = (Button) findViewById(R.id.btn_settings);
         okButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                ServiceManager.viewNotificationSettings(MainActivity.this);
+                ServiceManager.viewNotificationSettings(TestActivity.this);
             }
         });
 
