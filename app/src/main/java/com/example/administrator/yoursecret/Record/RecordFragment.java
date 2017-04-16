@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.SpaceItemDecoration;
 
 public class RecordFragment extends Fragment implements RecordContract.View{
 

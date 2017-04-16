@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.Record;
+package com.example.administrator.yoursecret;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
