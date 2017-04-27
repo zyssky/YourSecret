@@ -78,9 +78,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         final T data = mDatas.get(pos);
         onBind(viewHolder, pos, data);
 
-//        if(position >= mDatas.size())
-//            return;
-
 
         if(mListener != null) {
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {

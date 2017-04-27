@@ -13,7 +13,7 @@ public class RecieveTestData implements RecieveContract.Model {
         List<PushMessage> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             PushMessage message = new PushMessage();
-            message.setTitle("this is a title at "+i);
+            message.setTitle("航空mh370不知"+i);
             list.add(message);
         }
         return list;

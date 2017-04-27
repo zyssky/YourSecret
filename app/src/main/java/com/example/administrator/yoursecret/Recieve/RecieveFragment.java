@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.administrator.yoursecret.DividerItemDecoration;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.SpaceItemDecoration;
 
@@ -51,7 +52,8 @@ public class RecieveFragment extends Fragment implements RecieveContract.View {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new SpaceItemDecoration(10,10,10,10));
+//        recyclerView.addItemDecoration(new SpaceItemDecoration(10,10,10,10));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST,0,0,0,0));
         View headerView = LayoutInflater.from(getContext()).inflate(R.layout.header_message,null);
 
 

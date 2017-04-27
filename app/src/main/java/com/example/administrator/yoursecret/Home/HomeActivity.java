@@ -1,5 +1,6 @@
 package com.example.administrator.yoursecret.Home;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -8,9 +9,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.Write.WriteActivity;
 
 import java.lang.reflect.Field;
 
@@ -22,7 +25,22 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
 
     private HomeContract.Presenter presenter;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.publish_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.publish:
+                Intent intent  = new Intent(this, WriteActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
