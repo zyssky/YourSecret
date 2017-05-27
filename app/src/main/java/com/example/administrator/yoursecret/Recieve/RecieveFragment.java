@@ -9,9 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.administrator.yoursecret.DividerItemDecoration;
+import com.example.administrator.yoursecret.utils.DividerItemDecoration;
 import com.example.administrator.yoursecret.R;
-import com.example.administrator.yoursecret.SpaceItemDecoration;
 
 
 public class RecieveFragment extends Fragment implements RecieveContract.View {

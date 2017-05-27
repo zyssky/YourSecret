@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret;
+package com.example.administrator.yoursecret.utils;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,11 +19,26 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     public static final int TYPE_NORMAL = 1;
     public static final int TYPE_FOOTER = 2;
 
+    public List<T> getmDatas() {
+        return mDatas;
+    }
+
     private List<T> mDatas = new ArrayList<>();
 
     private View mHeaderView;
 
     private View mFooterView;
+
+    private boolean scaleHeaderView;
+    private boolean scaleFooterView;
+
+    public void setScaleHeaderView(boolean scaleHeaderView) {
+        this.scaleHeaderView = scaleHeaderView;
+    }
+
+    public void setScaleFooterView(boolean scaleFooterView) {
+        this.scaleFooterView = scaleFooterView;
+    }
 
     private OnItemClickListener mListener;
 
@@ -32,11 +47,13 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     }
 
     public void setHeaderView(View headerView) {
+        scaleHeaderView = true;
         mHeaderView = headerView;
         notifyItemInserted(0);
     }
 
     public void setFooterView(View footerView){
+        scaleFooterView = true;
         mFooterView = footerView;
         notifyItemChanged(getItemCount()-1);
     }
@@ -51,6 +68,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
 
     public void addDatas(List<T> datas) {
         mDatas.addAll(datas);
+        notifyDataSetChanged();
+    }
+
+    public void addData(T object){
+        mDatas.add(object);
         notifyDataSetChanged();
     }
 
@@ -99,8 +121,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    return getItemViewType(position) == TYPE_HEADER || getItemViewType(position) == TYPE_FOOTER
-                            ? gridManager.getSpanCount() : 1;
+                    if(getItemViewType(position) == TYPE_HEADER && scaleHeaderView)
+                        return gridManager.getSpanCount();
+                    if(getItemViewType(position) == TYPE_FOOTER && scaleFooterView)
+                        return  gridManager.getSpanCount();
+                    return  1;
                 }
             });
         }

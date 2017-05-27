@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.Activities;
+package com.example.administrator.yoursecret.Login;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -22,7 +22,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.administrator.yoursecret.AppContants;
+import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.R;
 
 /**
@@ -53,6 +53,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
     private View service;
     private int height = 0 ;
     private boolean isAtLogin = true;
+    private LoginHandler loginHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +63,8 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
 //        AndroidBug5497Workaround.assistActivity(this);
         intiView();
         initListener();
+
+        loginHandler = new LoginHandler(this);
     }
 
     private void intiView() {
@@ -89,7 +92,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
         iv_clean_phone.setOnClickListener(this);
         clean_password.setOnClickListener(this);
         iv_show_pwd.setOnClickListener(this);
-        clean_password.setOnClickListener(this);
+        clean_password_confirm.setOnClickListener(this);
         iv_show_pwd_confirm.setOnClickListener(this);
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +100,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
                 Bundle bundle = new Bundle();
                 bundle.putCharSequence(AppContants.ACCOUNT,et_mobile.getText().toString());
                 bundle.putCharSequence(AppContants.PASSWORD,et_password.getText().toString());
-                LoginHandler.onLogin(bundle);
+                loginHandler.onLogin(bundle);
             }
         });
         btn_register.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +110,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
                 bundle.putCharSequence(AppContants.ACCOUNT,et_mobile.getText().toString());
                 bundle.putCharSequence(AppContants.PASSWORD,et_password.getText().toString());
                 bundle.putCharSequence(AppContants.PASSWORD_CONFIRM,et_password_confirm.getText().toString());
-                LoginHandler.onRegister(bundle);
+                loginHandler.onRegister(bundle);
             }
         });
         et_mobile.addTextChangedListener(new TextWatcher() {
@@ -158,6 +161,36 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
                 }
             }
         });
+
+        et_password_confirm.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s) && clean_password_confirm.getVisibility() == View.GONE) {
+                    clean_password_confirm.setVisibility(View.VISIBLE);
+                } else if (TextUtils.isEmpty(s)) {
+                    clean_password_confirm.setVisibility(View.GONE);
+                }
+                if (s.toString().isEmpty())
+                    return;
+                if (!s.toString().matches("[A-Za-z0-9]+")) {
+                    String temp = s.toString();
+                    Toast.makeText(LoginActivity.this, R.string.please_input_limit_pwd, Toast.LENGTH_SHORT).show();
+                    s.delete(temp.length() - 1, temp.length());
+                    et_password_confirm.setSelection(s.length());
+                }
+            }
+        });
+
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -303,7 +336,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
                     et_password_confirm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     iv_show_pwd_confirm.setImageResource(R.drawable.pass_gone);
                 }
-                String pwd_confirm = et_password.getText().toString();
+                String pwd_confirm = et_password_confirm.getText().toString();
                 if (!TextUtils.isEmpty(pwd_confirm))
                     et_password_confirm.setSelection(pwd_confirm.length());
                 break;

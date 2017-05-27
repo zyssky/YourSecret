@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.Activities;
+package com.example.administrator.yoursecret;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.client.ServiceManager;
 
 public class TestActivity extends AppCompatActivity {

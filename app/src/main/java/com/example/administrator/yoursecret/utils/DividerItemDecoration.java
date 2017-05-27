@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret;
+package com.example.administrator.yoursecret.utils;
 
 import android.content.Context;
 import android.content.res.TypedArray;
