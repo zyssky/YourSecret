@@ -1,8 +1,12 @@
 package com.example.administrator.yoursecret;
 
 import android.app.Activity;
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,10 +30,11 @@ public class PhotosActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
-    private static int nextBitmapIndex = 0;
-
     public final static int TAKE_PHOTO_REQUEST = 0;
 
+    public ServiceConnection connection;
+
+    public LocationService.MyBinder myBinder;
 
     private WriteImagesAdapter adapter;
 
@@ -39,15 +44,22 @@ public class PhotosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photos);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         activity = this;
 
         recyclerView = (RecyclerView) findViewById(R.id.photos);
 
+        GridLayoutManager layoutManager = new GridLayoutManager(this,3);
+        recyclerView.addItemDecoration(new SpaceItemDecoration(10,10,10,10));
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = WriteImagesAdapter.getInstance();
+        recyclerView.setAdapter(adapter);
+
         //to change to fit the mvp architecture
 
 
-        adapter = WriteImagesAdapter.getInstance();
+
         adapter.setContext(this);
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -57,23 +69,37 @@ public class PhotosActivity extends AppCompatActivity {
                 activity.startActivity(intent);
             }
         });
-        View footer = LayoutInflater.from(this).inflate(R.layout.footer_write_image,null);
+        View footer = LayoutInflater.from(this).inflate(R.layout.footer_write_image,recyclerView,false);
+
         footer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                curImageUri= Uri.fromFile(BitmapUtil.getTempImage(nextBitmapIndex++));
+                curImageUri= Uri.fromFile(BitmapUtil.getTempImage());
                 intent.putExtra(MediaStore.EXTRA_OUTPUT,curImageUri);
                 startActivityForResult(intent,TAKE_PHOTO_REQUEST);
+                myBinder.getLocation();
             }
         });
         adapter.setFooterView(footer);
         adapter.setScaleFooterView(false);
-        recyclerView.setAdapter(adapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(this,3);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(10,10,10,10));
-        recyclerView.setLayoutManager(layoutManager);
 
+
+        connection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                myBinder = (LocationService.MyBinder) service;
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                myBinder = null;
+            }
+        };
+
+        Intent intent = new Intent(this,LocationService.class);
+//        this.startService(intent);
+        this.bindService(intent,connection, Service.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -84,5 +110,11 @@ public class PhotosActivity extends AppCompatActivity {
                     adapter.addData(curImageUri);
                 }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(connection);
     }
 }

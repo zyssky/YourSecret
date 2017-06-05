@@ -48,6 +48,7 @@ public final class FunctionUtil {
         } else {
             cachePath = context.getCacheDir().getPath();
         }
+
         return new File(cachePath + File.separator + uniqueName);
     }
 

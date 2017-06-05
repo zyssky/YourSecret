@@ -20,8 +20,6 @@ public class WriteActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
-    private static int nextBitmapIndex = 0;
-
     public final static int TAKE_PHOTO_REQUEST = 0;
 
     private List<Object> bitmaps;
@@ -54,7 +52,7 @@ public class WriteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                curImageUri= Uri.fromFile(BitmapUtil.getTempImage(nextBitmapIndex++));
+                curImageUri= Uri.fromFile(BitmapUtil.getTempImage());
                 intent.putExtra(MediaStore.EXTRA_OUTPUT,curImageUri);
                 startActivityForResult(intent,TAKE_PHOTO_REQUEST);
             }

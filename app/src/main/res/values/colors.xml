@@ -8,7 +8,7 @@
 
     <color name="light_grey">#999999</color>
 
-    <color name = "transparent">#e0000000</color>
+    <color name="transparent">#e0000000</color>
 
 
     <color name="color_999999">#999999</color>
@@ -23,5 +23,7 @@
     <color name="color_border">#8b000000</color>
     <color name="color_public">#689f38</color>
     <color name="color_private">#5e35b1</color>
+
+    <color name="black_overlay">#66000000</color>
 
 </resources>

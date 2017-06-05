@@ -1,15 +1,19 @@
 package com.example.administrator.yoursecret.Write;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * Created by Administrator on 2017/4/28.
@@ -45,10 +49,16 @@ public class BitmapUtil {
         return bmp;
     }
 
-    public static File getTempImage(int index) {
-        if (android.os.Environment.getExternalStorageState().equals(
-                android.os.Environment.MEDIA_MOUNTED)) {
-            File tempFile = new File(Environment.getExternalStorageDirectory(), "temp"+index+".jpg");
+    public static File getTempImage() {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                || !Environment.isExternalStorageRemovable()) {
+            File fileDir = new File(Environment.getExternalStorageDirectory()+File.separator
+                    + "footprint"+File.separator+"photos");
+            if(!fileDir.exists()){
+                fileDir.mkdirs();
+            }
+            long name = new Date().getTime();
+            File tempFile = new File(fileDir, name+".jpg");
             try {
                 tempFile.createNewFile();
             } catch (IOException e) {
@@ -59,4 +69,5 @@ public class BitmapUtil {
         }
         return null;
     }
+
 }

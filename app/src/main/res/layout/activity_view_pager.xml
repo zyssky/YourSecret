@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.administrator.yoursecret.HackyViewPager
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/view_pager"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.example.administrator.yoursecret.HackyViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageButton
+        android:visibility="gone"
+        android:id="@+id/delete_btn"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="bottom|center"
+        android:scaleType="center"
+        android:background="@drawable/delete_bg"
+        android:onClick="onDelete"
+        android:tint="@color/cardview_light_background"
+        app:srcCompat="@drawable/ic_delete" />
+</FrameLayout>

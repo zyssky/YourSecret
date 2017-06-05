@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -40,9 +42,25 @@ public class EditorActivity extends AppCompatActivity {
     private View text_toolbar;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.type_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.type:
+                break;
+        }
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         title_editor = (RichEditor) findViewById(R.id.title_html);
         title_editor.setPadding(15,15,15,15);
@@ -56,10 +74,10 @@ public class EditorActivity extends AppCompatActivity {
         text_toolbar = findViewById(R.id.text_toolbar);
 
         List<Object> bitmaps = new ArrayList<>();
-        bitmaps.add(R.drawable.sample);
-        bitmaps.add(R.drawable.sample);
-        bitmaps.add(R.drawable.sample);
-        bitmaps.add(R.drawable.sample);
+//        bitmaps.add(R.drawable.sample);
+//        bitmaps.add(R.drawable.sample);
+//        bitmaps.add(R.drawable.sample);
+//        bitmaps.add(R.drawable.sample);
 
         WriteImagesAdapter.initDatas(bitmaps);
 

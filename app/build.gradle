@@ -25,7 +25,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile files('libs/asmack.jar')
-    compile files('libs/Android_Map3D_SDK_V5.0.0_20170311.jar')
+    compile files('libs/AMap3DMap_5.1.0_AMapNavi_5.1.0_AMapSearch_5.1.0_AMapLocation_3.4.0_20170518.jar')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:design:25.3.1'
@@ -39,5 +39,4 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
     testCompile 'junit:junit:4.12'
-    compile files('libs/AMap_Search_V5.0.0_20170309.jar')
 }

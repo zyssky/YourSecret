@@ -22,42 +22,95 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 
 import com.example.administrator.yoursecret.Write.WriteImagesAdapter;
 import com.example.administrator.yoursecret.utils.AppContants;
+import com.example.administrator.yoursecret.utils.FileUtils;
 import com.example.administrator.yoursecret.utils.GlideImageLoader;
 import com.github.chrisbanes.photoview.PhotoView;
 
-public class ViewPagerActivity extends AppCompatActivity {
+public class ViewPagerActivity extends AppCompatActivity{
+
+    private boolean showDeleteBtn = false;
+    private ImageButton deleteBtn;
+    private ViewPager viewPager;
+    private SamplePagerAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pager);
-		ViewPager viewPager = (HackyViewPager) findViewById(R.id.view_pager);
+        deleteBtn = (ImageButton) findViewById(R.id.delete_btn);
+        viewPager = (HackyViewPager) findViewById(R.id.view_pager);
+        adapter = new SamplePagerAdapter();
+        adapter.setSingleClickListener(new OnSingleClickListener() {
+            @Override
+            public void click() {
+                showDeleteBtn = !showDeleteBtn;
+                if(showDeleteBtn){
+                    deleteBtn.setVisibility(View.VISIBLE);
+                }
+                else {
+                    deleteBtn.setVisibility(View.GONE);
+                }
+            }
+        });
+		viewPager.setAdapter(adapter);
+		int startPos = getIntent().getIntExtra(AppContants.POSITION,0);
+		viewPager.setCurrentItem(startPos);
+		viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+				| View.SYSTEM_UI_FLAG_FULLSCREEN);
 
-
-
-		viewPager.setAdapter(new SamplePagerAdapter());
-        int startPos = getIntent().getIntExtra(AppContants.POSITION,0);
-        viewPager.setCurrentItem(startPos);
 	}
 
-	static class SamplePagerAdapter extends PagerAdapter {
+	public void onDelete(View view){
+        Log.d("Delete item ", "onDelete: "+viewPager.getCurrentItem());
+        Uri uri = (Uri) WriteImagesAdapter.getInstance().getmDatas().remove(viewPager.getCurrentItem());
+        WriteImagesAdapter.getInstance().notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
 
-//		private static final int[] sUris = { R.drawable.sample,R.drawable.sample};
+        if(WriteImagesAdapter.getInstance().getmDatas().isEmpty()){
+            finish();
+        }
+        FileUtils.fileDelete(uri.getPath());
+    }
+
+    static class SamplePagerAdapter extends PagerAdapter {
+        //		private static final int[] sUris = { R.drawable.sample,R.drawable.sample};
+        private OnSingleClickListener listener;
+
+        public void setSingleClickListener(OnSingleClickListener listener){
+            this.listener = listener;
+        }
 
 		@Override
 		public int getCount() {
 			return WriteImagesAdapter.getInstance().getmDatas().size();
 		}
 
-		@Override
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        @Override
 		public View instantiateItem(ViewGroup container, int position) {
 			PhotoView photoView = new PhotoView(container.getContext());
+			photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            if(listener!=null)
+            photoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.click();
+                }
+            });
             GlideImageLoader.loadImage(container.getContext(),WriteImagesAdapter.getInstance().getmDatas().get(position),photoView);
 
 			// Now just add PhotoView to ViewPager and return it
@@ -78,18 +131,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 
 	}
 
-//	public static void setImage(PhotoView photoView,Object object){
-//        if(object instanceof Integer){
-//            photoView.setImageResource((Integer)object);
-//            return;
-//        }
-//        if(object instanceof Uri){
-//            photoView.setImageURI((Uri)object);
-//            return;
-//        }
-//        if(object instanceof Bitmap){
-//            photoView.setImageBitmap((Bitmap)object);
-//            return;
-//        }
-//    }
+	interface OnSingleClickListener{
+        public void click();
+    }
 }
