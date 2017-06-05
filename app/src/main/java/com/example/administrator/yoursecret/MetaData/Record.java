@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.Record;
+package com.example.administrator.yoursecret.MetaData;
 
 /**
  * Created by Administrator on 2017/4/14.
@@ -7,8 +7,8 @@ package com.example.administrator.yoursecret.Record;
 public class Record {
     String mood;
 
-    public Record(String mood){
-        this.mood = mood;
+    public Record(){
+
     }
 
     public String getMood() {

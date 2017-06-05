@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.yoursecret.EditorActivity">
+
+
+    <FrameLayout
+        android:id="@+id/title_bg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <jp.wasabeef.richeditor.RichEditor
+            android:id="@+id/title_html"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_marginTop="3dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:lines="1"
+            android:textSize="18dp"
+            android:text="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ "/>
+    </FrameLayout>
+
+    <jp.wasabeef.richeditor.RichEditor
+        android:id="@+id/editor"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_bg"></jp.wasabeef.richeditor.RichEditor>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@color/layout_background"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/linearLayout">
+
+        <com.example.administrator.yoursecret.View.MyImageButton
+            android:id="@+id/bold"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="insertImage"
+            android:scaleType="centerInside"
+            android:tint="@color/edit_btn_color"
+            android:text="Button"
+            app:srcCompat="@drawable/ic_image" />
+
+        <com.example.administrator.yoursecret.View.MyImageButton
+            android:id="@+id/button5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="setText"
+            android:scaleType="centerInside"
+            android:text="Button"
+            android:tint="@color/edit_btn_color"
+            app:srcCompat="@drawable/ic_text" />
+
+
+        <com.example.administrator.yoursecret.View.MyImageButton
+            android:id="@+id/button3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="checkPhotos"
+            android:scaleType="centerInside"
+            android:text="Button"
+            android:tint="@android:color/darker_gray"
+            app:srcCompat="@drawable/ic_album" />
+
+        <com.example.administrator.yoursecret.View.MyImageButton
+            android:id="@+id/button4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="setLink"
+            android:scaleType="centerInside"
+            android:text="Button"
+            android:tint="@android:color/darker_gray"
+            app:srcCompat="@drawable/ic_link" />
+
+        <ImageButton
+            android:id="@+id/button9"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="setUndo"
+            android:scaleType="centerInside"
+            android:text="Button"
+            android:tint="@android:color/darker_gray"
+            app:srcCompat="@drawable/ic_undo" />
+
+
+        <com.example.administrator.yoursecret.View.MyImageButton
+            android:id="@+id/button6"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="setSave"
+            android:scaleType="centerInside"
+            android:text="Button"
+            android:tint="@android:color/darker_gray"
+            app:srcCompat="@drawable/ic_save" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/insert_gallery"
+        android:visibility="gone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"></android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/text_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@color/color_dfdfdf"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        android:orientation="horizontal">
+
+        <com.example.administrator.yoursecret.View.MyImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="setBold"
+            android:scaleType="centerInside"
+            android:tint="@color/edit_btn_color"
+            app:srcCompat="@drawable/ic_bold" />
+
+
+        <com.example.administrator.yoursecret.View.MyImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="setItalic"
+            android:scaleType="centerInside"
+            android:tint="@color/edit_btn_color"
+            app:srcCompat="@drawable/ic_italic" />
+
+        <com.example.administrator.yoursecret.View.MyImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="setStrikeThrough"
+            android:scaleType="centerInside"
+            android:tint="@color/edit_btn_color"
+            app:srcCompat="@drawable/ic_strikethrough" />
+
+        <com.example.administrator.yoursecret.View.MyImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="setBlockQuote"
+            android:scaleType="centerInside"
+            android:tint="@color/edit_btn_color"
+            app:srcCompat="@drawable/ic_blockquote" />
+
+        <com.example.administrator.yoursecret.View.MyImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="setHeading1"
+            android:scaleType="centerInside"
+            android:tint="@color/edit_btn_color"
+            app:srcCompat="@drawable/ic_h1" />
+
+        <com.example.administrator.yoursecret.View.MyImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="setHeading2"
+            android:scaleType="centerInside"
+            android:tint="@color/edit_btn_color"
+            app:srcCompat="@drawable/ic_h2" />
+
+        <com.example.administrator.yoursecret.View.MyImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="setHeading3"
+            android:scaleType="centerInside"
+            android:tint="@color/edit_btn_color"
+            app:srcCompat="@drawable/ic_h3" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#f57c00</color>
+    <color name="colorPrimaryDark">#e97600</color>
+    <color name="colorAccent">#689f38</color>
     <color name="layout_background">#fafafa</color>
     <color name="colorNavItemUnselected">#757575</color>
 
@@ -16,10 +16,12 @@
     <color name="color_ffffff">#ffffff</color>
     <color name="color_c61a04">#c61a04</color>
     <color name="color_cccccc">#cccccc</color>
+    <color name="color_dfdfdf">#dfdfdf</color>
     <color name="color_d81e06">#d81e06</color>
     <color name="color_b0b8b2">#b0b8b2</color>
 
     <color name="color_border">#8b000000</color>
-    <color name="color_public">#279d03</color>
-    <color name="color_private">#250773</color>
+    <color name="color_public">#689f38</color>
+    <color name="color_private">#5e35b1</color>
+
 </resources>

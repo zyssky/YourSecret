@@ -1,5 +1,6 @@
 package com.example.administrator.yoursecret.Record;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,9 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.utils.DividerItemDecoration;
 import com.example.administrator.yoursecret.utils.SpaceItemDecoration;
 
 public class RecordFragment extends Fragment implements RecordContract.View{
+
+    private Context context;
 
     private View rootView;
     private RecyclerView recordsView;
@@ -51,11 +55,17 @@ public class RecordFragment extends Fragment implements RecordContract.View{
         super.onActivityCreated(savedInstanceState);
         recordsView.setLayoutManager(new LinearLayoutManager(getContext()));
         presenter.setRecyclerViewAdapter();
-        recordsView.addItemDecoration(new SpaceItemDecoration(10,10,10,50));
+        recordsView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL_LIST));
     }
 
     @Override
     public void setRecyclerViewAdapter(RecyclerView.Adapter adapter) {
         recordsView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 }

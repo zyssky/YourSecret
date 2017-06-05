@@ -10,12 +10,13 @@ public class RecordPresenter implements RecordContract.Presenter {
 
     public RecordPresenter(RecordContract.View view){
         this.view = view;
-        model = new RecordTestData();
+        model = new RecordData();
     }
 
     @Override
     public void setRecyclerViewAdapter() {
-        RecordsAdapter adapter = new RecordsAdapter(model.getInitDatas());
+        RecordsAdapter adapter = new RecordsAdapter();
+        adapter.setDatas(model.getDatas(),model.getTitles());
         view.setRecyclerViewAdapter(adapter);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.Recieve;
+package com.example.administrator.yoursecret.MetaData;
 
 import android.net.Uri;
 

@@ -5,6 +5,6 @@
     <item
         android:id="@+id/publish"
         android:title="publish"
-        android:icon="@drawable/ic_publish_black_24px"
+        android:icon="@drawable/ic_publish"
         app:showAsAction="always"/>
 </menu>

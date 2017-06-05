@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.utils.GlideImageLoader;
 
 import java.util.List;
 
@@ -19,15 +20,31 @@ import java.util.List;
 
 public class WriteImagesAdapter extends BaseRecyclerAdapter<Object> {
 
+    private static WriteImagesAdapter instance;
+
 
     private Context context;
+
+    private OnItemClickListener listener;
 
     public void setContext(Context context) {
         this.context = context;
     }
 
-    public WriteImagesAdapter(List<Object> mDatas){
+    private WriteImagesAdapter(List<Object> mDatas){
         addDatas(mDatas);
+    }
+
+    public static void initDatas(List<Object> mDatas){
+        instance = new WriteImagesAdapter(mDatas);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
+
+    public static WriteImagesAdapter getInstance(){
+        return instance;
     }
 
 
@@ -39,10 +56,16 @@ public class WriteImagesAdapter extends BaseRecyclerAdapter<Object> {
     }
 
     @Override
-    public void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, Object data) {
+    public void onBind(RecyclerView.ViewHolder viewHolder, final int RealPosition, final Object data) {
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(RealPosition,data);
+            }
+        });
         if(viewHolder instanceof WriteImagesAdapter.MyViewHolder)
             if(context!=null)
-                Glide.with(context).load(data).into(((MyViewHolder) viewHolder).imageView);
+                GlideImageLoader.loadImage(context,data,((MyViewHolder) viewHolder).imageView);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
@@ -53,4 +76,6 @@ public class WriteImagesAdapter extends BaseRecyclerAdapter<Object> {
             imageView = (ImageView) itemView;
         }
     }
+
+
 }

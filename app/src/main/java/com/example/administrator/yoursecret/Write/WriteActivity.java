@@ -46,7 +46,8 @@ public class WriteActivity extends AppCompatActivity {
         bitmaps.add(R.drawable.sample);
         bitmaps.add(R.drawable.sample);
 
-        adapter = new WriteImagesAdapter(bitmaps);
+        adapter = WriteImagesAdapter.getInstance();
+        adapter.addDatas(bitmaps);
         adapter.setContext(this);
         View footer = LayoutInflater.from(this).inflate(R.layout.footer_write_image,null);
         footer.setOnClickListener(new View.OnClickListener() {

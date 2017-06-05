@@ -6,43 +6,98 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
+import com.example.administrator.yoursecret.MetaData.PushMessage;
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.utils.MultiRecyclerAdapter;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2017/4/16.
  */
 
-public class RecieveRecyclerAdapter extends BaseRecyclerAdapter<PushMessage> {
+public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<PushMessage> {
 
-//    public RecieveRecyclerAdapter(){
-//
-//    }
+    private static RecieveRecyclerAdapter instance;
+    private RecieveRecyclerAdapter(){};
+    public static void init(Map<String,List<PushMessage>> datas , List<String> titles){
+        instance = new RecieveRecyclerAdapter();
+        instance.setDatas(datas,titles);
+    }
+    public static RecieveRecyclerAdapter getInstance(){
+        return instance;
+    }
 
     @Override
-    public RecyclerView.ViewHolder onCreate(ViewGroup parent, int viewType) {
-        if(viewType == TYPE_HEADER) {
-            View header = getHeaderView();
-            if (null !=header)
-                return new MyViewHolder(header);
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        return null;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {
+        return null;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateTitleViewHolder(ViewGroup parent) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_record_title,parent,false);
+        return new RecieveRecyclerAdapter.TitleViewHolder(view);
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message2,parent,false);
+        return new RecieveRecyclerAdapter.ItemViewHolder(view);
+    }
+
+    @Override
+    public void onBindHeader(RecyclerView.ViewHolder holder) {
+
+    }
+
+    @Override
+    public void onBindFooter(RecyclerView.ViewHolder holder) {
+
+    }
+
+    @Override
+    public void onBindTitle(RecyclerView.ViewHolder holder, String title) {
+        if(holder instanceof RecieveRecyclerAdapter.TitleViewHolder){
+            RecieveRecyclerAdapter.TitleViewHolder titleViewHolder = (RecieveRecyclerAdapter.TitleViewHolder) holder;
+            if(title.equals("热点")){
+                titleViewHolder.title_divider.setVisibility(View.GONE);
+            }
+            else {
+                titleViewHolder.title_divider.setVisibility(View.VISIBLE);
+            }
+            titleViewHolder.textView.setText(title);
         }
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message,parent,false);
-        return new MyViewHolder(view);
     }
 
     @Override
-    public void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, PushMessage data) {
-        if(viewHolder instanceof MyViewHolder)
-            ((MyViewHolder) viewHolder).tv_title.setText(data.getTitle());
+    public void onBindItem(RecyclerView.ViewHolder holder, PushMessage data) {
+        if(holder instanceof RecieveRecyclerAdapter.ItemViewHolder){
+            RecieveRecyclerAdapter.ItemViewHolder itemViewHolder = (RecieveRecyclerAdapter.ItemViewHolder) holder;
+
+        }
     }
 
-    class MyViewHolder extends BaseRecyclerAdapter.Holder{
 
-        public TextView tv_title;
-
-        public MyViewHolder(View itemView) {
+    class TitleViewHolder extends RecyclerView.ViewHolder{
+        TextView textView ;
+        View title_divider;
+        public TitleViewHolder(View itemView) {
             super(itemView);
-            tv_title = (TextView) itemView.findViewById(R.id.message_title);
+            textView = (TextView) itemView.findViewById(R.id.record_title);
+            title_divider = itemView.findViewById(R.id.title_divider);
+        }
+    }
+
+    class ItemViewHolder extends RecyclerView.ViewHolder{
+
+        public ItemViewHolder(View itemView) {
+            super(itemView);
         }
     }
 }

@@ -71,6 +71,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         notifyDataSetChanged();
     }
 
+
     public void addData(T object){
         mDatas.add(object);
         notifyDataSetChanged();

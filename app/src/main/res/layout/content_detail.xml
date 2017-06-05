@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/title_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="16dp"
+            android:textStyle="bold"
+            android:textSize="24dp"
+            android:textColor="@android:color/black"
+            android:text="越是轻描淡写，越是情深义重,不然还能怎样"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp" />
+
+        <TextView
+            android:id="@+id/content_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="版权归作者所有，任何形式转载请联系作者。 作者：他者others（来自豆瓣） 来源：https://www.douban.com/note/621211316/  岛屿的过去  明打威群岛位于苏门答腊西岸，由70个岛屿组成，南巴盖岛、北巴盖岛、西普拉岛以及西比路岛是四个主要岛屿，其中西比路岛最大，有4480平方公里，近3万人口，90%是原住民，其他人口由巴东人、爪哇人、巴塔克人组成。  公元前2000年到前500年间，岛民的祖先来到岛上。西方人对他们的最早记录来自英国人John Crisp，他当时试图在南巴盖岛南部建立胡椒种植园。  值得一提的是，世界上许多地方深陷殖民之苦时，明打威岛民却在荷兰殖民时期过着分外舒适的生活，当地长老回忆，他们称那段时间为“美好旧时光”，当时他们能在贸易往来中得到一个颇为合理的价格，也能自由自在地过着尊崇Arat Sabulunga传统的日子。Arat Sabulunga是明打威岛民信仰的核心，融合了祖先崇拜和自然崇拜，尊崇祖先、天空、土地、大海、河流以及一切自然之物。在萨满带领下举行仪式在当时也颇为常见.版权归作者所有，任何形式转载请联系作者。 作者：他者others（来自豆瓣） 来源：https://www.douban.com/note/621211316/  在荷兰殖民者的记载中同样可以看到他们与岛民友好相处的景象，在一份1902年的记录中，一位荷兰殖民官员说：“与讨人喜欢的野人在幸福的岛屿上共度了一段时光。”  1954年，印尼政府强行实施同化政策，一切才发生转变，明打威人不得不放弃Arat Sabulunga习俗，仪式场所与用具被烧毁，萨满遭到迫害，也有去做苦工，或是锒铛入狱者。许多包括磨牙（详见后文）、建造长屋等习俗就这样断代了。  5年后，同化热潮稍稍平息，伐木计划又如火如荼地在岛上展开。到1980年，除西比路岛外，其他岛上的雨林几乎被完全摧毁。WWF、UNESCO和Survival International等组织纷纷在1980年时发表文章，成功劝阻印尼政府伐木，将西比路岛建为保护区。那时，游客前往岛上拜访原住民的数量越来越多，给政府带来相当收入，政府的同化政策也就日益微弱，依传统过活不再违法，如此一来，明打威岛民才终于熬过重重危机，过上了他们熟悉的“老日子”。版权归作者所有，任何形式转载请联系作者。 作者：他者others（来自豆瓣） 来源：https://www.douban.com/note/621211316/  然而，物是人非，重新获得依传统过活机会的明打威人所面对的、拥有的还是与过去不同了。经历过同化政策、现代化侵袭的岛屿不得不面对一个问题：如果给你一个机会回到过去，你会要吗？  事实上，我和他们面对相同的问题，也交出了相似的答卷。  初抵西比路岛  2008年，全球经济崩溃后，我离开墨尔本来到西比路岛，希望在这儿过上隐居的、自给自足的生活。我自以为熟悉这座岛屿，因为一直到这儿来旅行、冲浪，它始终是我的避世之地，我了解这里的潮汐，也盼望着每一次骑浪而行所带来的纯粹的快乐。我以为生活于此也就能常驻于这单纯的喜乐之中，外来世界的纷纷扰扰会如同浪花般一一碎落，不留痕迹。  我到岛上一个偏远村落的椰子农场里开始这一切，但是很快，现实就击垮了我的浪漫主义。我根本不了解这片土地，我所掌握的那一点农业知识和种植技能根本无法在这里种出食物，必须向原住民讨教生存方式，但这也就意味着，我得先学会他们的语言。版权归作者所有，任何形式转载请联系作者。 作者：他者others（来自豆瓣） 来源：https://www.douban.com/note/621211316/  一开始我并不知道明打威岛上椰子农场是原住民的定居点，生活在这里的岛民大多已经遗失了古老的传统与价值观，只觉得他们熟知自给自足的生活方式。我花了几个月与村里人相处，交到极要好的朋友。我的岛民朋友们也与我推心置腹，向我诉说他们面临的困境。如此我才知道，在岛上一片田园风光、看似自然资源丰厚的背后，他们的传统社会体系正在崩塌，充满挣扎。  我也是从村中长老口中得知，如今他们过的已经不再能、期待与力量。"
+            android:layout_marginLeft="24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/author_image"
+            android:layout_marginRight="24dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp" />
+
+        <ImageView
+            android:id="@+id/author_image"
+            android:layout_width="53dp"
+            android:layout_height="45dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/skin_about_brand"
+            android:layout_marginLeft="24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/title_detail"
+            android:layout_marginStart="24dp" />
+
+        <TextView
+            android:id="@+id/username_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="他者others"
+            app:layout_constraintLeft_toRightOf="@+id/author_image"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/title_detail"
+            android:layout_marginStart="10dp" />
+
+        <TextView
+            android:id="@+id/date_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5月22日"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@+id/username_detail"
+            app:layout_constraintLeft_toRightOf="@+id/author_image"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp" />
+
+
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="@color/color_cccccc"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/content_detail"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/divider_detail">
+
+            <TextView
+                android:layout_gravity="bottom|left"
+                android:id="@+id/countflag_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="回复："
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp" />
+
+            <TextView
+                android:layout_gravity="bottom|left"
+                android:id="@+id/count_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintLeft_toRightOf="@+id/countflag_comment"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/comment_recycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider_detail" ></android.support.v7.widget.RecyclerView>
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v4.widget.NestedScrollView>

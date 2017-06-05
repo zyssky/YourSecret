@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.administrator.yoursecret.EditorActivity;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.Write.WriteActivity;
 
@@ -35,7 +36,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.publish:
-                Intent intent  = new Intent(this, WriteActivity.class);
+                Intent intent  = new Intent(this, EditorActivity.class);
                 startActivity(intent);
                 break;
         }

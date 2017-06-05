@@ -11,13 +11,13 @@ public class RecievePresenter implements RecieveContract.Presenter {
 
     public RecievePresenter(RecieveContract.View view){
         this.view = view;
-        model = new RecieveTestData();
+        RecieveData.initData();
+        model = RecieveData.getInstance();
     }
 
     @Override
     public void setRecyclerViewAdapter() {
-        RecieveRecyclerAdapter adapter = new RecieveRecyclerAdapter();
-        adapter.addDatas(model.getInitDatas());
-        view.setRecyclerViewAdapter(adapter);
+        RecieveRecyclerAdapter.init(model.getDatas(),model.getTitles());
+        view.setRecyclerViewAdapter();
     }
 }
