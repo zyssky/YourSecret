@@ -1,9 +1,11 @@
 package com.example.administrator.yoursecret;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RadioGroup;
 
 import com.example.administrator.yoursecret.View.MyImageButton;
 import com.example.administrator.yoursecret.Write.BitmapUtil;
@@ -41,6 +44,8 @@ public class EditorActivity extends AppCompatActivity {
 
     private View text_toolbar;
 
+    private int type;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.type_menu,menu);
@@ -51,8 +56,12 @@ public class EditorActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.type:
+                TypeDialog dialog = new TypeDialog(this,R.style.MyDialog);
+                setDialogPosition(dialog,Gravity.END,10,Gravity.TOP,60);
+                dialog.show();
                 break;
         }
+        Log.d("select type : ", "onOptionsItemSelected: "+type);
         return true;
     }
 
@@ -86,11 +95,18 @@ public class EditorActivity extends AppCompatActivity {
         //to change to fit the mvp architecture
 
 
-        WriteImagesAdapter adapter = WriteImagesAdapter.getInstance();
+        InsertImageAdapter adapter = new InsertImageAdapter();
         adapter.setContext(this);
+        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, Object data) {
+
+            }
+        });
         recyclerView.setAdapter(adapter);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(10,10,10,10));
+        recyclerView.addItemDecoration(new SpaceItemDecoration(15,0,15,15));
         recyclerView.setLayoutManager(layoutManager);
     }
 
@@ -123,22 +139,27 @@ public class EditorActivity extends AppCompatActivity {
 
     public void setLink(View view){
         click(view);
-//        editor.insertLink();
+        LinkDialog dialog = new LinkDialog(this,R.style.MyDialog);
+        dialog.show();
     }
 
     public void setUndo(View view){
         editor.undo();
     }
 
+    public void setDialogPosition(Dialog dialog,int gravity_x,int x, int gravity_y,int y){
+        Window dialogWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        dialogWindow.setGravity(gravity_x | gravity_y);
+        lp.x = FunctionUtil.dip2px(this,x);
+        lp.y = FunctionUtil.dip2px(this,y);
+        dialogWindow.setAttributes(lp);
+    }
+
     public void setSave(View view){
         click(view);
         SaveDialog dialog = new SaveDialog(this,R.style.MyDialog);
-        Window dialogWindow = dialog.getWindow();
-        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-        dialogWindow.setGravity(Gravity.RIGHT | Gravity.BOTTOM);
-        lp.x = FunctionUtil.dip2px(this,10);
-        lp.y = FunctionUtil.dip2px(this,50);
-        dialogWindow.setAttributes(lp);
+        setDialogPosition(dialog,Gravity.END,10,Gravity.BOTTOM,50);
         dialog.show();
     }
 

@@ -131,8 +131,8 @@
         android:id="@+id/insert_gallery"
         android:visibility="gone"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@android:color/darker_gray"
+        android:layout_height="100dp"
+        android:background="@color/color_dfdfdf"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"></android.support.v7.widget.RecyclerView>
