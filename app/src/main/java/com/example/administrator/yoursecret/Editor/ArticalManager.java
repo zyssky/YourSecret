@@ -45,15 +45,17 @@ public class ArticalManager {
             "        \n" +
             "    <section class=\"header\">\n" +
             "        <h1 class=\"title\">{title_content}</h1>\n" +  //标题
-            "        <div class=\"user-title\"> style=\"color:#aaa;font-size:15px;line-height:normal\"" +
-            "            <img class=\"note_author_avatar\" style=\"max-width:10%;height:auto;\" src=\"{author_iconUri}\" alt=\"{author_name}\">\n" +   //作者icon和昵称
-            "            <span class=\"info\">\n" +
-            "              {author_name}\n" +      //作者昵称
-            "              <span class=\"timestamp\">{timestamp_content}</span>\n" +  //时间戳
-            "            </span>\n" +
-            "        </div>\n" +
-            "        <div class=\"location\">\n" +
-            "            <img class=\"location_icon\" style=\"max-width:5%;height:auto;\" src=\"{location_iconUri}\">\n" +  //定位图标
+            "        <div style=\"display:inline\"> " +
+            "            <img class=\"note_author_avatar\"  style=\"max-width:20%;height:auto;\" src=\"{author_iconUri}\" alt=\"{author_name}\">\n" +   //作者icon和昵称
+            "        </div>\n"+
+            "        <div style=\"display:inline-block;position:relative;top:-3px;\"" +
+            "            <div class=\"author\" >\n" +
+            "              <strong >{author_name}</strong>\n" +      //作者昵称
+            "              <div class=\"timestamp\" style=\"color:#aaa;\">{timestamp_content}</div>\n" +  //时间戳
+            "            </div>\n" +
+            "        </div>\n"+
+            "        <div class=\"location\" style=\"margin-top:20px;margin-bottom:20px\">\n" +
+            "            <img class=\"location_icon\" style=\"position:relative;top:2px;max-width:5%;height:auto;\" src=\"{location_iconUri}\">\n" +  //定位图标
             "            <span class=\"location_address\" style=\"color:#aaa;font-size:13px;line-height:normal\" >{location_content}</span>\n" +
             "        </div>\n" +
             "    </section>" +
@@ -75,7 +77,7 @@ public class ArticalManager {
             "\n" +
             "        <div class=\"download-app\" style=\"text-align:center;padding:0 0 20px 0\">\n" +
             "            <div class=\"info\" style=\"padding: 20px 0 0 0\">\n" +
-            "                <img src=\"{app_iconUri}\" width=\"48\" style=\"\">\n" +
+            "                <img src=\"{app_iconUri}\" style=\"position:relative;top:10%;max-width:20%;height:auto;top:10px\">\n" +
             "                <div class=\"info-content\" style=\"display:inline-block;text-align:left\">\n" +
             "                    <strong style=\"font-size:24px;font-style: normal;\">足迹</strong>\n" +
             "                    <div style=\"white-space:pre;line-height:18px\">踏遍世界每一个角落</div>\n" +
@@ -190,13 +192,15 @@ public class ArticalManager {
         setHtmlContent(artical.content_html);
         setHtmlDescriptino(artical.introduction);
         setHtmlTimeStamp(df.format(new Date()));
-        setHtmlLocation(artical.location.description);
+        if(artical.location!=null)
+            setHtmlLocation(artical.location.description);
         setHtmlAutohrName(UserManager.getInstance().getUserName());
         setHtmlTitle(artical.title);
         setHtmlType(artical.articalType);
 
         setHtmlAppIcon(FileUtils.getAppIconPath());
-        setHtmlImage(artical.imageUri.getPath());
+        if(artical.imageUri!=null)
+            setHtmlImage(artical.imageUri.getPath());
         setHtmlLocationIcon(FileUtils.getLocationIconPath());
         setHtmlAuthorIcon(FileUtils.getUserIconPath());
 
@@ -208,63 +212,63 @@ public class ArticalManager {
 
     public void setHtmlContent(String value){
         String old = "{artical_content}";
-        template.replace(old,value);
+        template = template.replace(old,value);
     }
 
     public void setHtmlAppIcon(String value){
         String old = "{app_iconUri}";
-        template.replace(old,value);
+        template = template.replace(old,value);
     }
 
     public void setHtmlLocationIcon(String value){
         String old = "{location_iconUri}";
-        template.replace(old,value);
+        template = template.replace(old,value);
     }
 
     public void setHtmlTimeStamp(String value){
         String old = "{timestamp_content}";
-        template.replace(old,value);
+        template = template.replace(old,value);
     }
 
     public void setHtmlAuthorIcon(String value){
         String old = "{author_iconUri}";
-        template.replace(old,value);
+        template = template.replace(old,value);
     }
 
     public void setHtmlAutohrName(String value){
         String old = "{author_name}";
-        template.replace(old,value);
+        template = template.replace(old,value);
     }
 
     public void setHtmlTitle(String value){
         String old = "{title_content}";
         String old2 = "{browser_title_content}";
-        template.replace(old,value);
-        template.replace(old2,value+"-足迹");
+        template = template.replace(old,value);
+        template = template.replace(old2,value+"-足迹");
     }
 
     public void setHtmlLocation(String value){
         String old = "{location_content}";
-        template.replace(old,value);
+        template = template.replace(old,value);
     }
 
     public void setHtmlImage(String value){
         String old = "{mainImageUri}";
-        template.replace(old,value);
+        template = template.replace(old,value);
     }
 
     public void setHtmlType(String value){
         String old = "{artical_type}";
-        template.replace(old,value);
+        template = template.replace(old,value);
     }
 
     public void setHtmlDescriptino(String value){
         String old = "{description_content}";
-        template.replace(old,value);
+        template = template.replace(old,value);
     }
 
     public void setHtmlArticalHref(String value){
         String old = "{artical_href}";
-        template.replace(old,value);
+        template = template.replace(old,value);
     }
 }
