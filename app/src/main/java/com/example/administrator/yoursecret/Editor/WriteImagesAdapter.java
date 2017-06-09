@@ -1,13 +1,13 @@
-package com.example.administrator.yoursecret.Write;
+package com.example.administrator.yoursecret.Editor;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.GlideImageLoader;
@@ -18,10 +18,7 @@ import java.util.List;
  * Created by Administrator on 2017/4/16.
  */
 
-public class WriteImagesAdapter extends BaseRecyclerAdapter<Object> {
-
-    private static WriteImagesAdapter instance;
-
+public class WriteImagesAdapter extends BaseRecyclerAdapter<Uri> {
 
     private Context context;
 
@@ -31,23 +28,16 @@ public class WriteImagesAdapter extends BaseRecyclerAdapter<Object> {
         this.context = context;
     }
 
-    private WriteImagesAdapter(List<Object> mDatas){
-        addDatas(mDatas);
+    public WriteImagesAdapter(List<Uri> mDatas){
+        super(mDatas);
     }
 
-    public static void initDatas(List<Object> mDatas){
-        instance = new WriteImagesAdapter(mDatas);
-    }
+    public WriteImagesAdapter(){}
+
 
     public void setOnItemClickListener(OnItemClickListener listener){
         this.listener = listener;
     }
-
-    public static WriteImagesAdapter getInstance(){
-        return instance;
-    }
-
-
 
     @Override
     public RecyclerView.ViewHolder onCreate(ViewGroup parent, int viewType) {
@@ -56,7 +46,7 @@ public class WriteImagesAdapter extends BaseRecyclerAdapter<Object> {
     }
 
     @Override
-    public void onBind(RecyclerView.ViewHolder viewHolder, final int RealPosition, final Object data) {
+    public void onBind(RecyclerView.ViewHolder viewHolder, final int RealPosition, final Uri data) {
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.example.administrator.yoursecret;
+package com.example.administrator.yoursecret.Editor.Photo;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -28,9 +26,11 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 
-import com.example.administrator.yoursecret.Write.WriteImagesAdapter;
+import com.example.administrator.yoursecret.Editor.AdapterManager;
+import com.example.administrator.yoursecret.Editor.DataManager;
+import com.example.administrator.yoursecret.Editor.WriteImagesAdapter;
+import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FileUtils;
 import com.example.administrator.yoursecret.utils.GlideImageLoader;
@@ -72,11 +72,11 @@ public class ViewPagerActivity extends AppCompatActivity{
 
 	public void onDelete(View view){
         Log.d("Delete item ", "onDelete: "+viewPager.getCurrentItem());
-        Uri uri = (Uri) WriteImagesAdapter.getInstance().getmDatas().remove(viewPager.getCurrentItem());
-        WriteImagesAdapter.getInstance().notifyDataSetChanged();
+        Uri uri = (Uri) DataManager.getInstance().getPhotoManager().getPhotos().remove(viewPager.getCurrentItem());
+        AdapterManager.getInstance().getWriteImagesAdapter().notifyDataSetChanged();
         adapter.notifyDataSetChanged();
 
-        if(WriteImagesAdapter.getInstance().getmDatas().isEmpty()){
+        if(DataManager.getInstance().getPhotoManager().getPhotos().isEmpty()){
             finish();
         }
         FileUtils.fileDelete(uri.getPath());
@@ -92,7 +92,7 @@ public class ViewPagerActivity extends AppCompatActivity{
 
 		@Override
 		public int getCount() {
-			return WriteImagesAdapter.getInstance().getmDatas().size();
+			return DataManager.getInstance().getPhotoManager().getPhotos().size();
 		}
 
         @Override
@@ -111,7 +111,7 @@ public class ViewPagerActivity extends AppCompatActivity{
                     listener.click();
                 }
             });
-            GlideImageLoader.loadImage(container.getContext(),WriteImagesAdapter.getInstance().getmDatas().get(position),photoView);
+            GlideImageLoader.loadImage(container.getContext(), DataManager.getInstance().getPhotoManager().getPhotos().get(position),photoView);
 
 			// Now just add PhotoView to ViewPager and return it
 			container.addView(photoView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);

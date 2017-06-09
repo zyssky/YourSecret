@@ -23,7 +23,18 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         return mDatas;
     }
 
-    private List<T> mDatas = new ArrayList<>();
+    public void setmDatas(List<T> mDatas) {
+        this.mDatas = mDatas;
+    }
+
+    public BaseRecyclerAdapter(){}
+
+    public BaseRecyclerAdapter(List<T> datas){
+        this.mDatas = datas;
+    }
+
+    private List<T> mDatas ;
+
 
     private View mHeaderView;
 
@@ -66,16 +77,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         return mHeaderView;
     }
 
-    public void addDatas(List<T> datas) {
-        mDatas.addAll(datas);
-        notifyDataSetChanged();
-    }
-
-
-    public void addData(T object){
-        mDatas.add(object);
-        notifyDataSetChanged();
-    }
 
     @Override
     public int getItemViewType(int position) {

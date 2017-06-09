@@ -36,7 +36,7 @@ public class DetailPresenter implements DetailContract.Presenter {
         list.add(new Comment());
         list.add(new Comment());
         adapter = new CommentRecyclerAdapter();
-        adapter.addDatas(list);
+        adapter.setmDatas(list);
     }
 
     @Override

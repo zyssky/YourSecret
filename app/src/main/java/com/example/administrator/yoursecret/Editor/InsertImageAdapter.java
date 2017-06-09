@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret;
+package com.example.administrator.yoursecret.Editor;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.administrator.yoursecret.Write.WriteImagesAdapter;
+import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 import com.example.administrator.yoursecret.utils.GlideImageLoader;
 
@@ -44,12 +44,12 @@ public class InsertImageAdapter extends RecyclerView.Adapter<InsertImageAdapter.
             }
         });
         if(context!=null)
-            GlideImageLoader.loadImage(context,WriteImagesAdapter.getInstance().getmDatas().get(position),holder.imageView);
+            GlideImageLoader.loadImage(context,DataManager.getInstance().getPhotoManager().getPhotos().get(position),holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return WriteImagesAdapter.getInstance().getmDatas().size();
+        return DataManager.getInstance().getPhotoManager().getPhotos().size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{

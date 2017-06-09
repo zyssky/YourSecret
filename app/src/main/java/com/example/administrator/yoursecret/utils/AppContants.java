@@ -15,4 +15,10 @@ public class AppContants {
     public static String POSITION = "POSITION";
     public static String DATA = "DATA";
     public static String TITLE = "title";
+    public static String SCENERY = "风景";
+    public static String PERSON = "人物";
+    public static String THING = "事物";
+    public static String INTEREST = "有趣";
+    public static int PUBLIC = 1;
+    public static int PRIVATE = 0;
 }

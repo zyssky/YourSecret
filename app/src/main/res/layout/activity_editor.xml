@@ -4,43 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.administrator.yoursecret.EditorActivity">
-
-
-    <FrameLayout
-        android:id="@+id/title_bg"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <jp.wasabeef.richeditor.RichEditor
-            android:id="@+id/title_html"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_marginTop="3dp"
-            android:paddingTop="5dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:lines="1"
-            android:textSize="18dp"
-            android:text="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ "/>
-    </FrameLayout>
+    tools:context="com.example.administrator.yoursecret.Editor.EditorActivity">
 
     <jp.wasabeef.richeditor.RichEditor
-        android:id="@+id/editor"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/editor"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_bg"></jp.wasabeef.richeditor.RichEditor>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></jp.wasabeef.richeditor.RichEditor>
+
+
+
 
     <LinearLayout
         android:layout_width="0dp"
@@ -60,7 +36,7 @@
             android:background="@null"
             android:onClick="insertImage"
             android:scaleType="centerInside"
-            android:tint="@color/edit_btn_color"
+            android:tint="@android:color/darker_gray"
             android:text="Button"
             app:srcCompat="@drawable/ic_image" />
 
@@ -138,15 +114,15 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"></android.support.v7.widget.RecyclerView>
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/text_toolbar"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:background="@color/color_dfdfdf"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        android:orientation="horizontal">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
 
         <com.example.administrator.yoursecret.View.MyImageButton
             android:layout_width="0dp"

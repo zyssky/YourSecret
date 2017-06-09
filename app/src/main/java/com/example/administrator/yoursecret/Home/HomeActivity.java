@@ -12,9 +12,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.administrator.yoursecret.EditorActivity;
+import com.example.administrator.yoursecret.Editor.EditorActivity;
 import com.example.administrator.yoursecret.R;
-import com.example.administrator.yoursecret.Write.WriteActivity;
 
 import java.lang.reflect.Field;
 

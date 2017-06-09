@@ -25,7 +25,6 @@ public class PropUtil {
             e.printStackTrace();
         }
         return prop;
-
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.Write;
+package com.example.administrator.yoursecret.utils;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;

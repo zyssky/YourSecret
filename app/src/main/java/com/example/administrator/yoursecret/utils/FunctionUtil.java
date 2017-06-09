@@ -10,6 +10,8 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.Environment;
 
+import com.bumptech.glide.Glide;
+
 import java.io.File;
 
 /**
@@ -78,5 +80,9 @@ public final class FunctionUtil {
     public static int px2dip(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
+    }
+
+    public void test(){
+
     }
 }

@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret;
+package com.example.administrator.yoursecret.Editor.Photo;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

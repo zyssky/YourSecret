@@ -13,6 +13,7 @@
         android:textColor="@color/colorPrimary"/>
 
     <EditText
+        android:id="@+id/link_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="请输入链接名称"
@@ -21,6 +22,8 @@
         android:padding="10dp"/>
 
     <EditText
+        android:id="@+id/link_uri"
+        android:inputType="textUri"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -43,6 +46,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:onClick="onLinkCancle"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
@@ -59,6 +63,7 @@
             android:background="@color/color_dfdfdf"/>
 
         <Button
+            android:onClick="onLinkConfirm"
             android:layout_width="0dp"
             android:layout_marginTop="1dp"
             android:layout_marginLeft="1dp"
