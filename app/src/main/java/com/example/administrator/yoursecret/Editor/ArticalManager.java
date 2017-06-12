@@ -14,6 +14,9 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+
 /**
  * Created by Administrator on 2017/6/8.
  */
@@ -132,10 +135,13 @@ public class ArticalManager {
             title = df.format(new Date());
         }
 
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        artical.dateString = df.format(new Date());
         artical.title = title;
         artical.content_html = content;
 
-        artical.artical_id =Long.toHexString(new Random().nextLong());
+        artical.artical_id =""+new Random().nextLong();
         artical.author_id = UserManager.getInstance().getUserId();
 
         artical.images = DataManager.getInstance().getPhotoManager().getImagesWithLocation();
@@ -208,6 +214,22 @@ public class ArticalManager {
 
         Log.d("html : ", "getArticalHtml: "+template);
         return template;
+    }
+
+    public RequestBody getFormBody(){
+        RequestBody formBody = new FormBody.Builder()
+                .add("content_html",artical.content_html)
+                .add("introduction",artical.introduction)
+                .add("timeStamp",artical.introduction)
+                .add("latitude",""+artical.location.latitude)
+                .add("longtitude",""+artical.location.longtitude)
+                .add("location_desc",artical.location.description)
+                .add("title",artical.title)
+                .add("articalType",artical.articalType)
+                .add("imageUri",artical.imageUri.getPath())
+                .build();
+
+        return formBody;
     }
 
     public void setHtmlContent(String value){

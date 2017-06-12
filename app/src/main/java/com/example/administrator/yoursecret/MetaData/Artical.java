@@ -36,6 +36,8 @@ public class Artical{
 
     public int saveType = -1;
 
+    public String dateString;
+
     public String articalUrl;
 
     public static class ImageLocation implements Parcelable{
