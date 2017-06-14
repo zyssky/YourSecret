@@ -1,13 +1,13 @@
 package com.example.administrator.yoursecret.Editor;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,8 +15,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.example.administrator.yoursecret.Editor.Adapter.InsertImageAdapter;
+import com.example.administrator.yoursecret.Editor.Adapter.WriteImagesAdapter;
+import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
+import com.example.administrator.yoursecret.Editor.Manager.ArticalManager;
+import com.example.administrator.yoursecret.Editor.Manager.DataManager;
+import com.example.administrator.yoursecret.Editor.Manager.PhotoManager;
+import com.example.administrator.yoursecret.Editor.Network.NetworkManager;
 import com.example.administrator.yoursecret.Editor.Photo.PhotosActivity;
 import com.example.administrator.yoursecret.MetaData.Artical;
+import com.example.administrator.yoursecret.MetaData.ImageLocation;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.View.MyImageButton;
 import com.example.administrator.yoursecret.utils.AppContants;
@@ -25,12 +33,11 @@ import com.example.administrator.yoursecret.utils.FileUtils;
 import com.example.administrator.yoursecret.utils.FunctionUtil;
 import com.example.administrator.yoursecret.utils.SpaceItemDecoration;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jp.wasabeef.richeditor.RichEditor;
 
 public class EditorActivity extends AppCompatActivity {
+
+    private Context context;
 
     private RichEditor editor;
 
@@ -50,6 +57,8 @@ public class EditorActivity extends AppCompatActivity {
     private WriteImagesAdapter adapter;
 
     private InsertImageAdapter insertImageAdapter;
+
+    private NetworkManager networkManager;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,6 +91,7 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        context = this;
 
         editor = (RichEditor) findViewById(R.id.editor);
         recyclerView = (RecyclerView) findViewById(R.id.insert_gallery);
@@ -109,7 +119,9 @@ public class EditorActivity extends AppCompatActivity {
         articalManager.setArticalType(AppContants.SCENERY);
 
         photoManager = new PhotoManager();
+        networkManager = new NetworkManager();
 
+        dataManager.setNetworkManager(networkManager);
         dataManager.setArticalManager(articalManager);
         dataManager.setPhotoManager(photoManager);
     }
@@ -151,7 +163,7 @@ public class EditorActivity extends AppCompatActivity {
     public void insertImageIntoEditor(int position){
         Uri url =(Uri) adapter.getmDatas().get(position);
         editor.insertImage(url.getPath(),"sample");
-        Artical.ImageLocation location = photoManager.getImageLocation(url);
+        ImageLocation location = photoManager.getImageLocation(url);
         if(location!=null && !articalManager.hasLocation())
             articalManager.setLocation(location);
         if(url!=null && !articalManager.hasImageUri())
@@ -229,7 +241,10 @@ public class EditorActivity extends AppCompatActivity {
                         break;
                 }
 //                finish();
-                editor.setHtml(articalManager.getArticalHtml());
+//                Artical artical = articalManager.getArtical();
+                networkManager.uploadArtical(context);
+//                editor.setHtml(articalManager.getArticalHtml());
+                finish();
             }
         });
         dialog.show();

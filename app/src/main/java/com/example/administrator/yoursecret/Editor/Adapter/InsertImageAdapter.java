@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.Editor;
+package com.example.administrator.yoursecret.Editor.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.administrator.yoursecret.Editor.Manager.DataManager;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 import com.example.administrator.yoursecret.utils.GlideImageLoader;
@@ -44,7 +45,7 @@ public class InsertImageAdapter extends RecyclerView.Adapter<InsertImageAdapter.
             }
         });
         if(context!=null)
-            GlideImageLoader.loadImage(context,DataManager.getInstance().getPhotoManager().getPhotos().get(position),holder.imageView);
+            GlideImageLoader.loadImage(context, DataManager.getInstance().getPhotoManager().getPhotos().get(position),holder.imageView);
     }
 
     @Override

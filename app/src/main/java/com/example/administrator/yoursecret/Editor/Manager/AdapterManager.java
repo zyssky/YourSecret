@@ -1,4 +1,6 @@
-package com.example.administrator.yoursecret.Editor;
+package com.example.administrator.yoursecret.Editor.Manager;
+
+import com.example.administrator.yoursecret.Editor.Adapter.WriteImagesAdapter;
 
 /**
  * Created by Administrator on 2017/6/8.

@@ -2,7 +2,6 @@ package com.example.administrator.yoursecret.Editor.Photo;
 
 import android.app.Service;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -11,8 +10,9 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.example.administrator.yoursecret.Editor.DataManager;
+import com.example.administrator.yoursecret.Editor.Manager.DataManager;
 import com.example.administrator.yoursecret.MetaData.Artical;
+import com.example.administrator.yoursecret.MetaData.ImageLocation;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -93,7 +93,7 @@ public class LocationService extends Service implements AMapLocationListener{
 
                 String address = amapLocation.getAddress();//地址，
 
-                DataManager.getInstance().getPhotoManager().addLatestImageLocation(new Artical.ImageLocation(latitude,longtitude,address));
+                DataManager.getInstance().getPhotoManager().addLatestImageLocation(new ImageLocation(latitude,longtitude,address));
                 Log.d("Location: ", "onLocationChanged: "+day+"时间, "+latitude+"维度, "+longtitude+"经度， "+address);
             }else {
                 //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。

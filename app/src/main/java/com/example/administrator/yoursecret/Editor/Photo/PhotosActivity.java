@@ -15,12 +15,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.example.administrator.yoursecret.Editor.AdapterManager;
-import com.example.administrator.yoursecret.Editor.DataManager;
-import com.example.administrator.yoursecret.Editor.PhotoManager;
+import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
+import com.example.administrator.yoursecret.Editor.Manager.DataManager;
+import com.example.administrator.yoursecret.Editor.Manager.PhotoManager;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.BitmapUtil;
-import com.example.administrator.yoursecret.Editor.WriteImagesAdapter;
+import com.example.administrator.yoursecret.Editor.Adapter.WriteImagesAdapter;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 import com.example.administrator.yoursecret.utils.SpaceItemDecoration;

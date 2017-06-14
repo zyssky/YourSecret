@@ -16,72 +16,32 @@ public class Artical{
 
     }
 
-    public String artical_id;
+//    public String articalId;
 
-    public String author_id;
+    public String authorId = "";
 
-    public String title;
+    public String title = "";
 
-    public String content_html;
+    public String contentHtml = "";
 
-    public ImageLocation location;
+    public double latitude;
 
-    public String articalType;
+    public double longtitude;
 
-    public Uri imageUri;
+    public String locationDesc = "";
 
-    public Map<Uri,ImageLocation> images;
+    public String articalType = "";
 
-    public String introduction;
+    public String imageUri = "";
+
+    public String dateString = "";
+
+    public String articalUrl = "";
+
+    public String introduction = "";
 
     public int saveType = -1;
 
-    public String dateString;
+    public String html;
 
-    public String articalUrl;
-
-    public static class ImageLocation implements Parcelable{
-        public double latitude;
-
-        public double longtitude;
-
-        public String description;
-
-        protected ImageLocation(Parcel in) {
-            latitude = in.readDouble();
-            longtitude = in.readDouble();
-            description = in.readString();
-        }
-        public ImageLocation(){}
-
-        public ImageLocation(double latitude,double longtitude,String description){
-            this.latitude = latitude;
-            this.longtitude = longtitude;
-            this.description = description;
-        }
-
-        public static final Creator<ImageLocation> CREATOR = new Creator<ImageLocation>() {
-            @Override
-            public ImageLocation createFromParcel(Parcel in) {
-                return new ImageLocation(in);
-            }
-
-            @Override
-            public ImageLocation[] newArray(int size) {
-                return new ImageLocation[size];
-            }
-        };
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeDouble(latitude);
-            dest.writeDouble(longtitude);
-            dest.writeString(description);
-        }
-    }
 }

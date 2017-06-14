@@ -27,9 +27,8 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.example.administrator.yoursecret.Editor.AdapterManager;
-import com.example.administrator.yoursecret.Editor.DataManager;
-import com.example.administrator.yoursecret.Editor.WriteImagesAdapter;
+import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
+import com.example.administrator.yoursecret.Editor.Manager.DataManager;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FileUtils;

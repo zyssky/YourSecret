@@ -1,9 +1,10 @@
-package com.example.administrator.yoursecret.Editor;
+package com.example.administrator.yoursecret.Editor.Manager;
 
 import android.net.Uri;
 import android.util.Log;
 
 import com.example.administrator.yoursecret.MetaData.Artical;
+import com.example.administrator.yoursecret.MetaData.ImageLocation;
 import com.example.administrator.yoursecret.UserManager;
 import com.example.administrator.yoursecret.utils.FileUtils;
 
@@ -26,13 +27,13 @@ public class ArticalManager {
             "<html itemscope itemtype=\"http://schema.org/WebPage\">\n" +
             "    <head>\n" +
             "        <meta charset=\"UTF-8\">\n" +
-            "        <title>{browser_title_content}</title>" +                               //浏览器标题
-            "           <meta name=\"viewport\" content=\"width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0\">" +
-            "           <link rel=\"canonical\" href=\"{artical_href}\">" +         //全文链接
-            "           <meta name=\"description\" content=\"{description_content}\"" +    //简介
-            "           <meta name=\"keywords\" content=\"{artical_type}\">" +      //类型
-            "           <meta name=\"image\" content=\"{mainImageUri}\">" +     //图片
-            "           <meta name=\"location\" content=\"{location_content}\"" +   //地址
+            "        <title>{browser_title_content}</title>\n" +                               //浏览器标题
+            "           <style type=\"text/css\">img {max-width: 100%; width:auto; height:auto;}</style>\n"+
+            "           <meta name=\"viewport\" content=\"width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0\">\n" +
+            "           <meta name=\"description\" content=\"{description_content}\"\n" +    //简介
+            "           <meta name=\"keywords\" content=\"{artical_type}\">\n" +      //类型
+            "           <meta name=\"image\" content=\"{mainImageUri}\">\n" +     //图片
+            "           <meta name=\"location\" content=\"{location_content}\"\n" +   //地址
             "<!-- Wechat meta -->\n" +
             "    <meta property=\"weixin:timeline_title\" content=\"\" />\n" +
             "    <meta property=\"weixin:chat_title\" content=\"\" />\n" +
@@ -110,6 +111,10 @@ public class ArticalManager {
         }
     }
 
+    public Artical getArtical(){
+        return artical;
+    }
+
     public void setArticalSaveType(int type){
         artical.saveType = type;
     }
@@ -135,18 +140,18 @@ public class ArticalManager {
             title = df.format(new Date());
         }
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        artical.dateString = df.format(new Date());
+//        artical.dateString = df.format(new Date());
         artical.title = title;
-        artical.content_html = content;
+        artical.contentHtml = content;
 
-        artical.artical_id =""+new Random().nextLong();
-        artical.author_id = UserManager.getInstance().getUserId();
-
-        artical.images = DataManager.getInstance().getPhotoManager().getImagesWithLocation();
+//        artical.articalId =""+new Random().nextLong();
+        artical.authorId = UserManager.getInstance().getUserId();
 
         artical.introduction = getIntroduction(content);
+
+        artical.html = getArticalHtml();
 
     }
 
@@ -171,22 +176,24 @@ public class ArticalManager {
         return sb.toString();
     }
 
-    public void setLocation(Artical.ImageLocation location){
-        artical.location = location;
+    public void setLocation(ImageLocation location){
+        artical.latitude = location.latitude;
+        artical.longtitude = location.longtitude;
+        artical.locationDesc = location.description;
     }
 
     public void setImageUri(Uri imageUri){
-        artical.imageUri = imageUri;
+        artical.imageUri = imageUri.getPath();
     }
 
     public boolean hasLocation(){
-        if(null!=artical.location)
+        if(!artical.locationDesc.isEmpty())
             return true;
         return false;
     }
 
     public boolean hasImageUri(){
-        if(null!=artical.imageUri){
+        if(!artical.imageUri.isEmpty()){
             return true;
         }
         return false;
@@ -195,42 +202,28 @@ public class ArticalManager {
     public String getArticalHtml(){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-        setHtmlContent(artical.content_html);
+        setHtmlContent(artical.contentHtml);
         setHtmlDescriptino(artical.introduction);
         setHtmlTimeStamp(df.format(new Date()));
-        if(artical.location!=null)
-            setHtmlLocation(artical.location.description);
+        if(artical.locationDesc!=null)
+            setHtmlLocation(artical.locationDesc);
         setHtmlAutohrName(UserManager.getInstance().getUserName());
         setHtmlTitle(artical.title);
         setHtmlType(artical.articalType);
 
         setHtmlAppIcon(FileUtils.getAppIconPath());
         if(artical.imageUri!=null)
-            setHtmlImage(artical.imageUri.getPath());
+            setHtmlImage(artical.imageUri);
         setHtmlLocationIcon(FileUtils.getLocationIconPath());
         setHtmlAuthorIcon(FileUtils.getUserIconPath());
 
-        setHtmlArticalHref("");
+//        setHtmlArticalHref("");
 
         Log.d("html : ", "getArticalHtml: "+template);
         return template;
     }
 
-    public RequestBody getFormBody(){
-        RequestBody formBody = new FormBody.Builder()
-                .add("content_html",artical.content_html)
-                .add("introduction",artical.introduction)
-                .add("timeStamp",artical.introduction)
-                .add("latitude",""+artical.location.latitude)
-                .add("longtitude",""+artical.location.longtitude)
-                .add("location_desc",artical.location.description)
-                .add("title",artical.title)
-                .add("articalType",artical.articalType)
-                .add("imageUri",artical.imageUri.getPath())
-                .build();
 
-        return formBody;
-    }
 
     public void setHtmlContent(String value){
         String old = "{artical_content}";
@@ -289,8 +282,8 @@ public class ArticalManager {
         template = template.replace(old,value);
     }
 
-    public void setHtmlArticalHref(String value){
-        String old = "{artical_href}";
-        template = template.replace(old,value);
-    }
+//    public void setHtmlArticalHref(String value){
+//        String old = "{artical_href}";
+//        template = template.replace(old,value);
+//    }
 }

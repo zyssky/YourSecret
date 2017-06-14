@@ -1,4 +1,6 @@
-package com.example.administrator.yoursecret.Editor;
+package com.example.administrator.yoursecret.Editor.Manager;
+
+import com.example.administrator.yoursecret.Editor.Network.NetworkManager;
 
 /**
  * Created by Administrator on 2017/6/8.
@@ -33,6 +35,16 @@ public class DataManager {
     private ArticalManager articalManager;
 
     private PhotoManager photoManager;
+
+    private NetworkManager networkManager;
+
+    public NetworkManager getNetworkManager() {
+        return networkManager;
+    }
+
+    public void setNetworkManager(NetworkManager networkManager) {
+        this.networkManager = networkManager;
+    }
 
     public PhotoManager getPhotoManager() {
         return photoManager;

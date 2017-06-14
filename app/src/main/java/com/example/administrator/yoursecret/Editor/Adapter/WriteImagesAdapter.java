@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.Editor;
+package com.example.administrator.yoursecret.Editor.Adapter;
 
 import android.content.Context;
 import android.net.Uri;

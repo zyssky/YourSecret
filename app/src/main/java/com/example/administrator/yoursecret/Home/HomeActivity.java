@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.administrator.yoursecret.ApplicationDataManager;
 import com.example.administrator.yoursecret.Editor.EditorActivity;
 import com.example.administrator.yoursecret.R;
 
@@ -46,6 +47,8 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        ApplicationDataManager.getInstance().setAppContext(getApplicationContext());
 
         presenter = new HomePresenter(this);
 
