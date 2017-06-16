@@ -1,11 +1,10 @@
-package com.example.administrator.yoursecret.MetaData;
+package com.example.administrator.yoursecret.Entity;
 
 import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
+
+import com.example.administrator.yoursecret.utils.AppContants;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2017/6/6.
@@ -40,8 +39,10 @@ public class Artical{
 
     public String introduction = "";
 
-    public int saveType = -1;
+    public int saveType = AppContants.PRIVATE;
 
-    public String html;
+    public String html = "<h1>请输入标题......</h1><hr>请输入内容......";
+
+    public List<Uri> photos;
 
 }

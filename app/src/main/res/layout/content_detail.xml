@@ -1,127 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+    <!--<android.support.constraint.ConstraintLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" >-->
 
-        <TextView
-            android:id="@+id/title_detail"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginTop="16dp"
-            android:textStyle="bold"
-            android:textSize="24dp"
-            android:textColor="@android:color/black"
-            android:text="越是轻描淡写，越是情深义重,不然还能怎样"
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/content_detail"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp" />
-
-        <TextView
-            android:id="@+id/content_detail"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="simple data"
-            android:layout_marginLeft="24dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/author_image"
-            android:layout_marginRight="24dp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp" />
-
-        <ImageView
-            android:id="@+id/author_image"
-            android:layout_width="53dp"
-            android:layout_height="45dp"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/skin_about_brand"
-            android:layout_marginLeft="24dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/title_detail"
-            android:layout_marginStart="24dp" />
-
-        <TextView
-            android:id="@+id/username_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="他者others"
-            app:layout_constraintLeft_toRightOf="@+id/author_image"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/title_detail"
-            android:layout_marginStart="10dp" />
-
-        <TextView
-            android:id="@+id/date_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5月22日"
-            android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@+id/username_detail"
-            app:layout_constraintLeft_toRightOf="@+id/author_image"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp" />
+            app:layout_constraintBottom_toBottomOf="parent"></WebView>
 
 
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:background="@color/color_cccccc"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/content_detail"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:id="@+id/divider_detail">
+        <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:background="@color/color_cccccc"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/content_detail"-->
+            <!--app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--app:layout_constraintRight_toRightOf="parent"-->
+            <!--android:id="@+id/divider_detail">-->
 
-            <TextView
-                android:layout_gravity="bottom|left"
-                android:id="@+id/countflag_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="回复："
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp" />
+            <!--<TextView-->
+                <!--android:layout_gravity="bottom|left"-->
+                <!--android:id="@+id/countflag_comment"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="回复："-->
+                <!--android:layout_marginLeft="8dp"-->
+                <!--app:layout_constraintLeft_toLeftOf="parent"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--android:layout_marginBottom="8dp"-->
+                <!--android:layout_marginStart="8dp" />-->
 
-            <TextView
-                android:layout_gravity="bottom|left"
-                android:id="@+id/count_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="8"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintLeft_toRightOf="@+id/countflag_comment"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp" />
+            <!--<TextView-->
+                <!--android:layout_gravity="bottom|left"-->
+                <!--android:id="@+id/count_comment"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="8"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--android:layout_marginBottom="8dp"-->
+                <!--app:layout_constraintLeft_toRightOf="@+id/countflag_comment"-->
+                <!--android:layout_marginStart="4dp"-->
+                <!--android:layout_marginLeft="4dp" />-->
 
-        </android.support.constraint.ConstraintLayout>
+        <!--</android.support.constraint.ConstraintLayout>-->
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/comment_recycler"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider_detail" ></android.support.v7.widget.RecyclerView>
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/comment_recycler"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--app:layout_constraintRight_toRightOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/divider_detail" ></android.support.v7.widget.RecyclerView>-->
 
-    </android.support.constraint.ConstraintLayout>
+    <!--</android.support.constraint.ConstraintLayout>-->
 
-</android.support.v4.widget.NestedScrollView>
+</android.support.constraint.ConstraintLayout>

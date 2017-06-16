@@ -2,8 +2,6 @@ package com.example.administrator.yoursecret.Home;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,11 +10,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.administrator.yoursecret.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Editor.EditorActivity;
 import com.example.administrator.yoursecret.R;
-
-import java.lang.reflect.Field;
+import com.example.administrator.yoursecret.Recieve.RecieveDataManager;
+import com.example.administrator.yoursecret.Record.RecordDataManager;
+import com.example.administrator.yoursecret.AppManager.UserManager;
+import com.example.administrator.yoursecret.utils.FunctionUtils;
 
 public class HomeActivity extends AppCompatActivity implements HomeContract.View{
 
@@ -48,14 +48,14 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        ApplicationDataManager.getInstance().setAppContext(getApplicationContext());
+        initManager();
 
         presenter = new HomePresenter(this);
 
         presenter.switchContent(HomePresenter.RECIEVE_FRAGMENT);
 
         navigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
-        BottomNavigationViewHelper.disableShiftMode(navigationView);
+        FunctionUtils.disableShiftMode(navigationView);
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -80,6 +80,13 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         });
     }
 
+    private void initManager(){
+        ApplicationDataManager.getInstance().setAppContext(getApplicationContext());
+        ApplicationDataManager.getInstance().setUserManager(new UserManager());
+        ApplicationDataManager.getInstance().setRecordDataManager(new RecordDataManager());
+        ApplicationDataManager.getInstance().setRecieveDataManager(new RecieveDataManager());
+    }
+
 
     @Override
     public void switchContent(Fragment targetFragment) {
@@ -96,30 +103,6 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         }
         currentFragment = targetFragment;
     }
+
 }
 
-// 利用反射机制，改变 item 的 mShiftingMode 变量
-class BottomNavigationViewHelper {
-    public static void disableShiftMode(BottomNavigationView navigationView) {
-        BottomNavigationMenuView menuView =
-                (BottomNavigationMenuView) navigationView.getChildAt(0);
-        try {
-            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
-            shiftingMode.setAccessible(true);
-            shiftingMode.setBoolean(menuView, false);
-            shiftingMode.setAccessible(false);
-
-            for (int i = 0; i < menuView.getChildCount(); i++) {
-                BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(i);
-                itemView.setShiftingMode(false);
-                itemView.setChecked(itemView.getItemData().isChecked());
-            }
-        } catch (NoSuchFieldException e) {
-            // Log
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // Log
-            e.printStackTrace();
-        }
-    }
-}

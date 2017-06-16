@@ -1,6 +1,7 @@
-package com.example.administrator.yoursecret.Recieve;
+package com.example.administrator.yoursecret.Recieve.Category;
 
-import android.os.StrictMode;
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,11 +9,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.administrator.yoursecret.Detail.DetailActivity;
 import com.example.administrator.yoursecret.R;
-import com.example.administrator.yoursecret.Recieve.RecieveRecyclerAdapter;
 import com.example.administrator.yoursecret.utils.AppContants;
+import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 import com.example.administrator.yoursecret.utils.DividerItemDecoration;
 import com.example.administrator.yoursecret.utils.EndlessOnScrollListener;
+import com.example.administrator.yoursecret.utils.KV;
 
 public class CategoryActivity extends AppCompatActivity {
 
@@ -20,7 +23,6 @@ public class CategoryActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout refreshLayout;
 
-    private CategoryAdapter categoryAdapter;
 
 
     @Override
@@ -29,11 +31,13 @@ public class CategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        int position = getIntent().getIntExtra(AppContants.POSITION,-1);
-        if(position>=0) {
-            Object object = RecieveRecyclerAdapter.getInstance().getDataAt(position);
-            if(object instanceof String)
-                getSupportActionBar().setTitle((String)object);
+        final Activity activity = this;
+
+        Bundle bundle = getIntent().getExtras();
+        if(null!=bundle) {
+            KV kv = bundle.getParcelable(AppContants.KEY);
+
+            getSupportActionBar().setTitle(kv.key);
         }
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.category_refresh);
@@ -49,8 +53,21 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
 
-        categoryAdapter = new CategoryAdapter();
-        categoryAdapter.setDatas(RecieveData.getInstance().getDatas(),RecieveData.getInstance().getTitles());
-        recyclerView.setAdapter(categoryAdapter);
+        CategoryAdapter adapter = CategoryDataManager.getInstance().getAdapter();
+        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, Object data) {
+                Intent intent = new Intent(activity, DetailActivity.class);
+                intent.putExtra(AppContants.COMMENT_POSITION,position);
+                activity.startActivity(intent);
+            }
+        });
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CategoryDataManager.onDestroy();
     }
 }

@@ -5,8 +5,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Base64;
 
-import com.example.administrator.yoursecret.MetaData.Artical;
-import com.example.administrator.yoursecret.MetaData.ImageLocation;
+import com.example.administrator.yoursecret.Entity.ImageLocation;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import java.util.Map;
 public class PhotoManager {
     private Map<Uri,ImageLocation> images;
 
+
     public List<Uri> getPhotos() {
         if(photos==null){
             photos = new ArrayList<>();
@@ -29,6 +29,10 @@ public class PhotoManager {
     }
 
     private List<Uri> photos;
+
+    public void setPhotos(List<Uri> photos) {
+        this.photos = photos;
+    }
 
     public PhotoManager(){}
 

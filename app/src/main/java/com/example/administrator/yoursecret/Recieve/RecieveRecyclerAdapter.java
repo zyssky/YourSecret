@@ -6,28 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.administrator.yoursecret.MetaData.PushMessage;
+import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.MultiRecyclerAdapter;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2017/4/16.
  */
 
-public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<PushMessage> {
+public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<Artical> {
 
-    private static RecieveRecyclerAdapter instance;
-    private RecieveRecyclerAdapter(){};
-    public static void init(Map<String,List<PushMessage>> datas , List<String> titles){
-        instance = new RecieveRecyclerAdapter();
-        instance.setDatas(datas,titles);
-    }
-    public static RecieveRecyclerAdapter getInstance(){
-        return instance;
-    }
+    public RecieveRecyclerAdapter(){};
 
     @Override
     public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
@@ -47,7 +37,7 @@ public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<PushMessage> {
 
     @Override
     public RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message2,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_artical,parent,false);
         return new RecieveRecyclerAdapter.ItemViewHolder(view);
     }
 
@@ -65,7 +55,7 @@ public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<PushMessage> {
     public void onBindTitle(RecyclerView.ViewHolder holder, String title) {
         if(holder instanceof RecieveRecyclerAdapter.TitleViewHolder){
             RecieveRecyclerAdapter.TitleViewHolder titleViewHolder = (RecieveRecyclerAdapter.TitleViewHolder) holder;
-            if(title.equals("热点")){
+            if(title.equals(AppContants.RECIEVE_FIRST_CATOGORY)){
                 titleViewHolder.title_divider.setVisibility(View.GONE);
             }
             else {
@@ -76,7 +66,7 @@ public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<PushMessage> {
     }
 
     @Override
-    public void onBindItem(RecyclerView.ViewHolder holder, PushMessage data) {
+    public void onBindItem(RecyclerView.ViewHolder holder, Artical data) {
         if(holder instanceof RecieveRecyclerAdapter.ItemViewHolder){
             RecieveRecyclerAdapter.ItemViewHolder itemViewHolder = (RecieveRecyclerAdapter.ItemViewHolder) holder;
 

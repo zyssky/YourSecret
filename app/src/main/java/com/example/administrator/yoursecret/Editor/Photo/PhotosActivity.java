@@ -16,7 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
-import com.example.administrator.yoursecret.Editor.Manager.DataManager;
+import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.Editor.Manager.PhotoManager;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.BitmapUtil;
@@ -79,7 +79,7 @@ public class PhotosActivity extends AppCompatActivity {
     }
 
     public void initModel(){
-        photoManager = DataManager.getInstance().getPhotoManager();
+        photoManager = EditorDataManager.getInstance().getPhotoManager();
 
     }
 

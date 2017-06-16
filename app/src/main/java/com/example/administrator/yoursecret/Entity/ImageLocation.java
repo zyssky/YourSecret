@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.MetaData;
+package com.example.administrator.yoursecret.Entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;

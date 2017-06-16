@@ -3,20 +3,17 @@ package com.example.administrator.yoursecret.Editor.Manager;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.administrator.yoursecret.MetaData.Artical;
-import com.example.administrator.yoursecret.MetaData.ImageLocation;
-import com.example.administrator.yoursecret.UserManager;
+import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.FoundationManager;
+import com.example.administrator.yoursecret.Entity.Artical;
+import com.example.administrator.yoursecret.Entity.ImageLocation;
 import com.example.administrator.yoursecret.utils.FileUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
 
 /**
  * Created by Administrator on 2017/6/8.
@@ -105,7 +102,7 @@ public class ArticalManager {
     }
 
     public void deleteArtical(){
-        List<Uri> list = DataManager.getInstance().getPhotoManager().getPhotos();
+        List<Uri> list = EditorDataManager.getInstance().getPhotoManager().getPhotos();
         for (int i = 0; i < list.size(); i++) {
                 FileUtils.fileDelete(list.get(i).getPath());
         }
@@ -113,6 +110,10 @@ public class ArticalManager {
 
     public Artical getArtical(){
         return artical;
+    }
+
+    public void setArtical(Artical artical) {
+        this.artical = artical;
     }
 
     public void setArticalSaveType(int type){
@@ -140,18 +141,17 @@ public class ArticalManager {
             title = df.format(new Date());
         }
 
-//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-//        artical.dateString = df.format(new Date());
         artical.title = title;
         artical.contentHtml = content;
 
-//        artical.articalId =""+new Random().nextLong();
-        artical.authorId = UserManager.getInstance().getUserId();
+        artical.authorId = ApplicationDataManager.getInstance().getUserManager().getUserId();
 
         artical.introduction = getIntroduction(content);
 
-        artical.html = getArticalHtml();
+        artical.photos = EditorDataManager.getInstance().getPhotoManager().getPhotos();
+
+        artical.html = html;
+
 
     }
 
@@ -207,15 +207,15 @@ public class ArticalManager {
         setHtmlTimeStamp(df.format(new Date()));
         if(artical.locationDesc!=null)
             setHtmlLocation(artical.locationDesc);
-        setHtmlAutohrName(UserManager.getInstance().getUserName());
+        setHtmlAutohrName(ApplicationDataManager.getInstance().getUserManager().getUserName());
         setHtmlTitle(artical.title);
         setHtmlType(artical.articalType);
 
-        setHtmlAppIcon(FileUtils.getAppIconPath());
+        setHtmlAppIcon(FoundationManager.APP_ICON_URL);
         if(artical.imageUri!=null)
             setHtmlImage(artical.imageUri);
-        setHtmlLocationIcon(FileUtils.getLocationIconPath());
-        setHtmlAuthorIcon(FileUtils.getUserIconPath());
+        setHtmlLocationIcon(FoundationManager.LOCATION_ICON_URL);
+        setHtmlAuthorIcon(ApplicationDataManager.getInstance().getUserManager().getUserIconPath());
 
 //        setHtmlArticalHref("");
 
