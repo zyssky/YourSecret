@@ -77,35 +77,5 @@ public class FileUtils {
                 + File.separator;
     }
 
-    public static String getCssPath(){
-        if(checkSDcard()){
-            File css = new File(toRootPath(),"base.css");
-            if(!css.exists()){
-                try {
-                    FileOutputStream fileOutputStream = new FileOutputStream(css);
-                    fileOutputStream.write("img {max-width: 100%; width:auto; height:auto;}".getBytes());
-                    fileOutputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return css.getPath();
-        }
-        return null;
-    }
 
-    public static String getAppIconPath(){
-        File icon = new File(toRootPath(),"logo.png");
-        return icon.getPath();
-    }
-
-    public static String getLocationIconPath(){
-        File icon = new File(toRootPath(),"location.png");
-        return icon.getPath();
-    }
-
-    public static String getUserIconPath(){
-        File icon = new File(toRootPath(),"userIcon.png");
-        return icon.getPath();
-    }
 }

@@ -46,7 +46,7 @@ public class PropUtil {
      * 获取配置文件中对应的URL地址
      *
      */
-    private static String getValue(Context context , String propKey) {
+    private static String getAssetsValue(Context context , String propKey) {
         Properties properties = loadAssetsProperties(context,PROPERTY_PATH);
         return properties.getProperty(propKey,null);
     }

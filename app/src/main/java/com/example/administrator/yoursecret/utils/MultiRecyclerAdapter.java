@@ -31,8 +31,8 @@ public abstract class MultiRecyclerAdapter<T> extends RecyclerView.Adapter<Recyc
 
     private Map<String,List<T>> datas;
     private List<String> titles;
-    private String titleAfterGetItemType;
-    private T dataAfterGetItemType;
+    protected String titleAfterGetItemType;
+    protected T dataAfterGetItemType;
 
     public void setOnItemClickListener(BaseRecyclerAdapter.OnItemClickListener itemListener){
         this.itemListener = itemListener;
@@ -48,17 +48,17 @@ public abstract class MultiRecyclerAdapter<T> extends RecyclerView.Adapter<Recyc
         notifyDataSetChanged();
     }
 
-    public void addDatasOnTitle(String title , List<T> itemDatas){
-        for (int i = 0; i < titles.size(); i++) {
-            if(title.equals(titles.get(i))){
-                datas.get(title).addAll(itemDatas);
-            }
-        }
-        if(!datas.containsKey(title)){
-            datas.put(title,itemDatas);
-        }
-        notifyDataSetChanged();
-    }
+//    public void addDatasOnTitle(String title , List<T> itemDatas){
+//        for (int i = 0; i < titles.size(); i++) {
+//            if(title.equals(titles.get(i))){
+//                datas.get(title).addAll(itemDatas);
+//            }
+//        }
+//        if(!datas.containsKey(title)){
+//            datas.put(title,itemDatas);
+//        }
+//        notifyDataSetChanged();
+//    }
 
     public Object getDataAt(int position) {
         position = position - hasFooter - hasHeader;
@@ -70,6 +70,23 @@ public abstract class MultiRecyclerAdapter<T> extends RecyclerView.Adapter<Recyc
             if (position < datas.get(titles.get(i)).size()) {
                 return datas.get(titles.get(i)).get(position);
             }
+            position -= datas.get(titles.get(i)).size();
+        }
+        return null;
+    }
+
+    public KV getLocation(int position){
+        for (int i = 0; i < titles.size(); i++) {
+            if (position == 0) {
+                return new KV(titles.get(i),-1);
+            }
+
+            position--;
+
+            if (position < datas.get(titles.get(i)).size()) {
+                return new KV(titles.get(i),position);
+            }
+
             position -= datas.get(titles.get(i)).size();
         }
         return null;

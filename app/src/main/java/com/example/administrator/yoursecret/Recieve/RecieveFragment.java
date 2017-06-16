@@ -13,15 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Detail.DetailActivity;
+import com.example.administrator.yoursecret.Entity.Artical;
+import com.example.administrator.yoursecret.Recieve.Category.CategoryActivity;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 import com.example.administrator.yoursecret.utils.DividerItemDecoration;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.EndlessOnScrollListener;
+import com.example.administrator.yoursecret.utils.KV;
 
 
-public class RecieveFragment extends Fragment implements RecieveContract.View {
+public class RecieveFragment extends Fragment {
 
     private RecyclerView recyclerView;
 
@@ -30,8 +34,6 @@ public class RecieveFragment extends Fragment implements RecieveContract.View {
 //    private View footerView;
 
     private View rootView;
-
-    private RecieveContract.Presenter presenter;
 
     private Context context;
 
@@ -49,7 +51,6 @@ public class RecieveFragment extends Fragment implements RecieveContract.View {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new RecievePresenter(this);
     }
 
     @Override
@@ -82,12 +83,7 @@ public class RecieveFragment extends Fragment implements RecieveContract.View {
         super.onActivityCreated(savedInstanceState);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-//        recyclerView.addItemDecoration(new SpaceItemDecoration(10,10,10,10));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST,0,0,0,0));
-        View headerView = LayoutInflater.from(getContext()).inflate(R.layout.header_message,null);
-//        footerView = LayoutInflater.from(getContext()).inflate(R.layout.footer_loading,null);
-
-//        refreshLayout.setRefreshing(true);
 
         recyclerView.addOnScrollListener(new EndlessOnScrollListener(linearLayoutManager) {
             @Override
@@ -97,32 +93,29 @@ public class RecieveFragment extends Fragment implements RecieveContract.View {
             }
         });
 
-
-        presenter.setRecyclerViewAdapter();
-//        ((RecieveRecyclerAdapter)recyclerView.getAdapter()).setHeaderView(headerView);
-//        ((RecieveRecyclerAdapter)recyclerView.getAdapter()).setFooterView(footerView);
-    }
-
-    @Override
-    public void setRecyclerViewAdapter() {
-        RecieveRecyclerAdapter recieveRecyclerAdapter = RecieveRecyclerAdapter.getInstance();
-        recyclerView.setAdapter(recieveRecyclerAdapter);
-        recieveRecyclerAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+        RecieveRecyclerAdapter adapter = ApplicationDataManager.getInstance().getRecieveDataManager().getAdapter();
+        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, Object data) {
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(AppContants.COMMENT_POSITION,position);
+                KV kv = ApplicationDataManager.getInstance().getRecieveDataManager().getAdapter().getLocation(position);
+                intent.putExtra(AppContants.FROM_RECIEVE,kv);
+                context.startActivity(intent);
+            }
+        });
+        adapter.setOnTitleClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, Object data) {
+                Intent intent = new Intent(context, CategoryActivity.class);
+                KV kv = ApplicationDataManager.getInstance().getRecieveDataManager().getAdapter().getLocation(position);
+                intent.putExtra(AppContants.KEY,kv);
                 context.startActivity(intent);
             }
         });
 
-        recieveRecyclerAdapter.setOnTitleClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, Object data) {
-                Intent intent = new Intent(context, CategoryActivity.class);
-                intent.putExtra(AppContants.POSITION,position);
-                context.startActivity(intent);
-            }
-        });
+        ApplicationDataManager.getInstance().getRecieveDataManager().addArtical(AppContants.ARTICAL_CATOGORY_HOT,new Artical());
+        recyclerView.setAdapter(adapter);
+
     }
+
 }

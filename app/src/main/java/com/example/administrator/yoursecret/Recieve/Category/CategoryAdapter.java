@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.Recieve;
+package com.example.administrator.yoursecret.Recieve.Category;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.administrator.yoursecret.MetaData.PushMessage;
+import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.MultiRecyclerAdapter;
 
@@ -14,7 +14,7 @@ import com.example.administrator.yoursecret.utils.MultiRecyclerAdapter;
  * Created by Administrator on 2017/6/4.
  */
 
-public class CategoryAdapter extends MultiRecyclerAdapter<PushMessage> {
+public class CategoryAdapter extends MultiRecyclerAdapter<Artical> {
     @Override
     public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
         return null;
@@ -33,7 +33,7 @@ public class CategoryAdapter extends MultiRecyclerAdapter<PushMessage> {
 
     @Override
     public RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message2,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_artical,parent,false);
         return new CategoryAdapter.ItemViewHolder(view);
     }
 
@@ -53,7 +53,7 @@ public class CategoryAdapter extends MultiRecyclerAdapter<PushMessage> {
     }
 
     @Override
-    public void onBindItem(RecyclerView.ViewHolder holder, PushMessage data) {
+    public void onBindItem(RecyclerView.ViewHolder holder, Artical data) {
 
     }
 

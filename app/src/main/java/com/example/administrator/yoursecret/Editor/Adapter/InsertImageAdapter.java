@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.administrator.yoursecret.Editor.Manager.DataManager;
+import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 import com.example.administrator.yoursecret.utils.GlideImageLoader;
@@ -45,12 +45,12 @@ public class InsertImageAdapter extends RecyclerView.Adapter<InsertImageAdapter.
             }
         });
         if(context!=null)
-            GlideImageLoader.loadImage(context, DataManager.getInstance().getPhotoManager().getPhotos().get(position),holder.imageView);
+            GlideImageLoader.loadImage(context, EditorDataManager.getInstance().getPhotoManager().getPhotos().get(position),holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return DataManager.getInstance().getPhotoManager().getPhotos().size();
+        return EditorDataManager.getInstance().getPhotoManager().getPhotos().size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{

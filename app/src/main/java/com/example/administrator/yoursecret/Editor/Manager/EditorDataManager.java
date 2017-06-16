@@ -6,14 +6,14 @@ import com.example.administrator.yoursecret.Editor.Network.NetworkManager;
  * Created by Administrator on 2017/6/8.
  */
 
-public class DataManager {
-    private static DataManager instance;
+public class EditorDataManager {
+    private static EditorDataManager instance;
 
-    private DataManager(){}
+    private EditorDataManager(){}
 
-    public static DataManager getInstance(){
+    public static EditorDataManager getInstance(){
         if(instance==null){
-            instance = new DataManager();
+            instance = new EditorDataManager();
         }
         return instance;
     }

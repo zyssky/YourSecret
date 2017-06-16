@@ -9,16 +9,20 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.Environment;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
+import android.support.design.widget.BottomNavigationView;
 
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 /**
  * Created by Administrator on 2017/5/27.
  */
 
-public final class FunctionUtil {
+public final class FunctionUtils {
     public static Bitmap createCircleImage(Bitmap source, int min) {
         final Paint paint = new Paint();
         paint.setAntiAlias(true);
@@ -85,4 +89,29 @@ public final class FunctionUtil {
     public void test(){
 
     }
+
+    // 利用反射机制，改变 item 的 mShiftingMode 变量
+    public static void disableShiftMode(BottomNavigationView navigationView) {
+        BottomNavigationMenuView menuView =
+                (BottomNavigationMenuView) navigationView.getChildAt(0);
+        try {
+            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+            shiftingMode.setAccessible(true);
+            shiftingMode.setBoolean(menuView, false);
+            shiftingMode.setAccessible(false);
+
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(i);
+                itemView.setShiftingMode(false);
+                itemView.setChecked(itemView.getItemData().isChecked());
+            }
+        } catch (NoSuchFieldException e) {
+            // Log
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            // Log
+            e.printStackTrace();
+        }
+    }
+
 }

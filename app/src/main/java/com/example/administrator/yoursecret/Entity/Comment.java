@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.MetaData;
+package com.example.administrator.yoursecret.Entity;
 
 /**
  * Created by Administrator on 2017/5/27.

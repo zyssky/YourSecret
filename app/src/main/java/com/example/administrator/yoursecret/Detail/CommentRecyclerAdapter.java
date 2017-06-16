@@ -5,9 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.administrator.yoursecret.MetaData.Comment;
+import com.example.administrator.yoursecret.Entity.Comment;
 import com.example.administrator.yoursecret.R;
-import com.example.administrator.yoursecret.Recieve.RecieveRecyclerAdapter;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 
 /**

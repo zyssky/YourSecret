@@ -1,7 +1,6 @@
 package com.example.administrator.yoursecret.Editor;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -15,29 +14,31 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Editor.Adapter.InsertImageAdapter;
 import com.example.administrator.yoursecret.Editor.Adapter.WriteImagesAdapter;
 import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
 import com.example.administrator.yoursecret.Editor.Manager.ArticalManager;
-import com.example.administrator.yoursecret.Editor.Manager.DataManager;
+import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.Editor.Manager.PhotoManager;
 import com.example.administrator.yoursecret.Editor.Network.NetworkManager;
 import com.example.administrator.yoursecret.Editor.Photo.PhotosActivity;
-import com.example.administrator.yoursecret.MetaData.Artical;
-import com.example.administrator.yoursecret.MetaData.ImageLocation;
+import com.example.administrator.yoursecret.AppManager.FoundationManager;
+import com.example.administrator.yoursecret.Entity.Artical;
+import com.example.administrator.yoursecret.Entity.ImageLocation;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.View.MyImageButton;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
-import com.example.administrator.yoursecret.utils.FileUtils;
-import com.example.administrator.yoursecret.utils.FunctionUtil;
+import com.example.administrator.yoursecret.utils.FunctionUtils;
+import com.example.administrator.yoursecret.utils.KV;
 import com.example.administrator.yoursecret.utils.SpaceItemDecoration;
 
 import jp.wasabeef.richeditor.RichEditor;
 
 public class EditorActivity extends AppCompatActivity {
 
-    private Context context;
+//    private Context context;
 
     private RichEditor editor;
 
@@ -70,6 +71,8 @@ public class EditorActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         articalManager.saveArtical(editor.getHtml());
+        ApplicationDataManager.getInstance().getRecordDataManager().saveTempArtical(articalManager.getArtical());
+
     }
 
     @Override
@@ -86,24 +89,36 @@ public class EditorActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        context = this;
+//        context = this;
 
         editor = (RichEditor) findViewById(R.id.editor);
         recyclerView = (RecyclerView) findViewById(R.id.insert_gallery);
         text_toolbar = findViewById(R.id.text_toolbar);
 
         initModels();
+
+        Intent intent = getIntent();
+        if(intent.getExtras()!=null) {
+            KV kv = intent.getExtras().getParcelable(AppContants.FROM_RECORD);
+
+            Artical artical = ApplicationDataManager.getInstance().getRecordDataManager().getArtical(kv);
+            photoManager.setPhotos(artical.photos);
+            articalManager.setArtical(artical);
+            ApplicationDataManager.getInstance().getRecordDataManager().removeArtical(kv);
+        }
+
         initAdapters();
 
         editor.setPadding(10, 10, 10, 10);
-        String hint = "<h1>请输入标题......</h1><hr>请输入内容......";
-        editor.loadCSS(FileUtils.getCssPath());
-        editor.setHtml(hint);
+//        String hint = "<h1>请输入标题......</h1><hr>请输入内容......";
+        editor.loadCSS(FoundationManager.getCssPath());
+        editor.setHtml(articalManager.getArtical().html);
 
         recyclerView.setAdapter(insertImageAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
@@ -112,18 +127,18 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     private void initModels(){
-        DataManager dataManager = DataManager.getInstance();
+        EditorDataManager editorDataManager = EditorDataManager.getInstance();
 
 
         articalManager = new ArticalManager();
-        articalManager.setArticalType(AppContants.SCENERY);
+        articalManager.setArticalType(AppContants.ARTICAL_CATOGORY_SCENERY);
 
         photoManager = new PhotoManager();
         networkManager = new NetworkManager();
 
-        dataManager.setNetworkManager(networkManager);
-        dataManager.setArticalManager(articalManager);
-        dataManager.setPhotoManager(photoManager);
+        editorDataManager.setNetworkManager(networkManager);
+        editorDataManager.setArticalManager(articalManager);
+        editorDataManager.setPhotoManager(photoManager);
     }
 
     private void initAdapters(){
@@ -148,20 +163,20 @@ public class EditorActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DataManager.onDestroy();
+        EditorDataManager.onDestroy();
         AdapterManager.onDestroy();
     }
 
-    private String getHtmlData(String bodyHTML) {
-        String head = "<head>" +
-                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> " +
-                "<style>img{max-width: 100%; width:auto; height:auto;}</style>" +
-                "</head>";
-        return "<html>" + head + "<body>" + bodyHTML + "</body></html>";
-    }
+//    private String getHtmlData(String bodyHTML) {
+//        String head = "<head>" +
+//                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> " +
+//                "<style>img{max-width: 100%; width:auto; height:auto;}</style>" +
+//                "</head>";
+//        return "<html>" + head + "<body>" + bodyHTML + "</body></html>";
+//    }
 
     public void insertImageIntoEditor(int position){
-        Uri url =(Uri) adapter.getmDatas().get(position);
+        Uri url = adapter.getmDatas().get(position);
         editor.insertImage(url.getPath(),"sample");
         ImageLocation location = photoManager.getImageLocation(url);
         if(location!=null && !articalManager.hasLocation())
@@ -215,14 +230,14 @@ public class EditorActivity extends AppCompatActivity {
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         dialogWindow.setGravity(gravity_x | gravity_y);
-        lp.x = FunctionUtil.dip2px(this,x);
-        lp.y = FunctionUtil.dip2px(this,y);
+        lp.x = FunctionUtils.dip2px(this,x);
+        lp.y = FunctionUtils.dip2px(this,y);
         dialogWindow.setAttributes(lp);
     }
 
     public void setSave(View view){
         click(view);
-        SaveDialog dialog = new SaveDialog(this,R.style.MyDialog);
+        final SaveDialog dialog = new SaveDialog(this,R.style.MyDialog);
         setDialogPosition(dialog,Gravity.END,10,Gravity.BOTTOM,50);
         dialog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,16 +249,17 @@ public class EditorActivity extends AppCompatActivity {
                     case R.id.save_public:
                         articalManager.setArticalSaveType(AppContants.PUBLIC);
                         articalManager.saveArtical(editor.getHtml());
+                        ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(articalManager.getArtical());
+                        networkManager.uploadArtical();
                         break;
                     case R.id.save_private:
                         articalManager.setArticalSaveType(AppContants.PRIVATE);
                         articalManager.saveArtical(editor.getHtml());
+                        ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(articalManager.getArtical());
+                        networkManager.uploadArtical();
                         break;
                 }
-//                finish();
-//                Artical artical = articalManager.getArtical();
-                networkManager.uploadArtical(context);
-//                editor.setHtml(articalManager.getArticalHtml());
+                dialog.dismiss();
                 finish();
             }
         });
@@ -303,25 +319,25 @@ public class EditorActivity extends AppCompatActivity {
     //类型选择按钮
 
     public void onSceneryClick(View view){
-        articalManager.setArticalType(AppContants.SCENERY);
+        articalManager.setArticalType(AppContants.ARTICAL_CATOGORY_SCENERY);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }
 
     public void onPersonClick(View view){
-        articalManager.setArticalType(AppContants.PERSON);
+        articalManager.setArticalType(AppContants.ARTICAL_CATOGORY_PERSON);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }
 
     public void onThingClick(View view){
-        articalManager.setArticalType(AppContants.THING);
+        articalManager.setArticalType(AppContants.ARTICAL_CATOGORY_THING);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }
 
     public void onInterest(View view){
-        articalManager.setArticalType(AppContants.INTEREST);
+        articalManager.setArticalType(AppContants.ARTICAL_CATOGORY_INTEREST);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }
