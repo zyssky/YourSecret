@@ -96,6 +96,12 @@
             android:theme="@style/FullscreenTheme">
 
         </activity>
+        <activity android:name=".Account.Account_set_Activity">
+
+
+        </activity>
+        <activity android:name=".Account.Basic_set_Activity"
+            ></activity>
     </application>
 
 </manifest>
