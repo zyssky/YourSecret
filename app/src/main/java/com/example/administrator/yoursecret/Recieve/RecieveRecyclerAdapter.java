@@ -1,14 +1,18 @@
 package com.example.administrator.yoursecret.Recieve;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
+import com.example.administrator.yoursecret.utils.GlideImageLoader;
 import com.example.administrator.yoursecret.utils.MultiRecyclerAdapter;
 
 /**
@@ -69,7 +73,22 @@ public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<Artical> {
     public void onBindItem(RecyclerView.ViewHolder holder, Artical data) {
         if(holder instanceof RecieveRecyclerAdapter.ItemViewHolder){
             RecieveRecyclerAdapter.ItemViewHolder itemViewHolder = (RecieveRecyclerAdapter.ItemViewHolder) holder;
-
+            itemViewHolder.title.setText(data.title);
+            itemViewHolder.introduction.setText(data.introduction);
+            itemViewHolder.locationDesc.setText(data.locationDesc);
+            if(data.imageUri==null || data.imageUri.isEmpty()){
+                GlideImageLoader.loadImageNail(itemViewHolder.itemView.getContext(),R.drawable.default_image,itemViewHolder.imageView);
+            }
+            else {
+                Uri uri = null;
+                if(!data.imageUri.contains("://")) {
+                    uri = Uri.parse("file://" + data.imageUri);
+                }else {
+                    uri = Uri.parse(data.imageUri);
+                }
+                Log.d("test image in record ", "onBindItem: "+data.imageUri);
+                GlideImageLoader.loadImageNail(itemViewHolder.itemView.getContext(),uri,itemViewHolder.imageView);
+            }
         }
     }
 
@@ -85,9 +104,17 @@ public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<Artical> {
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder{
+        public TextView title;
+        public TextView introduction;
+        public ImageView imageView;
+        public TextView locationDesc;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
+            title = (TextView) itemView.findViewById(R.id.title_msg);
+            introduction = (TextView) itemView.findViewById(R.id.content_msg);
+            imageView = (ImageView) itemView.findViewById(R.id.image_msg);
+            locationDesc = (TextView) itemView.findViewById(R.id.location_msg);
         }
     }
 }

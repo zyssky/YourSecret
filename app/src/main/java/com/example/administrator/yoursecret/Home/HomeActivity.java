@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Editor.EditorActivity;
+import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.Recieve.RecieveDataManager;
 import com.example.administrator.yoursecret.Record.RecordDataManager;
@@ -85,6 +86,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         ApplicationDataManager.getInstance().setUserManager(new UserManager());
         ApplicationDataManager.getInstance().setRecordDataManager(new RecordDataManager());
         ApplicationDataManager.getInstance().setRecieveDataManager(new RecieveDataManager());
+        ApplicationDataManager.getInstance().setNetworkManager(new NetworkManager());
     }
 
 

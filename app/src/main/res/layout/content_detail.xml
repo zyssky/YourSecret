@@ -11,8 +11,8 @@
         <!--android:layout_height="match_parent" >-->
 
         <WebView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:id="@+id/content_detail"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -29,7 +29,7 @@
             <!--app:layout_constraintTop_toBottomOf="@+id/content_detail"-->
             <!--app:layout_constraintLeft_toLeftOf="parent"-->
             <!--app:layout_constraintRight_toRightOf="parent"-->
-            <!--android:id="@+id/divider_detail">-->
+            <!--android:id="@+id/divid er_detail">-->
 
             <!--<TextView-->
                 <!--android:layout_gravity="bottom|left"-->

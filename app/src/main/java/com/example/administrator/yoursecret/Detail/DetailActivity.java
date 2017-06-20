@@ -22,6 +22,11 @@ public class DetailActivity extends AppCompatActivity {
 //    private View header;
     private WebView webView;
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DetailDataManager.onDestroy();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +59,11 @@ public class DetailActivity extends AppCompatActivity {
             KV kv2 = bundle.getParcelable(AppContants.FROM_RECIEVE);
             if(kv1!=null){
                 Artical artical = ApplicationDataManager.getInstance().getRecordDataManager().getArtical(kv1);
-                webView.loadUrl("https://www.douban.com/note/621336215/");
+                webView.loadUrl(artical.articalHref);
             }
             if(kv2!=null){
                 Artical artical = ApplicationDataManager.getInstance().getRecieveDataManager().getArtical(kv2);
-                webView.loadUrl("http://m.csdn.net/article/2015-08-20/2825506");
+                webView.loadUrl(artical.articalHref);
             }
         }
 

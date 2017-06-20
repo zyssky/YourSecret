@@ -33,9 +33,9 @@ public class Artical{
 
     public String imageUri = "";
 
-    public String dateString = "";
+    public long date;
 
-    public String articalUrl = "";
+    public String articalHref = "";
 
     public String introduction = "";
 

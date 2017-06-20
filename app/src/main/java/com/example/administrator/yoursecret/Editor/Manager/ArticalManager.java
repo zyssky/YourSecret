@@ -144,7 +144,7 @@ public class ArticalManager {
         artical.title = title;
         artical.contentHtml = content;
 
-        artical.authorId = ApplicationDataManager.getInstance().getUserManager().getUserId();
+        artical.authorId = ApplicationDataManager.getInstance().getUserManager().getPhoneNum();
 
         artical.introduction = getIntroduction(content);
 
@@ -207,7 +207,7 @@ public class ArticalManager {
         setHtmlTimeStamp(df.format(new Date()));
         if(artical.locationDesc!=null)
             setHtmlLocation(artical.locationDesc);
-        setHtmlAutohrName(ApplicationDataManager.getInstance().getUserManager().getUserName());
+        setHtmlAutohrName(ApplicationDataManager.getInstance().getUserManager().getNickName());
         setHtmlTitle(artical.title);
         setHtmlType(artical.articalType);
 
@@ -215,7 +215,7 @@ public class ArticalManager {
         if(artical.imageUri!=null)
             setHtmlImage(artical.imageUri);
         setHtmlLocationIcon(FoundationManager.LOCATION_ICON_URL);
-        setHtmlAuthorIcon(ApplicationDataManager.getInstance().getUserManager().getUserIconPath());
+        setHtmlAuthorIcon(ApplicationDataManager.getInstance().getUserManager().getIconPath());
 
 //        setHtmlArticalHref("");
 

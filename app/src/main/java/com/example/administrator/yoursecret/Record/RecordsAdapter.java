@@ -75,15 +75,17 @@ public class RecordsAdapter extends MultiRecyclerAdapter<Artical>{
                 itemViewHolder.locationDesc.setText(data.locationDesc);
             }
             if(data.imageUri.isEmpty()){
-                GlideImageLoader.loadImage(itemViewHolder.itemView.getContext(),R.drawable.default_image,itemViewHolder.imageView);
+                GlideImageLoader.loadImageNail(itemViewHolder.itemView.getContext(),R.drawable.default_image,itemViewHolder.imageView);
             }
             else {
                 Uri uri = null;
                 if(!data.imageUri.contains("://")) {
                     uri = Uri.parse("file://" + data.imageUri);
+                }else {
+                    uri = Uri.parse(data.imageUri);
                 }
                 Log.d("test image in record ", "onBindItem: "+data.imageUri);
-                GlideImageLoader.loadImage(itemViewHolder.itemView.getContext(),uri,itemViewHolder.imageView);
+                GlideImageLoader.loadImageNail(itemViewHolder.itemView.getContext(),uri,itemViewHolder.imageView);
             }
         }
     }
@@ -98,7 +100,7 @@ public class RecordsAdapter extends MultiRecyclerAdapter<Artical>{
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         super.onBindViewHolder(holder, position);
-        if(titleAfterGetItemType.equals(AppContants.RECORD_CATOGORY_TEMP) && tempItemListener!=null){
+        if(position!=0 && titleAfterGetItemType.equals(AppContants.RECORD_CATOGORY_TEMP) && tempItemListener!=null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

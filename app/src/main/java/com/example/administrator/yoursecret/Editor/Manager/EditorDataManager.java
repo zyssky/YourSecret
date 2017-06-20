@@ -1,6 +1,6 @@
 package com.example.administrator.yoursecret.Editor.Manager;
 
-import com.example.administrator.yoursecret.Editor.Network.NetworkManager;
+import com.example.administrator.yoursecret.Network.NetworkManager;
 
 /**
  * Created by Administrator on 2017/6/8.
