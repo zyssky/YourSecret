@@ -24,6 +24,16 @@ import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.EndlessOnScrollListener;
 import com.example.administrator.yoursecret.utils.KV;
 
+import java.util.ArrayList;
+import java.util.Map;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 
 public class RecieveFragment extends Fragment {
 
@@ -66,7 +76,32 @@ public class RecieveFragment extends Fragment {
             @Override
             public void onRefresh() {
                 // TODO: 2017/5/27 get new items
-                refreshLayout.setRefreshing(false);
+                Observable<Map<String, ArrayList<Artical>>> observable = ApplicationDataManager.getInstance().getNetworkManager().getArticals();
+                observable.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<Map<String, ArrayList<Artical>>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                Log.d("subscribe ", "onSubscribe: ");
+                            }
+
+                            @Override
+                            public void onNext(@NonNull Map<String, ArrayList<Artical>> stringArrayListMap) {
+                                ApplicationDataManager.getInstance().getRecieveDataManager().addArticals(stringArrayListMap);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                e.printStackTrace();
+                                refreshLayout.setRefreshing(false);
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                Log.d("success recieve ", "onComplete: ");
+                                refreshLayout.setRefreshing(false);
+                            }
+                        });
             }
         });
         return rootView;
@@ -113,7 +148,7 @@ public class RecieveFragment extends Fragment {
             }
         });
 
-        ApplicationDataManager.getInstance().getRecieveDataManager().addArtical(AppContants.ARTICAL_CATOGORY_HOT,new Artical());
+//        ApplicationDataManager.getInstance().getRecieveDataManager().addArtical(AppContants.ARTICAL_CATOGORY_HOT,new Artical());
         recyclerView.setAdapter(adapter);
 
     }

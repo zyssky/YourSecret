@@ -29,7 +29,7 @@
             <!--app:layout_constraintTop_toBottomOf="@+id/content_detail"-->
             <!--app:layout_constraintLeft_toLeftOf="parent"-->
             <!--app:layout_constraintRight_toRightOf="parent"-->
-            <!--android:id="@+id/divider_detail">-->
+            <!--android:id="@+id/divid er_detail">-->
 
             <!--<TextView-->
                 <!--android:layout_gravity="bottom|left"-->

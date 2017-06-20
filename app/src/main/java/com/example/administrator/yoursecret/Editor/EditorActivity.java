@@ -21,7 +21,7 @@ import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
 import com.example.administrator.yoursecret.Editor.Manager.ArticalManager;
 import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.Editor.Manager.PhotoManager;
-import com.example.administrator.yoursecret.Editor.Network.NetworkManager;
+import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.Editor.Photo.PhotosActivity;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.Entity.Artical;
@@ -131,7 +131,7 @@ public class EditorActivity extends AppCompatActivity {
 
 
         articalManager = new ArticalManager();
-        articalManager.setArticalType(AppContants.ARTICAL_CATOGORY_SCENERY);
+        articalManager.setArticalType(AppContants.ARTICAL_TYPE_THING);
 
         photoManager = new PhotoManager();
         networkManager = new NetworkManager();
@@ -319,25 +319,25 @@ public class EditorActivity extends AppCompatActivity {
     //类型选择按钮
 
     public void onSceneryClick(View view){
-        articalManager.setArticalType(AppContants.ARTICAL_CATOGORY_SCENERY);
+        articalManager.setArticalType(AppContants.ARTICAL_TYPE_SCENERY);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }
 
     public void onPersonClick(View view){
-        articalManager.setArticalType(AppContants.ARTICAL_CATOGORY_PERSON);
+        articalManager.setArticalType(AppContants.ARTICAL_TYPE_PERSON);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }
 
     public void onThingClick(View view){
-        articalManager.setArticalType(AppContants.ARTICAL_CATOGORY_THING);
+        articalManager.setArticalType(AppContants.ARTICAL_TYPE_THING);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }
 
     public void onInterest(View view){
-        articalManager.setArticalType(AppContants.ARTICAL_CATOGORY_INTEREST);
+        articalManager.setArticalType(AppContants.ARTICAL_TYPE_INTEREST);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }

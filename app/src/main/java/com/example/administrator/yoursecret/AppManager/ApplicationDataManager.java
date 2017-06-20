@@ -2,6 +2,7 @@ package com.example.administrator.yoursecret.AppManager;
 
 import android.content.Context;
 
+import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.Recieve.RecieveDataManager;
 import com.example.administrator.yoursecret.Record.RecordDataManager;
 
@@ -60,5 +61,15 @@ public class ApplicationDataManager {
 
     public void setRecordDataManager(RecordDataManager recordDataManager) {
         this.recordDataManager = recordDataManager;
+    }
+
+    private NetworkManager networkManager;
+
+    public NetworkManager getNetworkManager() {
+        return networkManager;
+    }
+
+    public void setNetworkManager(NetworkManager networkManager) {
+        this.networkManager = networkManager;
     }
 }

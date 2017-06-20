@@ -4,10 +4,17 @@ import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.KV;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Administrator on 2017/6/16.
@@ -24,10 +31,9 @@ public class RecieveDataManager {
         if(adapter==null){
             adapter = new RecieveRecyclerAdapter();
             addCatogory(AppContants.ARTICAL_CATOGORY_HOT);
-            addCatogory(AppContants.ARTICAL_CATOGORY_SCENERY);
-            addCatogory(AppContants.ARTICAL_CATOGORY_INTEREST);
-            addCatogory(AppContants.ARTICAL_CATOGORY_PERSON);
-            addCatogory(AppContants.ARTICAL_CATOGORY_THING);
+            addCatogory(AppContants.ARTICAL_CATOGORY_GOOD);
+            addCatogory(AppContants.ARTICAL_CATOGORY_PUSH);
+            addCatogory(AppContants.ARTICAL_CATOGORY_OUTSIDE);
             adapter.setDatas(getDatas(),getTitles());
 
         }
@@ -60,14 +66,20 @@ public class RecieveDataManager {
         return datas.get(kv.key).get(kv.value);
     }
 
-    public String getArticalUrl(KV kv){
+    public String getArticalHref(KV kv){
         Artical artical = getArtical(kv);
-        return artical.articalUrl;
+        return artical.articalHref;
     }
 
     public void addArtical(String title,Artical artical){
         addCatogory(title);
         getDatas().get(title).add(artical);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void addArticals(Map<String, ArrayList<Artical>> stringArrayListMap) {
+//        datas.get(AppContants.ARTICAL_CATOGORY_HOT).addAll(stringArrayListMap.get());
+        datas.putAll(stringArrayListMap);
         adapter.notifyDataSetChanged();
     }
 

@@ -48,7 +48,7 @@ public class TypeDialog extends Dialog {
         buttons.add((Button) findViewById(R.id.thing));
         buttons.add((Button) findViewById(R.id.interest));
 
-        buttons.get(0).setSelected(true);
+        buttons.get(2).setSelected(true);
 
     }
 
