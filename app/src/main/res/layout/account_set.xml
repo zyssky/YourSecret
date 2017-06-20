@@ -20,8 +20,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
             android:fillViewport="true"
             android:scrollbarThumbVertical="@android:color/transparent"
             android:scrollbars="vertical">
@@ -35,169 +33,148 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="30px"
+                    android:layout_height="10dp"
                     android:background="#f0f0f0" />
 
                 <LinearLayout
-                    android:id="@+id/mima"
+                    android:id="@+id/tou"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:background="@drawable/bg_btn_account_selected"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp">
+                    android:layout_height="80dp"
+                    android:layout_marginTop="1dp"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="37dp"
-                        android:text="密码修改"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="20dp"
+                        android:text="头像"
                         android:textColor="#000"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                       />
 
                     <ImageView
-                        android:id="@+id/touxiang"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        android:layout_marginLeft="130dp"
-                        android:src="@drawable/skin_about_brand" />
+                        android:id="@+id/touxiang2"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:background="@drawable/bg_btn_login_selected"
+                        android:src="@drawable/skin_about_brand"
+                        android:layout_marginLeft="80dp"/>
 
 
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="10dp"
                     android:layout_marginTop="5dp"
                     android:background="#f0f0f0" />
+
+
                 <LinearLayout
-                    android:id="@+id/xiaoxi"
+                    android:id="@+id/nic"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:background="@drawable/bg_btn_account_selected"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp">
+                    android:orientation="horizontal">
 
 
                     <TextView
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="消息设置"
+                        android:layout_marginLeft="20dp"
+                        android:text="昵称"
                         android:textColor="#000"
-                        android:textSize="18sp" />>
+                        android:textSize="18sp" />
 
-
+                    <TextView
+                        android:id="@+id/nicheng"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="180dp"
+                        android:text="haha"
+                        android:textColor="#000"
+                        android:textSize="16sp" />
                 </LinearLayout>
-
 
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
+                    android:layout_marginTop="5dp"
                     android:background="#f0f0f0" />
 
-
                 <LinearLayout
-                    android:id="@+id/yinsi"
+                    android:id="@+id/zhangh"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:background="@drawable/bg_btn_account_selected"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp">
+                    android:orientation="horizontal">
+
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="隐私设置"
+                        android:layout_marginLeft="20dp"
+                        android:text="账号"
                         android:textColor="#000"
                         android:textSize="18sp" />
-
-                </LinearLayout>
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="#f0f0f0" />
-
-
-                <LinearLayout
-                    android:id="@+id/zhuxiao"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:background="@drawable/bg_btn_account_selected"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp">
 
                     <TextView
+                        android:id="@+id/zhanghao"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="注销登录"
+                        android:layout_marginLeft="180dp"
+                        android:text="13662456616"
                         android:textColor="#000"
-                        android:textSize="18sp" />
-
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
-                    android:background="#f0f0f0"/>
-
-                <LinearLayout
-                    android:id="@+id/fankui"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:background="@drawable/bg_btn_account_selected"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="13dp">
-
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:text="意见反馈"
-                        android:textColor="#000"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_marginTop="5dp"
                     android:background="#f0f0f0" />
 
                 <LinearLayout
-                    android:id="@+id/guanyu"
+                    android:id="@+id/mim"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:background="@drawable/bg_btn_account_selected"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="13dp">
 
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="关于我们"
+                        android:layout_marginLeft="20dp"
+                        android:text="密码"
                         android:textColor="#000"
                         android:textSize="18sp" />
 
+                    <TextView
+                        android:id="@+id/mima"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="180dp"
+                        android:text="13662456616"
+                        android:textColor="#000"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
-                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="5dp"
                     android:background="#f0f0f0" />
-
 
             </LinearLayout>
 
         </ScrollView>
     </RelativeLayout>
-
 </LinearLayout>
