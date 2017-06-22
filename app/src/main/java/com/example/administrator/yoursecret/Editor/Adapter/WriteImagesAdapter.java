@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.GlideImageLoader;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by Administrator on 2017/4/16.
  */
 
-public class WriteImagesAdapter extends BaseRecyclerAdapter<Uri> {
+public class WriteImagesAdapter extends BaseRecyclerAdapter<Image> {
 
     private Context context;
 
@@ -28,7 +29,7 @@ public class WriteImagesAdapter extends BaseRecyclerAdapter<Uri> {
         this.context = context;
     }
 
-    public WriteImagesAdapter(List<Uri> mDatas){
+    public WriteImagesAdapter(List<Image> mDatas){
         super(mDatas);
     }
 
@@ -46,16 +47,16 @@ public class WriteImagesAdapter extends BaseRecyclerAdapter<Uri> {
     }
 
     @Override
-    public void onBind(RecyclerView.ViewHolder viewHolder, final int RealPosition, final Uri data) {
+    public void onBind(RecyclerView.ViewHolder viewHolder, final int RealPosition, final Image data) {
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(RealPosition,data);
+                listener.onItemClick(RealPosition,data.path);
             }
         });
         if(viewHolder instanceof WriteImagesAdapter.MyViewHolder)
             if(context!=null)
-                GlideImageLoader.loadImage(context,data,((MyViewHolder) viewHolder).imageView);
+                GlideImageLoader.loadImage(context,data.path,((MyViewHolder) viewHolder).imageView);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{

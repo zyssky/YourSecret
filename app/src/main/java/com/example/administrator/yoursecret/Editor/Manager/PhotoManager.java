@@ -1,72 +1,99 @@
 package com.example.administrator.yoursecret.Editor.Manager;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.util.Base64;
+import android.util.Log;
 
-import com.example.administrator.yoursecret.Entity.ImageLocation;
+import com.example.administrator.yoursecret.Entity.Image;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Administrator on 2017/6/8.
  */
 
 public class PhotoManager {
-    private Map<Uri,ImageLocation> images;
+    public static final String TAG = PhotoManager.class.getSimpleName();
 
+    private List<Image> images;
 
-    public List<Uri> getPhotos() {
-        if(photos==null){
-            photos = new ArrayList<>();
-        }
-        return photos;
+    public PhotoManager(){
+        images = new ArrayList<>();
     }
 
-    private List<Uri> photos;
-
-    public void setPhotos(List<Uri> photos) {
-        this.photos = photos;
+    public void setImages(List<Image> images){
+        this.images.addAll(images);
     }
 
-    public PhotoManager(){}
-
-    public void addPhoto(Uri uri){
-        photos.add(uri);
-    }
-
-    public void addLatestImageLocation(ImageLocation location){
-        if(images==null){
-            images = new HashMap<>();
-        }
-        images.put(photos.get(photos.size()-1),location);
-    }
-
-    public ImageLocation getImageLocation(Uri uri){
-        return images.get(uri);
-    }
-
-    public Map<Uri,ImageLocation> getImagesWithLocation(){
+    public List<Image> getImages() {
         return images;
     }
 
-    public String getBase64String(String path){
-        Bitmap bitmap = BitmapFactory.decodeFile(path);
-        //convert to byte array
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] bytes = baos.toByteArray();
-
-        //base64 encode
-        byte[] encode = Base64.encode(bytes, Base64.DEFAULT);
-        String encodeString = new String(encode);
-
-        return encodeString;
+    public void addImage(Image image){
+        image.uuid = EditorDataManager.getInstance().getArticalManager().getArtical().uuid;
+        images.add(image);
     }
+
+    public Image getImage(int position){
+        return images.get(position);
+    }
+
+    public void addLatestImageLocation(Image image){
+        images.get(images.size()-1).description = image.description;
+        images.get(images.size()-1).latitude = image.latitude;
+        images.get(images.size()-1).longtitude = image.longtitude;
+
+        if(!EditorDataManager.getInstance().getArticalManager().hasLocation()){
+            EditorDataManager.getInstance().getArticalManager().setLocation(image);
+        }
+
+    }
+
+    public Observer<List<Image>> getObserver(){
+        Observer<List<Image>> observer = new Observer<List<Image>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                Log.d(TAG, "onSubscribe: ");
+            }
+
+            @Override
+            public void onNext(@NonNull List<Image> images2) {
+                images.addAll(images2);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onComplete() {
+                AdapterManager.getInstance().getWriteImagesAdapter().setmDatas(images);
+
+            }
+        };
+        return observer;
+    }
+
+
+
+//
+//    public String getBase64String(String path){
+//        Bitmap bitmap = BitmapFactory.decodeFile(path);
+//        //convert to byte array
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//        byte[] bytes = baos.toByteArray();
+//
+//        //base64 encode
+//        byte[] encode = Base64.encode(bytes, Base64.DEFAULT);
+//        String encodeString = new String(encode);
+//
+//        return encodeString;
+//    }
 
 }

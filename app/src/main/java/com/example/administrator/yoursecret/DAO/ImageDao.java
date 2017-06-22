@@ -1,0 +1,24 @@
+package com.example.administrator.yoursecret.DAO;
+
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
+
+import com.example.administrator.yoursecret.Entity.Image;
+
+import java.util.List;
+
+/**
+ * Created by Administrator on 2017/6/21.
+ */
+@Dao
+public interface ImageDao {
+    @Query("SELECT * FROM image WHERE uuid = :key")
+    List<Image> getImages(String key);
+
+    @Insert
+    void insert(Image image);
+
+    @Query("DELETE FROM image WHERE uuid = :key")
+    void deleteImages(String key);
+}

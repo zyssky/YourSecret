@@ -29,6 +29,7 @@ import android.widget.ImageView;
 
 import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
 import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
+import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FileUtils;
@@ -71,14 +72,14 @@ public class ViewPagerActivity extends AppCompatActivity{
 
 	public void onDelete(View view){
         Log.d("Delete item ", "onDelete: "+viewPager.getCurrentItem());
-        Uri uri = (Uri) EditorDataManager.getInstance().getPhotoManager().getPhotos().remove(viewPager.getCurrentItem());
+        Image image= (Image) EditorDataManager.getInstance().getPhotoManager().getImages().remove(viewPager.getCurrentItem());
         AdapterManager.getInstance().getWriteImagesAdapter().notifyDataSetChanged();
         adapter.notifyDataSetChanged();
 
-        if(EditorDataManager.getInstance().getPhotoManager().getPhotos().isEmpty()){
+        if(EditorDataManager.getInstance().getPhotoManager().getImages().isEmpty()){
             finish();
         }
-        FileUtils.fileDelete(uri.getPath());
+        FileUtils.fileDelete(image.path);
     }
 
     static class SamplePagerAdapter extends PagerAdapter {
@@ -91,7 +92,7 @@ public class ViewPagerActivity extends AppCompatActivity{
 
 		@Override
 		public int getCount() {
-			return EditorDataManager.getInstance().getPhotoManager().getPhotos().size();
+			return EditorDataManager.getInstance().getPhotoManager().getImages().size();
 		}
 
         @Override
@@ -110,7 +111,7 @@ public class ViewPagerActivity extends AppCompatActivity{
                     listener.click();
                 }
             });
-            GlideImageLoader.loadImage(container.getContext(), EditorDataManager.getInstance().getPhotoManager().getPhotos().get(position),photoView);
+            GlideImageLoader.loadImage(container.getContext(), EditorDataManager.getInstance().getPhotoManager().getImage(position).path,photoView);
 
 			// Now just add PhotoView to ViewPager and return it
 			container.addView(photoView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);

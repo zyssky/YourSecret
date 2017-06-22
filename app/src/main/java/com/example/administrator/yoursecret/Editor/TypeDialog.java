@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.View.MyButton;
+import com.example.administrator.yoursecret.utils.AppContants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,8 @@ public class TypeDialog extends Dialog {
 
     private List<Button> buttons;
 
+    public static int choosed = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +51,19 @@ public class TypeDialog extends Dialog {
         buttons.add((Button) findViewById(R.id.thing));
         buttons.add((Button) findViewById(R.id.interest));
 
-        buttons.get(2).setSelected(true);
+        buttons.get(choosed).setSelected(true);
 
+    }
+
+    public static void setChoosed(String articalType){
+        if(articalType.equals(AppContants.ARTICAL_TYPE_SCENERY))
+            choosed = 0;
+        if(articalType.equals(AppContants.ARTICAL_TYPE_PERSON))
+            choosed = 1;
+        if (articalType.equals(AppContants.ARTICAL_TYPE_THING))
+            choosed = 2;
+        if (articalType.equals(AppContants.ARTICAL_TYPE_INTEREST))
+            choosed = 3;
     }
 
     public void clearSelected(){

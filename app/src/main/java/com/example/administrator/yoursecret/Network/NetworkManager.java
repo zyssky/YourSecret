@@ -9,6 +9,9 @@ import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.Entity.Artical;
+import com.example.administrator.yoursecret.Entity.ArticalResponse;
+import com.example.administrator.yoursecret.Entity.Image;
+import com.example.administrator.yoursecret.Entity.UserResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -21,6 +24,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -39,31 +43,26 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkManager {
 
-    public void uploadArtical(){
-        Retrofit retrofit = getRetrofit();
+    private UserService userService;
+    private ArticalService articalService;
 
-        ArticalService service = retrofit.create(ArticalService.class);
-        Call<ResponseBody> call = service.uploadArtical(getFormBody(),getHtml(),getImagesUploadMap());
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    String result = response.body().string();
-                    Log.d("network test : ", "onResponse: "+result);
-                    Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"上传到："+result,Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    private UserService getUserService(){
+        if(userService == null){
+            userService = getRetrofit().create(UserService.class);
+        }
+        return userService;
+    }
 
-            }
+    private ArticalService getArticalService(){
+        if(null == articalService){
+            articalService = getRetrofit().create(ArticalService.class);
+        }
+        return articalService;
+    }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("network test : ", "onFailure: net work fail !!!!!!!!!");
-                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"上传失败",Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
-            }
-        });
+    public Observable<ArticalResponse> uploadArtical(){
+        Observable<ArticalResponse> observable = getArticalService().uploadArtical(getFormBody(),getHtml(),getImagesUploadMap());
+        return observable;
     }
 
     public Retrofit getRetrofit(){
@@ -95,22 +94,19 @@ public class NetworkManager {
 
     public Map<String, RequestBody> getImagesUploadMap(){
         Map<String, RequestBody> map = new HashMap<>();
-        List<Uri> imageList = EditorDataManager.getInstance().getPhotoManager().getPhotos();
-        int count = 0;
-        for (Uri uri :
+        List<Image> imageList = EditorDataManager.getInstance().getPhotoManager().getImages();
+        for (Image image :
                 imageList) {
-            String path = uri.getPath();
+            String path = image.path;
             RequestBody requestBody= getFileRequestBody(path);
-            map.put("image:"+uri.getPath(),requestBody);
+            map.put("image:"+image.path,requestBody);
 
         }
         return map;
     }
 
     public Observable<Map<String,ArrayList<Artical>>> getArticals(){
-        Retrofit retrofit = getRetrofit();
-        ArticalService service = retrofit.create(ArticalService.class);
-        return service.getArticals();
+        return getArticalService().getArticals();
     }
 
     public RequestBody getFileRequestBody(String path){
@@ -131,6 +127,7 @@ public class NetworkManager {
                 .add("articalType",artical.articalType)
                 .add("saveType",""+artical.saveType)
                 .add("imageUri",artical.imageUri)
+                .add("uuid",artical.uuid)
                 .build();
 
         return formBody;
@@ -140,80 +137,37 @@ public class NetworkManager {
         return RequestBody.create(MediaType.parse("text/plain"),value);
     }
 
-    public void register(){
+    public Observable<UserResponse> register(){
         UserManager userManager = ApplicationDataManager.getInstance().getUserManager();
         String identifier = userManager.getIdentifier();
         String phoneNum = userManager.getPhoneNum();
         String nickName = userManager.getNickName();
         RequestBody requestBody = getFileRequestBody(userManager.getIconLocalTempPath());
 
-        Retrofit retrofit = getRetrofit();
-        UserService service = retrofit.create(UserService.class);
-        Call<ResponseBody> call = service.register(getTextRequestBody(phoneNum),getTextRequestBody(nickName),getTextRequestBody(identifier),requestBody);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    Log.d("user netword test ", "onResponse: "+response.body().string());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("user network test ", "onFailure: "+"fail to register");
-                t.printStackTrace();
-            }
-        });
+        UserService service = getUserService();
+        return service.register(getTextRequestBody(phoneNum),getTextRequestBody(nickName),getTextRequestBody(identifier),requestBody);
     }
 
-    public void login(){
+    public Observable<UserResponse> login(){
         String identifier = ApplicationDataManager.getInstance().getUserManager().getIdentifier();
         RequestBody requestBody = new FormBody.Builder().add("identifier",identifier).build();
-        Call<ResponseBody> call = getRetrofit().create(UserService.class).login(requestBody);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    Log.d("user netword test ", "onResponse: "+response.body().string());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("user network test ", "onFailure: "+"fail to login");
-                t.printStackTrace();
-            }
-        });
+        return getUserService().login(requestBody);
     }
 
-    public void modify() {
+    public Observable<UserResponse> modify() {
         UserManager userManager = ApplicationDataManager.getInstance().getUserManager();
         String token = userManager.getToken();
         String nickName = userManager.getNickName();
         RequestBody requestBody = getFileRequestBody(userManager.getIconLocalTempPath());
 
-        Retrofit retrofit = getRetrofit();
-        UserService service = retrofit.create(UserService.class);
-        Call<ResponseBody> call = service.modify(getTextRequestBody(token),getTextRequestBody(nickName),requestBody);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    Log.d("user netword test ", "onResponse: "+response.body().string());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        UserService service = getUserService();
+        return service.modify(getTextRequestBody(token),getTextRequestBody(nickName),requestBody);
+    }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("user network test ", "onFailure: "+"fail to register");
-                t.printStackTrace();
-            }
-        });
+
+
+    public Observable<List<Artical>> getUserArticals(String token) {
+        RequestBody requestBody = new FormBody.Builder().add("token",token).build();
+        return getArticalService().getUserArticals(requestBody);
     }
 }

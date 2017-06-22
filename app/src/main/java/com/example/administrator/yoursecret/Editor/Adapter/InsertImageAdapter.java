@@ -45,12 +45,12 @@ public class InsertImageAdapter extends RecyclerView.Adapter<InsertImageAdapter.
             }
         });
         if(context!=null)
-            GlideImageLoader.loadImage(context, EditorDataManager.getInstance().getPhotoManager().getPhotos().get(position),holder.imageView);
+            GlideImageLoader.loadImage(context, EditorDataManager.getInstance().getPhotoManager().getImage(position).path,holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return EditorDataManager.getInstance().getPhotoManager().getPhotos().size();
+        return EditorDataManager.getInstance().getPhotoManager().getImages().size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{

@@ -76,19 +76,7 @@ public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<Artical> {
             itemViewHolder.title.setText(data.title);
             itemViewHolder.introduction.setText(data.introduction);
             itemViewHolder.locationDesc.setText(data.locationDesc);
-            if(data.imageUri==null || data.imageUri.isEmpty()){
-                GlideImageLoader.loadImageNail(itemViewHolder.itemView.getContext(),R.drawable.default_image,itemViewHolder.imageView);
-            }
-            else {
-                Uri uri = null;
-                if(!data.imageUri.contains("://")) {
-                    uri = Uri.parse("file://" + data.imageUri);
-                }else {
-                    uri = Uri.parse(data.imageUri);
-                }
-                Log.d("test image in record ", "onBindItem: "+data.imageUri);
-                GlideImageLoader.loadImageNail(itemViewHolder.itemView.getContext(),uri,itemViewHolder.imageView);
-            }
+            GlideImageLoader.loadImageNail(itemViewHolder.itemView.getContext(),data.imageUri,itemViewHolder.imageView);
         }
     }
 

@@ -103,7 +103,8 @@
         <activity android:name=".Account.Basic_set_Activity"
             android:theme="@style/FullscreenTheme"></activity>
 
-        <activity android:name=".TestMyActivity"></activity>
+        <activity android:name=".TestMyActivity">
+        </activity>
 
     </application>
 

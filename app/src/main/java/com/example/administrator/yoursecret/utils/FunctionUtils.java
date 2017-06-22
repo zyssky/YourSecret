@@ -29,7 +29,8 @@ public final class FunctionUtils {
     public static Bitmap createCircleImage(Bitmap source, int min) {
         final Paint paint = new Paint();
         paint.setAntiAlias(true);
-        Bitmap target = Bitmap.createBitmap(min, min, Bitmap.Config.ARGB_8888);
+        Bitmap target = Bitmap.createBitmap(min, min, Bitmap.Config.RGB_565);
+
         /**
          * 产生一个同样大小的画布
          */
@@ -46,6 +47,23 @@ public final class FunctionUtils {
          * 绘制图片
          */
         canvas.drawBitmap(source, 0, 0, paint);
+        return target;
+    }
+
+    public static Bitmap createCircleImage(Bitmap source){
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        int limit = source.getHeight()>source.getWidth()?source.getWidth():source.getHeight();
+        Bitmap temp = null;
+        if(limit==source.getHeight())
+            temp = Bitmap.createBitmap(source,(source.getWidth()-limit)/2,0,limit,limit);
+        else
+            temp = Bitmap.createBitmap(source,0,(source.getHeight()-limit)/2,limit,limit);
+        Bitmap target = Bitmap.createBitmap(limit,limit,temp.getConfig());
+        Canvas canvas = new Canvas(target);
+        canvas.drawCircle(limit/2,limit/2,limit/2,paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(temp,0,0,paint);
         return target;
     }
 

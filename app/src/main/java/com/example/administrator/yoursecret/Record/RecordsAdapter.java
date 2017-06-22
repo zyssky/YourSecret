@@ -68,25 +68,15 @@ public class RecordsAdapter extends MultiRecyclerAdapter<Artical>{
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
             itemViewHolder.title.setText(data.title);
             itemViewHolder.introduction.setText(data.introduction);
-            if(data.locationDesc.isEmpty()){
+            if(data.locationDesc==null || data.locationDesc.isEmpty()){
                 itemViewHolder.locationDesc.setText("亲，还没有拍过照片来定位哦！");
             }
             else{
                 itemViewHolder.locationDesc.setText(data.locationDesc);
             }
-            if(data.imageUri.isEmpty()){
-                GlideImageLoader.loadImageNail(itemViewHolder.itemView.getContext(),R.drawable.default_image,itemViewHolder.imageView);
-            }
-            else {
-                Uri uri = null;
-                if(!data.imageUri.contains("://")) {
-                    uri = Uri.parse("file://" + data.imageUri);
-                }else {
-                    uri = Uri.parse(data.imageUri);
-                }
-                Log.d("test image in record ", "onBindItem: "+data.imageUri);
-                GlideImageLoader.loadImageNail(itemViewHolder.itemView.getContext(),uri,itemViewHolder.imageView);
-            }
+            Log.d("test image in record ", "onBindItem: "+data.imageUri);
+            GlideImageLoader.loadImageNail(itemViewHolder.itemView.getContext(),data.imageUri,itemViewHolder.imageView);
+
         }
     }
 
