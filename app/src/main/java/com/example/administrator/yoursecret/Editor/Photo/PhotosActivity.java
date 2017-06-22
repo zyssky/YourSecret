@@ -18,6 +18,7 @@ import android.view.View;
 import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
 import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.Editor.Manager.PhotoManager;
+import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.BitmapUtil;
 import com.example.administrator.yoursecret.Editor.Adapter.WriteImagesAdapter;
@@ -116,7 +117,8 @@ public class PhotosActivity extends AppCompatActivity {
         switch (requestCode){
             case TAKE_PHOTO_REQUEST:
                 if(resultCode==RESULT_OK && null!=curImageUri){
-                    photoManager.addPhoto(curImageUri);
+//                    photoManager.addPhoto(curImageUri);
+                    photoManager.addImage(new Image(curImageUri));
                     myBinder.getLocation();
                     adapter.notifyDataSetChanged();
                 }

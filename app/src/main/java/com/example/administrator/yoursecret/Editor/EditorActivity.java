@@ -2,18 +2,21 @@ package com.example.administrator.yoursecret.Editor;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import com.example.administrator.yoursecret.AppManager.AppDatabase;
+import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Editor.Adapter.InsertImageAdapter;
 import com.example.administrator.yoursecret.Editor.Adapter.WriteImagesAdapter;
@@ -21,11 +24,12 @@ import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
 import com.example.administrator.yoursecret.Editor.Manager.ArticalManager;
 import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.Editor.Manager.PhotoManager;
+import com.example.administrator.yoursecret.Entity.ArticalResponse;
+import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.Editor.Photo.PhotosActivity;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.Entity.Artical;
-import com.example.administrator.yoursecret.Entity.ImageLocation;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.View.MyImageButton;
 import com.example.administrator.yoursecret.utils.AppContants;
@@ -34,11 +38,24 @@ import com.example.administrator.yoursecret.utils.FunctionUtils;
 import com.example.administrator.yoursecret.utils.KV;
 import com.example.administrator.yoursecret.utils.SpaceItemDecoration;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import jp.wasabeef.richeditor.RichEditor;
+import okhttp3.ResponseBody;
 
 public class EditorActivity extends AppCompatActivity {
 
 //    private Context context;
+
+    public static final String TAG = EditorActivity.class.getSimpleName();
 
     private RichEditor editor;
 
@@ -54,12 +71,13 @@ public class EditorActivity extends AppCompatActivity {
 
     private PhotoManager photoManager;
 
-
     private WriteImagesAdapter adapter;
 
     private InsertImageAdapter insertImageAdapter;
 
     private NetworkManager networkManager;
+
+    private boolean isNew = true;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,9 +88,17 @@ public class EditorActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        articalManager.saveArtical(editor.getHtml());
+
+        //memory operation
+        articalManager.saveTempArtical(editor.getHtml());
         ApplicationDataManager.getInstance().getRecordDataManager().saveTempArtical(articalManager.getArtical());
 
+        //Database operation
+        if(isNew)
+            AppDatabaseManager.addArtical(articalManager.getArtical());
+        else
+            AppDatabaseManager.updateArtical(articalManager.getArtical());
+        AppDatabaseManager.saveImages(photoManager.getImages());
     }
 
     @Override
@@ -95,7 +121,6 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        context = this;
 
         editor = (RichEditor) findViewById(R.id.editor);
         recyclerView = (RecyclerView) findViewById(R.id.insert_gallery);
@@ -105,18 +130,29 @@ public class EditorActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if(intent.getExtras()!=null) {
+            isNew = false;
             KV kv = intent.getExtras().getParcelable(AppContants.FROM_RECORD);
 
+            //get artical from memory
             Artical artical = ApplicationDataManager.getInstance().getRecordDataManager().getArtical(kv);
-            photoManager.setPhotos(artical.photos);
             articalManager.setArtical(artical);
+            //to set the loaded choosed
+            TypeDialog.setChoosed(artical.articalType);
+
+
+            //update recordfragment
             ApplicationDataManager.getInstance().getRecordDataManager().removeArtical(kv);
+
+            //get data form database
+            AppDatabaseManager.getImages(artical.uuid)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(photoManager.getObserver());
         }
 
         initAdapters();
 
         editor.setPadding(10, 10, 10, 10);
-//        String hint = "<h1>请输入标题......</h1><hr>请输入内容......";
         editor.loadCSS(FoundationManager.getCssPath());
         editor.setHtml(articalManager.getArtical().html);
 
@@ -128,7 +164,6 @@ public class EditorActivity extends AppCompatActivity {
 
     private void initModels(){
         EditorDataManager editorDataManager = EditorDataManager.getInstance();
-
 
         articalManager = new ArticalManager();
         articalManager.setArticalType(AppContants.ARTICAL_TYPE_THING);
@@ -145,7 +180,7 @@ public class EditorActivity extends AppCompatActivity {
         AdapterManager adapterManager = AdapterManager.getInstance();
 
         adapter = new WriteImagesAdapter();
-        adapter.setmDatas(photoManager.getPhotos());
+        adapter.setmDatas(photoManager.getImages());
 
         insertImageAdapter = new InsertImageAdapter();
         insertImageAdapter.setContext(this);
@@ -167,22 +202,11 @@ public class EditorActivity extends AppCompatActivity {
         AdapterManager.onDestroy();
     }
 
-//    private String getHtmlData(String bodyHTML) {
-//        String head = "<head>" +
-//                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> " +
-//                "<style>img{max-width: 100%; width:auto; height:auto;}</style>" +
-//                "</head>";
-//        return "<html>" + head + "<body>" + bodyHTML + "</body></html>";
-//    }
-
     public void insertImageIntoEditor(int position){
-        Uri url = adapter.getmDatas().get(position);
-        editor.insertImage(url.getPath(),"sample");
-        ImageLocation location = photoManager.getImageLocation(url);
-        if(location!=null && !articalManager.hasLocation())
-            articalManager.setLocation(location);
-        if(url!=null && !articalManager.hasImageUri())
-            articalManager.setImageUri(url);
+        String path = adapter.getmDatas().get(position).path;
+        if(!articalManager.hasImageUri())
+            articalManager.setImageUri(path);
+        editor.insertImage(path,"image");
     }
 
 
@@ -242,23 +266,42 @@ public class EditorActivity extends AppCompatActivity {
         dialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.save_delete:
-                        articalManager.deleteArtical();
-                        break;
-                    case R.id.save_public:
-                        articalManager.setArticalSaveType(AppContants.PUBLIC);
-                        articalManager.saveArtical(editor.getHtml());
-                        ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(articalManager.getArtical());
-                        networkManager.uploadArtical();
-                        break;
-                    case R.id.save_private:
-                        articalManager.setArticalSaveType(AppContants.PRIVATE);
-                        articalManager.saveArtical(editor.getHtml());
-                        ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(articalManager.getArtical());
-                        networkManager.uploadArtical();
-                        break;
+                if(v.getId()==R.id.save_delete){
+                    articalManager.deleteArtical();
+                    if(!isNew){
+                        AppDatabaseManager.deleteImages(articalManager.getArtical().uuid);
+                        AppDatabaseManager.deleteArtical(articalManager.getArtical().uuid);
+                    }
                 }
+                else {
+                    if(v.getId() == R.id.save_public){
+                        articalManager.setArticalSaveType(AppContants.PUBLIC);
+                    }
+                    if(v.getId() == R.id.save_private){
+                        articalManager.setArticalSaveType(AppContants.PRIVATE);
+                    }
+
+                    //memory operation
+                    articalManager.saveFinishedArtical(editor.getHtml());
+                    ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(articalManager.getArtical());
+
+                    //Database operation
+                    if(isNew)
+                        AppDatabaseManager.addArtical(articalManager.getArtical());
+                    else
+                        AppDatabaseManager.updateArtical(articalManager.getArtical());
+
+                    //delete after confirm upload to server
+                    AppDatabaseManager.saveImages(photoManager.getImages());
+
+                    //nerwork operation
+                    ApplicationDataManager.getInstance().getNetworkMonitor().pushArtical(articalManager.getArtical());
+                    networkManager.uploadArtical()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(ApplicationDataManager.getInstance().getNetworkMonitor().getUploadArticalObserver());
+                }
+
                 dialog.dismiss();
                 finish();
             }

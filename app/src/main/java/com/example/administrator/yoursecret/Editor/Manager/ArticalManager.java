@@ -2,24 +2,35 @@ package com.example.administrator.yoursecret.Editor.Manager;
 
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.Entity.Artical;
-import com.example.administrator.yoursecret.Entity.ImageLocation;
+import com.example.administrator.yoursecret.Entity.ArticalResponse;
+import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.utils.FileUtils;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Administrator on 2017/6/8.
  */
 
 public class ArticalManager {
+    public String TAG = ArticalManager.class.getSimpleName();
+
     private String template = "<!DOCTYPE html>\n" +
             "<html itemscope itemtype=\"http://schema.org/WebPage\">\n" +
             "    <head>\n" +
@@ -47,7 +58,7 @@ public class ArticalManager {
             "    <section class=\"header\">\n" +
             "        <h1 class=\"title\">{title_content}</h1>\n" +  //标题
             "        <div style=\"display:inline\"> " +
-            "            <img class=\"note_author_avatar\"  style=\"max-width:20%;height:auto;\" src=\"{author_iconUri}\" alt=\"{author_name}\">\n" +   //作者icon和昵称
+            "            <img class=\"note_author_avatar\"  style=\"max-width:12%;height:auto;border-radius:50%;\" src=\"{author_iconUri}\" alt=\"{author_name}\">\n" +   //作者icon和昵称
             "        </div>\n"+
             "        <div style=\"display:inline-block;position:relative;top:-3px;\"" +
             "            <div class=\"author\" >\n" +
@@ -56,7 +67,7 @@ public class ArticalManager {
             "            </div>\n" +
             "        </div>\n"+
             "        <div class=\"location\" style=\"margin-top:20px;margin-bottom:20px\">\n" +
-            "            <img class=\"location_icon\" style=\"position:relative;top:2px;max-width:5%;height:auto;\" src=\"{location_iconUri}\">\n" +  //定位图标
+            "            <img class=\"location_icon\" style=\"position:relative;top:2px;max-width:4%;height:auto;\" src=\"{location_iconUri}\">\n" +  //定位图标
             "            <span class=\"location_address\" style=\"color:#aaa;font-size:13px;line-height:normal\" >{location_content}</span>\n" +
             "        </div>\n" +
             "    </section>" +
@@ -95,6 +106,7 @@ public class ArticalManager {
 
     public ArticalManager(){
         artical = new Artical();
+        artical.uuid = ""+new Random().nextLong();
     }
 
     public void setArticalType(String type){
@@ -102,9 +114,9 @@ public class ArticalManager {
     }
 
     public void deleteArtical(){
-        List<Uri> list = EditorDataManager.getInstance().getPhotoManager().getPhotos();
+        List<Image> list = EditorDataManager.getInstance().getPhotoManager().getImages();
         for (int i = 0; i < list.size(); i++) {
-                FileUtils.fileDelete(list.get(i).getPath());
+                FileUtils.fileDelete(list.get(i).path);
         }
     }
 
@@ -148,11 +160,30 @@ public class ArticalManager {
 
         artical.introduction = getIntroduction(content);
 
-        artical.photos = EditorDataManager.getInstance().getPhotoManager().getPhotos();
+        artical.images = EditorDataManager.getInstance().getPhotoManager().getImages();
 
         artical.html = html;
 
+        artical.date = new Date().getTime();
+    }
 
+    public void saveFinishedArtical(String html){
+        artical.finished = 1;
+        saveArtical(html);
+    }
+
+    public void saveTempArtical(String html){
+        artical.finished = 0;
+        saveArtical(html);
+    }
+
+    public void setArticalFinishedStatus(boolean status){
+        if(status){
+            artical.finished = 1;
+        }
+        else{
+            artical.finished = 0;
+        }
     }
 
     public String getIntroduction(String content_html){
@@ -176,14 +207,14 @@ public class ArticalManager {
         return sb.toString();
     }
 
-    public void setLocation(ImageLocation location){
-        artical.latitude = location.latitude;
-        artical.longtitude = location.longtitude;
-        artical.locationDesc = location.description;
+    public void setLocation(Image image){
+        artical.latitude = image.latitude;
+        artical.longtitude = image.longtitude;
+        artical.locationDesc = image.description;
     }
 
-    public void setImageUri(Uri imageUri){
-        artical.imageUri = imageUri.getPath();
+    public void setImageUri(String path){
+        artical.imageUri = path;
     }
 
     public boolean hasLocation(){
@@ -281,6 +312,7 @@ public class ArticalManager {
         String old = "{description_content}";
         template = template.replace(old,value);
     }
+
 
 //    public void setHtmlArticalHref(String value){
 //        String old = "{artical_href}";

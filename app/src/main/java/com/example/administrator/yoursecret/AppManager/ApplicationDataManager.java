@@ -1,8 +1,10 @@
 package com.example.administrator.yoursecret.AppManager;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 
 import com.example.administrator.yoursecret.Network.NetworkManager;
+import com.example.administrator.yoursecret.Network.NetworkMonitor;
 import com.example.administrator.yoursecret.Recieve.RecieveDataManager;
 import com.example.administrator.yoursecret.Record.RecordDataManager;
 
@@ -71,5 +73,26 @@ public class ApplicationDataManager {
 
     public void setNetworkManager(NetworkManager networkManager) {
         this.networkManager = networkManager;
+    }
+
+    public NetworkMonitor getNetworkMonitor() {
+        return networkMonitor;
+    }
+
+    public void setNetworkMonitor(NetworkMonitor networkMonitor) {
+        this.networkMonitor = networkMonitor;
+    }
+
+    private NetworkMonitor networkMonitor;
+
+
+
+    private AppDatabase db ;
+
+    public AppDatabase getAppDatabase(){
+        if(null==db){
+            db = Room.databaseBuilder(appContext,AppDatabase.class,"yoursecret_db").build();
+        }
+        return db;
     }
 }

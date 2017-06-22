@@ -1,5 +1,8 @@
 package com.example.administrator.yoursecret.Network;
 
+import com.example.administrator.yoursecret.Entity.UserResponse;
+
+import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -17,14 +20,14 @@ public interface UserService {
 
     @Multipart
     @POST("Rest/user/register")
-    Call<ResponseBody> register(@Part("phoneNum") RequestBody phoneNum, @Part("nickName")RequestBody nickname,
-                                       @Part("identifier") RequestBody identifier, @Part("image")RequestBody data);
+    Observable<UserResponse> register(@Part("phoneNum") RequestBody phoneNum, @Part("nickName")RequestBody nickname,
+                                      @Part("identifier") RequestBody identifier, @Part("image")RequestBody data);
 
 
     @POST("Rest/user/login")
-    Call<ResponseBody> login(@Body RequestBody body);
+    Observable<UserResponse> login(@Body RequestBody body);
 
     @Multipart
     @POST("Rest/user/modify")
-    Call<ResponseBody> modify(@Part("token") RequestBody token, @Part("nickName")RequestBody nickname,@Part("image")RequestBody data);
+    Observable<UserResponse> modify(@Part("token") RequestBody token, @Part("nickName")RequestBody nickname,@Part("image")RequestBody data);
 }

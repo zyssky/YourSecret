@@ -38,7 +38,7 @@ public class UserManager {
         this.password = "123456";
         this.phoneNum = "18826075817";
         this.nickName = "zyssky";
-        this.token = "f99359f5-1b7c-463f-97b9-5ad1aa9e2f82";
+        this.token = "e9f6c6be-415a-46c3-b7ee-8ef9054ab06a";
         this.iconPath = FoundationManager.SERVER_BASE_URL+"userIcon/test.jpg";
 //        this.iconPath = FileUtils.toRootPath()+ File.separator+"test.jpg";
         this.iconLocalTempPath = FileUtils.toRootPath()+ File.separator+"test.jpg";
