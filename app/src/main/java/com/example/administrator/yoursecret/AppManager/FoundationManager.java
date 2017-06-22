@@ -18,7 +18,7 @@ import static com.example.administrator.yoursecret.utils.FileUtils.toRootPath;
 
 public class FoundationManager {
     public static String SERVER_BASE_URL;
-
+    public static String ISUNDER_WIFI;
     public static String APP_ICON_URL;
 
     public static String LOCATION_ICON_URL;

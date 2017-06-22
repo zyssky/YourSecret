@@ -103,7 +103,7 @@
         <activity android:name=".Account.activity_register"
             android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity android:name=".Account.activity_setBasic" />
-        <activity android:name=".Account.activity_setItem1" />
+        <activity android:name=".Account.activity_setItem" />
 
     </application>
 

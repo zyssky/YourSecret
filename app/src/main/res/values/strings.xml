@@ -6,6 +6,7 @@
     <string name="hint_login_password">输入密码</string>
     <string name="login_forget_pwd">忘记密码</string>
     <string name="please_input_limit_pwd">请输入数字或字母</string>
+    <string name="please_input_limit_acc">请输入数字</string>
     <string name="register">注册</string>
     <string name="to_register">注册新用户</string>
     <string name="hint_login_password_confirm">再次输入密码</string>
@@ -16,12 +17,16 @@
     <string name="register_fail">注册失败，用户已存在！</string>
     <string name="login_success">登陆成功</string>
     <string name="login">登录</string>
-
+    <string name="please_input_limt_setitem">只允许输入中文，英文、数字以及下划线</string>
     <string name="nav_recieve">消息</string>
     <string name="nav_discover">发现</string>
     <string name="nav_push">记录</string>
     <string name="nav_account">我的</string>
-
+    <string name="nickname">昵称</string>
+    <string name="password">密码</string>
+    <string name="set_head_portrait">设置头像</string>
+    <string name="photograph">拍照</string>
+    <string name="ablum">相册</string>
     <string name="type_public">公开</string>
     <string name="type_secret">私密</string>
     <string name="write_hint">这一刻你的想法...</string>

@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.administrator.yoursecret.R;
 
@@ -26,8 +25,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by j on 2017/6/19.
@@ -49,12 +46,14 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
     }
 
     private void initView() {
+        getView();
         touxiang=(ImageView) findViewById(R.id.touxiang2) ;
         nicheng=(LinearLayout)findViewById(R.id.nic);
         mima=(LinearLayout)findViewById(R.id.mim) ;
         touxiang.setOnClickListener(this);
         nicheng.setOnClickListener(this);
         mima.setOnClickListener(this);
+
     }
 
     @Override
@@ -65,12 +64,14 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.nic:
                 Intent intent1=new Intent();
-                intent1.setClass(this,activity_setItem1.class);
-               startActivity(intent1);
+                intent1.setClass(this,activity_setItem.class);
+                intent1.putExtra("title","昵称");
+                startActivity(intent1);
                 break;
             case R.id.mim:
                 Intent intent2=new Intent();
-                intent2.setClass(this,activity_setItem1.class);
+                intent2.setClass(this,activity_setItem.class);
+                intent2.putExtra("title","密码");
                 startActivity(intent2);
                 break;
 
@@ -82,8 +83,8 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
 
     private void ShowPickDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("设置头像")
-                .setNegativeButton("相册", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.set_head_portrait)
+                .setNegativeButton(R.string.ablum, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         Intent intent = new Intent(Intent.ACTION_PICK, null);
@@ -93,7 +94,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                         startActivityForResult(intent, 1);
                     }
                 })
-                .setPositiveButton("拍照", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.photograph, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         dialog.dismiss();
                         Intent intent = new Intent(
@@ -238,4 +239,8 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
         }
     }
 
+    public void getView() {
+
+
+    }
 }
