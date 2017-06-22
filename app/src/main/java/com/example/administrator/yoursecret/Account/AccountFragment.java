@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.administrator.yoursecret.AppManager.FoundationManager;
+import com.example.administrator.yoursecret.Login.LoginActivity;
 import com.example.administrator.yoursecret.R;
 
 import java.io.File;
@@ -131,6 +133,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
         if(readImage()){
             return;
         }
+        else{
+
+
+        }
     }
 
     @Override
@@ -138,10 +144,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
         if((isChecked)&&isConnectWithWifi(getContext()))
 
         {
-            Toast.makeText(getContext(),"sdfs",Toast.LENGTH_LONG).show();
+            FoundationManager.ISUNDER_WIFI="TRUE";
+            Toast.makeText(getContext(),(String)FoundationManager.ISUNDER_WIFI,Toast.LENGTH_LONG).show();
         }
         else {
-
+            FoundationManager.ISUNDER_WIFI="fALSE";
+            Toast.makeText(getContext(),FoundationManager.ISUNDER_WIFI,Toast.LENGTH_LONG).show();
         }
     }
 }

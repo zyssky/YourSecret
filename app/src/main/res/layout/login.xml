@@ -9,7 +9,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/logo"
+            android:id="@+id/l_logo"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
@@ -51,7 +51,7 @@
                         android:src="@drawable/ic_mobile_flag" />
 
                     <EditText
-                        android:id="@+id/et_mobile"
+                        android:id="@+id/l_et_mobile"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -66,7 +66,7 @@
                         android:textSize="14dp" />
 
                     <ImageView
-                        android:id="@+id/iv_clean_phone"
+                        android:id="@+id/l_iv_clean_phone"
                         android:layout_width="40dp"
                         android:layout_height="fill_parent"
                         android:scaleType="centerInside"
@@ -92,8 +92,10 @@
                         android:layout_marginRight="15dp"
                         android:src="@drawable/ic_password_flag" />
 
+
+
                     <EditText
-                        android:id="@+id/et_password"
+                        android:id="@+id/l_et_password"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -106,9 +108,8 @@
                         android:textColor="@color/color_999999"
                         android:textColorHint="@color/color_999999"
                         android:textSize="14dp" />
-
                     <ImageView
-                        android:id="@+id/clean_password"
+                        android:id="@+id/l_clean_password"
                         android:layout_width="40dp"
                         android:layout_height="fill_parent"
                         android:scaleType="centerInside"
@@ -116,58 +117,13 @@
                         android:visibility="gone" />
 
                     <ImageView
-                        android:id="@+id/iv_show_pwd"
+                        android:id="@+id/l_iv_show_pwd"
                         android:layout_width="40dp"
                         android:layout_height="fill_parent"
                         android:scaleType="centerInside"
                         android:src="@drawable/pass_gone" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/register_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:visibility="gone"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="13dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="15dp"
-                        android:src="@drawable/ic_password_flag" />
-
-                    <EditText
-                        android:id="@+id/et_password_confirm"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:hint="@string/hint_login_password_confirm"
-                        android:inputType="textPassword"
-                        android:maxLength="30"
-                        android:singleLine="true"
-                        android:text=""
-                        android:textColor="@color/color_999999"
-                        android:textColorHint="@color/color_999999"
-                        android:textSize="14dp" />
-
-                    <ImageView
-                        android:id="@+id/clean_password_confirm"
-                        android:layout_width="40dp"
-                        android:layout_height="fill_parent"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_clear"
-                        android:visibility="gone" />
-
-                    <ImageView
-                        android:id="@+id/iv_show_pwd_confirm"
-                        android:layout_width="40dp"
-                        android:layout_height="fill_parent"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/pass_gone" />
-                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -175,7 +131,7 @@
                     android:background="@color/color_eeeeee" />
 
                 <Button
-                    android:id="@+id/btn_login"
+                    android:id="@+id/l_btn_login"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginBottom="10dp"
@@ -185,25 +141,14 @@
                     android:textColor="@color/color_ffffff"
                     android:textSize="18dp" />
 
-                <Button
-                    android:id="@+id/btn_register"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="21dp"
-                    android:background="@drawable/bg_btn_login_selected"
-                    android:text="@string/register"
-                    android:textColor="@color/color_ffffff"
-                    android:textSize="18dp"
-                    />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:orientation="horizontal"
                     android:layout_height="20dp">
                     <Button
-                        android:id="@+id/btn_to_regist1"
+                        android:id="@+id/l_btn_to_regist"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="left"
@@ -212,7 +157,7 @@
                         android:textColor="@color/color_b0b8b2"
                         android:textSize="14dp" />
                     <Button
-                        android:id="@+id/forget_password1"
+                        android:id="@+id/l_forget_password"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="left"
