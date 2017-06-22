@@ -60,6 +60,7 @@ public class AppDatabaseManager {
             @Override
             public void run() {
                 ApplicationDataManager.getInstance().getAppDatabase().articalDao().delete(uuid);
+                ApplicationDataManager.getInstance().getAppDatabase().imageDao().deleteImages(uuid);
             }
         });
         thread.start();

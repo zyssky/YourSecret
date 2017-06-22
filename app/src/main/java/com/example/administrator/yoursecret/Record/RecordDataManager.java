@@ -201,4 +201,26 @@ public class RecordDataManager {
             }
         }
     }
+
+    public OnSwipeListener getOnSwipeListener(){
+        return new OnSwipeListener() {
+            @Override
+            public void onSwipe(int position) {
+                KV kv = adapter.getLocation(position);
+                Artical artical = datas.get(kv.key).remove(kv.value);
+                adapter.notifyItemRemoved(position);
+
+                AppDatabaseManager.deleteArtical(artical.uuid);
+                if(artical.finished == 1)
+                    ApplicationDataManager.getInstance().getNetworkManager()
+                            .deleteArtical(ApplicationDataManager.getInstance().getUserManager().getToken(),
+                                    artical.articalHref);
+
+            }
+        };
+    }
+
+    public interface OnSwipeListener{
+        void onSwipe(int position);
+    }
 }

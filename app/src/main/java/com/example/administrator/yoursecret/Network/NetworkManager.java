@@ -170,4 +170,31 @@ public class NetworkManager {
         RequestBody requestBody = new FormBody.Builder().add("token",token).build();
         return getArticalService().getUserArticals(requestBody);
     }
+
+    public void deleteArtical(String token,String articalHref) {
+        RequestBody requestBody = new FormBody.Builder().add("token",token).add("articalHref",articalHref).build();
+        getArticalService().deleteArtical(requestBody).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                String result = "";
+                try {
+                    result = response.body().string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(result.equals("success")){
+                    Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"云端删除成功！",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"云端删除失败！",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"云端删除失败！",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }

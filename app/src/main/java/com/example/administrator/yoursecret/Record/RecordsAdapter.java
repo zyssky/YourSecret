@@ -100,7 +100,7 @@ public class RecordsAdapter extends MultiRecyclerAdapter<Artical>{
         }
     }
 
-    class TitleViewHolder extends RecyclerView.ViewHolder{
+    public static class TitleViewHolder extends RecyclerView.ViewHolder{
         TextView textView ;
 
         public TitleViewHolder(View itemView) {
