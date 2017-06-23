@@ -8,6 +8,8 @@ public class AppContants {
     public static String ACCOUNT = "ACCOUNT";
     public static String PASSWORD = "PASSWORD";
     public static String NICKNAME="NICKNAME";
+    public static String TOKEN = "TOKEN";
+    public static String ICONPATH = "ICONPATH";
     public static String PASSWORD_CONFIRM = "PASSWORD_CONFIRM";
     public static String TYPE = "TYPE";
     public static int LOGIN = 1;
@@ -39,4 +41,6 @@ public class AppContants {
     public static String KEY = "KEY";
 
     public static String RECIEVE_FIRST_CATOGORY = ARTICAL_CATOGORY_HOT;
+
+    public static String packageName = "com.example.administrator.yoursecret";
 }

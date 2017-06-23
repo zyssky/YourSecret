@@ -67,7 +67,7 @@ public class activity_setItem extends Activity {
             @Override
             public void onRightClick() {
 
-                ApplicationDataManager.getInstance().getNetworkManager().modify()
+                ApplicationDataManager.getInstance().getNetworkManager().modify("","")
                          .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Observer<UserResponse>() {

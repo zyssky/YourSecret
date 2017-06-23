@@ -21,6 +21,9 @@ import com.example.administrator.yoursecret.Record.RecordDataManager;
 import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.utils.FunctionUtils;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class HomeActivity extends AppCompatActivity implements HomeContract.View{
 
     private BottomNavigationView navigationView;
@@ -56,8 +59,6 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
 
         initManager();
 
-//        ApplicationDataManager.getInstance().getNetworkManager().register();
-//        ApplicationDataManager.getInstance().getNetworkManager().login();
 
 
         presenter = new HomePresenter(this);
@@ -98,7 +99,6 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         ApplicationDataManager.getInstance().setNetworkManager(new NetworkManager());
         ApplicationDataManager.getInstance().setNetworkMonitor(new NetworkMonitor());
     }
-
 
     @Override
     public void switchContent(Fragment targetFragment) {

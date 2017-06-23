@@ -27,8 +27,13 @@ public interface UserService {
     @POST("Rest/user/login")
     Observable<UserResponse> login(@Body RequestBody body);
 
+    @POST("Rest/user/security")
+    Observable<UserResponse> modifyPassword(@Body RequestBody body);
+
     @Multipart
     @POST("Rest/user/modify")
     Observable<UserResponse> modify(@Part("token") RequestBody token, @Part("nickName")RequestBody nickname,
-                                    @Part("identifier") RequestBody identifier,@Part("image")RequestBody data);
+                                    @Part("image")RequestBody data);
+
+
 }

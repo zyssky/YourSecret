@@ -158,15 +158,24 @@ public class NetworkManager {
         return getUserService().login(requestBody);
     }
 
-    public Observable<UserResponse> modify() {
+    public Observable<UserResponse> modify(String nickName,String iconLocalTempPath) {
         UserManager userManager = ApplicationDataManager.getInstance().getUserManager();
         String token = userManager.getToken();
-        String nickName = userManager.getNickName();
-        String identifier = userManager.getIdentifier();
-        RequestBody requestBody = getFileRequestBody(userManager.getIconLocalTempPath());
+
+        RequestBody requestBody = getFileRequestBody(iconLocalTempPath);
 
         UserService service = getUserService();
-        return service.modify(getTextRequestBody(token),getTextRequestBody(nickName),getTextRequestBody(identifier),requestBody);
+        return service.modify(getTextRequestBody(token),getTextRequestBody(nickName),requestBody);
+    }
+
+    public Observable<UserResponse> modifyPassword(String oldPassword,String newPassword){
+        String phoneNum = ApplicationDataManager.getInstance().getUserManager().getPhoneNum();
+        String theOld = FunctionUtils.getSHA256String(phoneNum+oldPassword);
+        String theNew = FunctionUtils.getSHA256String(phoneNum+newPassword);
+
+        RequestBody requestBody = new FormBody.Builder().add("phoneNum",phoneNum)
+                .add("theold",theOld).add("thenew",theNew).build();
+        return getUserService().modifyPassword(requestBody);
     }
 
 
