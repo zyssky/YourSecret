@@ -186,10 +186,11 @@ public class NetworkManager {
         return getCommentService().putComment(requestBody);
     }
 
-    public Observable<List<Comment>> getUserComments() {
-//        String token = ApplicationDataManager.getInstance().getUserManager().getToken();
-        String token = "dc6620a5-1d3e-496e-900f-d25f9b30e9e3";
+    public Observable<List<Comment>> getUserComments(String lastDate) {
+        String token = ApplicationDataManager.getInstance().getUserManager().getToken();
+//        String token = "dc6620a5-1d3e-496e-900f-d25f9b30e9e3";
         RequestBody requestBody = new FormBody.Builder()
+                .add("lastDate",lastDate)
                 .add("token",token).build();
         return getCommentService().getUserComments(requestBody);
     }

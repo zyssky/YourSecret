@@ -49,14 +49,16 @@ public class CommentDataManager {
     private List<Comment> getDatas(){
         if(datas==null){
             datas = new ArrayList<>();
-            datas.add(new Comment());
         }
         return datas;
     }
 
     public void loadComments(){
-
-        ApplicationDataManager.getInstance().getNetworkManager().getUserComments()
+        String lastDate = "0";
+        if(!datas.isEmpty()){
+            lastDate = ""+datas.get(0).date;
+        }
+        ApplicationDataManager.getInstance().getNetworkManager().getUserComments(lastDate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<Comment>>() {
@@ -67,7 +69,7 @@ public class CommentDataManager {
 
                     @Override
                     public void onNext(@NonNull List<Comment> comments) {
-                        datas.addAll(comments);
+                        datas.addAll(0,comments);
                     }
 
                     @Override
