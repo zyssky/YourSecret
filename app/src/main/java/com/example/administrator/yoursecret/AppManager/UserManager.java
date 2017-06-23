@@ -25,6 +25,16 @@ public class UserManager {
 
     private String iconLocalTempPath;
 
+    private String tempPhoneNum;
+
+    public void setTempPhoneNum(String tempPhoneNum){
+        this.tempPhoneNum = tempPhoneNum;
+    }
+
+    public void savePhoneNum(){
+        this.phoneNum = tempPhoneNum;
+    }
+
     public String getIconLocalTempPath() {
         return iconLocalTempPath;
     }
@@ -42,6 +52,7 @@ public class UserManager {
         this.iconPath = FoundationManager.SERVER_BASE_URL+"userIcon/test.jpg";
 //        this.iconPath = FileUtils.toRootPath()+ File.separator+"test.jpg";
         this.iconLocalTempPath = FileUtils.toRootPath()+ File.separator+"test.jpg";
+
     }
 
     public void setPassword(String password) {

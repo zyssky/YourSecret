@@ -3,11 +3,11 @@ package com.example.administrator.yoursecret.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.UserManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Entity.UserResponse;
 import com.example.administrator.yoursecret.Home.HomeActivity;
 import com.example.administrator.yoursecret.Login.LoginHandler;
@@ -50,6 +50,7 @@ public class handler_login {
             String password = bundle.getString(AppContants.PASSWORD);
             String identifier = FunctionUtils.getSHA256String(account+password);
             Log.d(TAG, "onLogin: "+account+","+password+","+identifier);
+            ApplicationDataManager.getInstance().getUserManager().setTempPhoneNum(account);
             ApplicationDataManager.getInstance().getNetworkManager().login(account,password)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -61,7 +62,13 @@ public class handler_login {
 
                         @Override
                         public void onNext(@NonNull UserResponse userResponse) {
-
+                            if(userResponse.code == 200){
+                                UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
+                                usermanager.savePhoneNum();
+                                usermanager.setNickName(userResponse.nickName);
+                                usermanager.setIconPath(userResponse.userIconPath);
+                                usermanager.setToken(userResponse.token);
+                            }
                             String s=userResponse.message;
                             Intent intent = new Intent(context, WaitingActivity.class);
                             intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));
@@ -108,6 +115,7 @@ public class handler_login {
         } else {
             final String account = bundle.getString(AppContants.ACCOUNT);
             String password = bundle.getString(AppContants.PASSWORD);
+
             String identifier = FunctionUtils.getSHA256String(account+password);
             final String nickname = bundle.getString(AppContants.NICKNAME);
             Log.d(TAG, "onLogin: "+account+","+password+","+identifier);
@@ -122,8 +130,8 @@ public class handler_login {
 
                         @Override
                         public void onNext(@NonNull UserResponse userResponse) {
-                            String s = userResponse.message;
-                            if(s!="fail")
+
+                            if(userResponse.code == 200)
                             {
                                /* ApplicationDataManager.getInstance().getUserManager().setNickName(nickname);
                                 ApplicationDataManager.getInstance().getUserManager().setPhoneNum(account);*/
