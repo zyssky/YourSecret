@@ -148,13 +148,12 @@ public class NetworkManager {
 
     public Observable<UserResponse> register(String phoneNum , String nickName , String password){
         String identifier = FunctionUtils.getSHA256String(phoneNum+password);
-
         UserService service = getUserService();
         return service.register(getTextRequestBody(phoneNum),getTextRequestBody(nickName),getTextRequestBody(identifier));
     }
 
-    public Observable<UserResponse> login(){
-        String identifier = ApplicationDataManager.getInstance().getUserManager().getIdentifier();
+    public Observable<UserResponse> login(String phoneNum,String password){
+        String identifier = FunctionUtils.getSHA256String(phoneNum+password);
         RequestBody requestBody = new FormBody.Builder().add("identifier",identifier).build();
         return getUserService().login(requestBody);
     }

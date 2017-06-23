@@ -7,6 +7,7 @@ package com.example.administrator.yoursecret.utils;
 public class AppContants {
     public static String ACCOUNT = "ACCOUNT";
     public static String PASSWORD = "PASSWORD";
+    public static String NICKNAME="NICKNAME";
     public static String PASSWORD_CONFIRM = "PASSWORD_CONFIRM";
     public static String TYPE = "TYPE";
     public static int LOGIN = 1;

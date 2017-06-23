@@ -51,6 +51,7 @@ public class activity_login extends AppCompatActivity implements View.OnClickLis
         l_clean_password = (ImageView) findViewById(R.id.l_clean_password);
         l_iv_show_pwd = (ImageView) findViewById(R.id.l_iv_show_pwd);
 
+
     }
     private void initListener() {
         l_iv_clean_phone.setOnClickListener(this);

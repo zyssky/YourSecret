@@ -80,7 +80,7 @@ public class UserManager {
         this.iconPath = iconPath;
     }
 
-    public String getIdentifier(){
-        return FunctionUtils.getSHA256String(phoneNum+password);
-    }
+//    public String getIdentifier(){
+//        return FunctionUtils.getSHA256String(phoneNum+password);
+//    }
 }

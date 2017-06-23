@@ -43,8 +43,10 @@ public class handler_login {
         if (bundle.getString(AppContants.PASSWORD).length() == 0) {
             Toast.makeText(context, R.string.empty_password, Toast.LENGTH_SHORT).show();
             return;
-        } else {
-            ApplicationDataManager.getInstance().getNetworkManager().register()
+        }
+        else {
+            ApplicationDataManager.getInstance().getNetworkManager().login(bundle.getString(AppContants.ACCOUNT)
+                    ,bundle.getString(AppContants.PASSWORD))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<UserResponse>() {
@@ -55,20 +57,18 @@ public class handler_login {
 
                         @Override
                         public void onNext(@NonNull UserResponse userResponse) {
-                            if (FunctionUtils.getSHA256String(bundle.getString(AppContants.ACCOUNT) + bundle.getString(AppContants.ACCOUNT)) ==
-                                    ApplicationDataManager.getInstance().getUserManager().getIdentifier())
 
-                            {
-
-                                Intent intent = new Intent(context, WaitingActivity.class);
-                                intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));
-                                intent.putExtra(AppContants.PASSWORD, bundle.getString(AppContants.PASSWORD));
-                                intent.putExtra(AppContants.TYPE, AppContants.LOGIN);
-                                context.startActivity(intent);
+                            String s=userResponse.message;
+                            Intent intent = new Intent(context, WaitingActivity.class);
+                            intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));
+                            intent.putExtra(AppContants.PASSWORD, bundle.getString(AppContants.PASSWORD));
+                            intent.putExtra(AppContants.TYPE, AppContants.LOGIN);
+                            intent.putExtra("code",s);
+                            context.startActivity(intent);
                                 //设置ui，保存对应数据
                                 //注册,登录，修改 成功后返回的数据不一样的，有的会没有，需要的就跟我说}
                             }
-                        }
+
                         @Override
                         public void onError(@NonNull Throwable e) {
                             e.printStackTrace();
@@ -103,7 +103,8 @@ public class handler_login {
             return;
         } else {
 
-            ApplicationDataManager.getInstance().getNetworkManager().register()
+            ApplicationDataManager.getInstance().getNetworkManager().register(bundle.getString(AppContants.ACCOUNT),
+                    bundle.getString(AppContants.PASSWORD),bundle.getString(AppContants.NICKNAME))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<UserResponse>() {
@@ -114,8 +115,13 @@ public class handler_login {
 
                         @Override
                         public void onNext(@NonNull UserResponse userResponse) {
-
-
+                            String s=userResponse.message;
+                           Intent intent = new Intent(context, WaitingActivity.class);
+                            intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));
+                            intent.putExtra(AppContants.PASSWORD, bundle.getString(AppContants.PASSWORD));
+                            intent.putExtra(AppContants.TYPE, AppContants.LOGIN);
+                            intent.putExtra("code",s);
+                            context.startActivity(intent);
 
                         }
 

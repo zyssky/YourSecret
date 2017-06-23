@@ -13,8 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.administrator.yoursecret.Login.LoginActivity;
-import com.example.administrator.yoursecret.Login.LoginHandler;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
 
@@ -23,8 +21,8 @@ import com.example.administrator.yoursecret.utils.AppContants;
  */
 
 public class activity_register extends AppCompatActivity implements View.OnClickListener{
-    private EditText r_et_mobile,r_et_password,r_et_password_confirm;
-    private ImageView r_iv_show_pwd,r_iv_show_pwd_confirm,r_clean_phone,r_clean_password,r_clean_password_confirm;
+    private EditText r_et_mobile,r_et_password,r_et_password_confirm,r_et_id;
+    private ImageView r_iv_show_pwd,r_iv_show_pwd_confirm,r_clean_password,r_clean_password_confirm,r_clean_id,r_clean_phone;
     private Button r_register;
     handler_login RegisterHandler;
     @Override
@@ -40,7 +38,7 @@ public class activity_register extends AppCompatActivity implements View.OnClick
 
 
     private void initView() {
-
+        r_clean_id=(ImageView)findViewById(R.id.register_clean_id);
         r_register=(Button) findViewById(R.id.register_btn_register);
         r_et_mobile = (EditText) findViewById(R.id.register_et_mobile);
         r_et_password = (EditText) findViewById(R.id.register_et_password);
@@ -50,13 +48,16 @@ public class activity_register extends AppCompatActivity implements View.OnClick
         r_iv_show_pwd = (ImageView) findViewById(R.id.register_iv_show_pwd);
         r_clean_password_confirm = (ImageView) findViewById(R.id.register_clean_confirm_password);
         r_iv_show_pwd_confirm = (ImageView) findViewById(R.id.register_iv_show_confirm_pwd);
+        r_et_id=(EditText)findViewById(R.id.register_et_id);
     }
     private void initListener() {
-
+        r_clean_phone.setOnClickListener(this);
+        r_clean_id.setOnClickListener(this);
+        r_et_id.setOnClickListener(this);
         r_et_mobile.setOnClickListener(this);
         r_et_password.setOnClickListener(this);
         r_et_password_confirm.setOnClickListener(this);
-        r_clean_phone.setOnClickListener(this);
+        r_clean_id.setOnClickListener(this);
         r_clean_password.setOnClickListener(this);
         r_iv_show_pwd .setOnClickListener(this);
         r_clean_password_confirm.setOnClickListener(this);
@@ -68,8 +69,38 @@ public class activity_register extends AppCompatActivity implements View.OnClick
                 Bundle bundle = new Bundle();
                 bundle.putCharSequence(AppContants.ACCOUNT,r_et_mobile.getText().toString());
                 bundle.putCharSequence(AppContants.PASSWORD,r_et_password.getText().toString());
+                bundle.putCharSequence(AppContants.NICKNAME,r_et_id.getText().toString());
                 bundle.putCharSequence(AppContants.PASSWORD_CONFIRM,r_et_password_confirm.getText().toString());
                 RegisterHandler.onRegister(bundle);
+            }
+        });
+        r_et_id.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s) && r_clean_id.getVisibility() == View.GONE) {
+                    r_clean_id.setVisibility(View.VISIBLE);
+                } else if (TextUtils.isEmpty(s)) {
+                    r_clean_id.setVisibility(View.GONE);
+
+                }
+                else if(!s.toString().matches("[\\u4e00-\\u9fa5\\w]+")) {
+                    String temp = s.toString();
+                    Toast.makeText(activity_register.this, R.string.please_input_limit_acc, Toast.LENGTH_SHORT).show();
+                    s.delete(temp.length() - 1, temp.length());
+                    r_et_mobile.setSelection(s.length());
+                }
+
+
             }
         });
         r_et_mobile.addTextChangedListener(new TextWatcher() {
@@ -169,6 +200,9 @@ public class activity_register extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.register_clean__password:
                 r_et_password.setText("");
+                break;
+            case R.id.register_clean_id:
+                r_et_id.setText("");
                 break;
             case R.id.register_clean_confirm_password:
                 r_et_password_confirm.setText("");
