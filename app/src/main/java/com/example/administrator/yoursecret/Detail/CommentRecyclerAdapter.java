@@ -1,5 +1,6 @@
 package com.example.administrator.yoursecret.Detail;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +11,21 @@ import android.widget.TextView;
 import com.example.administrator.yoursecret.Entity.Comment;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
+import com.example.administrator.yoursecret.utils.GlideImageLoader;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Administrator on 2017/5/27.
  */
 
 public class CommentRecyclerAdapter extends BaseRecyclerAdapter<Comment> {
+    private Context context;
+    public void setContext(Context context){
+        this.context = context;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreate(ViewGroup parent, int viewType) {
         if(viewType == TYPE_HEADER){
@@ -30,7 +40,15 @@ public class CommentRecyclerAdapter extends BaseRecyclerAdapter<Comment> {
 
     @Override
     public void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, Comment data) {
-
+        if(viewHolder instanceof ViewHolder){
+            ViewHolder holder = (ViewHolder) viewHolder;
+            holder.content.setText(data.content);
+            holder.nickName.setText(data.nickName);
+            GlideImageLoader.loadImageNail(context,data.iconPath,holder.imageView);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String date = dateFormat.format(new Date(data.date));
+            holder.date.setText(date);
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -40,7 +58,10 @@ public class CommentRecyclerAdapter extends BaseRecyclerAdapter<Comment> {
         TextView content;
         public ViewHolder(View itemView) {
             super(itemView);
-//            imageView = (ImageView) itemView.findViewById()
+            imageView = (ImageView) itemView.findViewById(R.id.publisher_icon);
+            date = (TextView) itemView.findViewById(R.id.date_comment);
+            nickName = (TextView) itemView.findViewById(R.id.publisher_nickname);
+            content = (TextView) itemView.findViewById(R.id.content_comment);
         }
     }
 }

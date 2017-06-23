@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.Comment.CommentActivity;
 import com.example.administrator.yoursecret.Editor.EditorActivity;
 import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.Network.NetworkMonitor;
@@ -40,6 +41,9 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
             case R.id.publish:
                 Intent intent  = new Intent(this, EditorActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.comments:
+                startActivity(new Intent(this, CommentActivity.class));
                 break;
         }
         return true;

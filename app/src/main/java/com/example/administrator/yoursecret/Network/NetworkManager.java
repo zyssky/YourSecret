@@ -163,10 +163,11 @@ public class NetworkManager {
         UserManager userManager = ApplicationDataManager.getInstance().getUserManager();
         String token = userManager.getToken();
         String nickName = userManager.getNickName();
+        String identifier = userManager.getIdentifier();
         RequestBody requestBody = getFileRequestBody(userManager.getIconLocalTempPath());
 
         UserService service = getUserService();
-        return service.modify(getTextRequestBody(token),getTextRequestBody(nickName),requestBody);
+        return service.modify(getTextRequestBody(token),getTextRequestBody(nickName),getTextRequestBody(identifier),requestBody);
     }
 
 
@@ -184,6 +185,14 @@ public class NetworkManager {
                 .add("authorId",comment.authorId)
                 .add("iconPath",comment.iconPath).build();
         return getCommentService().putComment(requestBody);
+    }
+
+    public Observable<List<Comment>> getUserComments() {
+//        String token = ApplicationDataManager.getInstance().getUserManager().getToken();
+        String token = "dc6620a5-1d3e-496e-900f-d25f9b30e9e3";
+        RequestBody requestBody = new FormBody.Builder()
+                .add("token",token).build();
+        return getCommentService().getUserComments(requestBody);
     }
 
 

@@ -31,14 +31,15 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/comment_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                android:layout_height="wrap_content"
+                android:background="@color/cardview_light_background"></android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 
     </ScrollView>
 
     <LinearLayout
-        android:background="@color/cardview_light_background"
+        android:background="@color/color_eeeeee"
         android:id="@+id/input_layout"
         android:visibility="gone"
         android:layout_gravity="bottom"
