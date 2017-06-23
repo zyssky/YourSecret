@@ -30,7 +30,9 @@ public class CommentActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST,0,0,0,0));
-        recyclerView.setAdapter(CommentDataManager.getInstance().getAdapter());
+        CommentsAdapter adapter = CommentDataManager.getInstance().getAdapter();
+        adapter.setContext(this);
+        recyclerView.setAdapter(adapter);
         CommentDataManager.getInstance().loadComments();
     }
 }

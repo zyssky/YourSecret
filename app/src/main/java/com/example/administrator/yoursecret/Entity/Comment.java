@@ -18,9 +18,9 @@ public class Comment {
 
     public String authorId;
 
-    public String articalTitle;
+    public String title;
 
-    public String articalImageUrl;
+    public String imageUri;
 
-    public String articalIntroduction;
+    public String introduction;
 }
