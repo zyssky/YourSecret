@@ -49,9 +49,20 @@ public class TestMyActivity extends AppCompatActivity {
                 return true;
             }
 
+
+
+
+
         });
 
+
         webView.loadUrl("http://geek.csdn.net/news/detail/203046");
+
+
+
+
+        webView.loadUrl("http://geek.csdn.net/news/detail/203046");
+
 
 //        FoundationManager.setup(this);
 //        String path = FileUtils.toRootPath()+ File.separator+"test.jpg";

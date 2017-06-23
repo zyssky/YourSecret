@@ -7,3 +7,6 @@
 /build
 /captures
 .externalNativeBuild
+app/src/main/java/com/example/administrator/yoursecret/Account/handler_login.java
+app/src/main/res/layout/register.xml
+app/src/main/java/com/example/administrator/yoursecret/Account/handler_login.java
