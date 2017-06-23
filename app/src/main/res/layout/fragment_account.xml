@@ -63,12 +63,13 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/nicheng1"
+                            android:id="@+id/m_nickname"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="20dp"
                             android:text="mkd"
+                            android:textSize="12sp"
                             android:textColor="#000" />
 
                         <TextView
@@ -80,10 +81,11 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/zhanghao1"
+                        android:id="@+id/m_zhanghao"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="40dp"
+                        android:textSize="12sp"
+                        android:layout_marginTop="42dp"
                         android:text="sss" />
 
 

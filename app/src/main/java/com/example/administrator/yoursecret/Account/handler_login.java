@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Entity.UserResponse;
+import com.example.administrator.yoursecret.Home.HomeActivity;
 import com.example.administrator.yoursecret.Login.LoginHandler;
 import com.example.administrator.yoursecret.Login.WaitingActivity;
 import com.example.administrator.yoursecret.R;
@@ -45,8 +46,11 @@ public class handler_login {
             return;
         }
         else {
-            ApplicationDataManager.getInstance().getNetworkManager().login(bundle.getString(AppContants.ACCOUNT)
-                    ,bundle.getString(AppContants.PASSWORD))
+            String account = bundle.getString(AppContants.ACCOUNT);
+            String password = bundle.getString(AppContants.PASSWORD);
+            String identifier = FunctionUtils.getSHA256String(account+password);
+            Log.d(TAG, "onLogin: "+account+","+password+","+identifier);
+            ApplicationDataManager.getInstance().getNetworkManager().login(account,password)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<UserResponse>() {
@@ -102,9 +106,12 @@ public class handler_login {
             Toast.makeText(context, R.string.wrong_confirm_pwd, Toast.LENGTH_SHORT).show();
             return;
         } else {
-
-            ApplicationDataManager.getInstance().getNetworkManager().register(bundle.getString(AppContants.ACCOUNT),
-                    bundle.getString(AppContants.PASSWORD),bundle.getString(AppContants.NICKNAME))
+            final String account = bundle.getString(AppContants.ACCOUNT);
+            String password = bundle.getString(AppContants.PASSWORD);
+            String identifier = FunctionUtils.getSHA256String(account+password);
+            final String nickname = bundle.getString(AppContants.NICKNAME);
+            Log.d(TAG, "onLogin: "+account+","+password+","+identifier);
+            ApplicationDataManager.getInstance().getNetworkManager().register(account,password,nickname)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<UserResponse>() {
@@ -115,13 +122,22 @@ public class handler_login {
 
                         @Override
                         public void onNext(@NonNull UserResponse userResponse) {
-                            String s=userResponse.message;
-                           Intent intent = new Intent(context, WaitingActivity.class);
-                            intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));
-                            intent.putExtra(AppContants.PASSWORD, bundle.getString(AppContants.PASSWORD));
+                            String s = userResponse.message;
+                            if(s!="fail")
+                            {
+                               /* ApplicationDataManager.getInstance().getUserManager().setNickName(nickname);
+                                ApplicationDataManager.getInstance().getUserManager().setPhoneNum(account);*/
+
+
+                            Intent intent = new Intent(context, HomeActivity.class);
+
+                           /* intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));
+                            intent.putExtra(AppContants.NICKNAME,nic );
                             intent.putExtra(AppContants.TYPE, AppContants.LOGIN);
-                            intent.putExtra("code",s);
+                            intent.putExtra("code",s);*/
                             context.startActivity(intent);
+
+                            }
 
                         }
 

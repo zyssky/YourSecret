@@ -146,7 +146,7 @@ public class NetworkManager {
         return RequestBody.create(MediaType.parse("text/plain"),value);
     }
 
-    public Observable<UserResponse> register(String phoneNum , String nickName , String password){
+    public Observable<UserResponse> register(String phoneNum , String password,String nickName  ){
         String identifier = FunctionUtils.getSHA256String(phoneNum+password);
         UserService service = getUserService();
         return service.register(getTextRequestBody(phoneNum),getTextRequestBody(nickName),getTextRequestBody(identifier));

@@ -18,11 +18,15 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
+import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Login.LoginActivity;
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.utils.AppContants;
 
 import java.io.File;
 
@@ -34,6 +38,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
     private LinearLayout basic_set,exit,login;
     private Switch wifi_set;
     private ImageView touxiang;
+    private TextView m_nickname,m_account;
     public AccountFragment() {
         // Required empty public constructor
     }
@@ -65,12 +70,24 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
         wifi_set.setOnCheckedChangeListener(this);
         login.setOnClickListener(this);
         exit.setOnClickListener(this);
-
-
+        m_account = (TextView) rootView.findViewById(R.id.m_zhanghao) ;
+        m_nickname = (TextView) rootView.findViewById(R.id.m_nickname) ;
+        initView();
         return rootView;
+
 
     }
 
+    private void initView() {
+        UserManager user = ApplicationDataManager.getInstance().getUserManager();
+        String nic = user.getNickName();
+        String acc = user.getPhoneNum();
+        m_account.setText(acc);
+        m_nickname.setText(nic);
+
+
+
+    }
 
 
     @Override
@@ -131,6 +148,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
     public void onResume() {
         super.onResume();
         if(readImage()){
+
             return;
         }
         else{
