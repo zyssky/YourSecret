@@ -29,5 +29,6 @@ public interface UserService {
 
     @Multipart
     @POST("Rest/user/modify")
-    Observable<UserResponse> modify(@Part("token") RequestBody token, @Part("nickName")RequestBody nickname,@Part("image")RequestBody data);
+    Observable<UserResponse> modify(@Part("token") RequestBody token, @Part("nickName")RequestBody nickname,
+                                    @Part("identifier") RequestBody identifier,@Part("image")RequestBody data);
 }

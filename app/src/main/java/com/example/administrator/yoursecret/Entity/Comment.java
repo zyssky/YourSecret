@@ -17,4 +17,10 @@ public class Comment {
     public String iconPath;
 
     public String authorId;
+
+    public String articalTitle;
+
+    public String articalImageUrl;
+
+    public String articalIntroduction;
 }

@@ -74,7 +74,7 @@
             android:name=".Editor.EditorActivity"
             android:label="写文章"
             android:launchMode="singleTop"
-            android:parentActivityName=".Home.HomeActivity"></activity>
+            android:parentActivityName=".Home.HomeActivity" />
         <activity
             android:name=".Editor.Photo.PhotosActivity"
             android:label="图集"
@@ -93,20 +93,17 @@
             android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen"
-            android:theme="@style/FullscreenTheme">
-
-        </activity>
-
-        <activity android:name=".TestMyActivity">
-        </activity>
-
-        <activity android:name=".Account.activity_login"
-                   android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".Account.activity_register"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:theme="@style/FullscreenTheme"></activity>
+        <activity android:name=".TestMyActivity"></activity>
+        <activity
+            android:name=".Account.activity_login"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Account.activity_register"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".Account.activity_setBasic" />
         <activity android:name=".Account.activity_setItem" />
-
+        <activity android:name=".Comment.CommentActivity"></activity>
     </application>
 
 </manifest>

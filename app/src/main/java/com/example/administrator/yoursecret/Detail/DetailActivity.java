@@ -1,5 +1,6 @@
 package com.example.administrator.yoursecret.Detail;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -59,6 +61,7 @@ public class DetailActivity extends AppCompatActivity {
                     inputLayout.setVisibility(View.GONE);
                 else
                     inputLayout.setVisibility(View.VISIBLE);
+                editText.setText("");
                 break;
         }
         return true;
@@ -104,10 +107,7 @@ public class DetailActivity extends AppCompatActivity {
             if(artical!=null) {
                 DetailDataManager.getInstance().artical = artical;
                 webView.loadUrl(artical.articalHref);
-                ApplicationDataManager.getInstance().getNetworkManager().getComments(artical.articalHref)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(DetailDataManager.getInstance().getCommentsObserver());
+                DetailDataManager.getInstance().getComments();
             }
 
         }
@@ -121,13 +121,14 @@ public class DetailActivity extends AppCompatActivity {
         recyclerView.setNestedScrollingEnabled(false);
 
         CommentRecyclerAdapter adapter = DetailDataManager.getInstance().getAdapter();
+        adapter.setContext(this);
         recyclerView.setAdapter(adapter);
 
         recyclerView.addOnScrollListener(new EndlessOnScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int currentPage) {
                 Log.d("DetailActivity", "onLoadMore: ");
-                DetailDataManager.getInstance().test();
+//                DetailDataManager.getInstance().test();
             }
         });
 
@@ -137,6 +138,9 @@ public class DetailActivity extends AppCompatActivity {
         String content = editText.getText().toString();
         Log.d("DetailActivity ", "sendComment: "+content);
         DetailDataManager.getInstance().sendComment(content);
-
+        inputLayout.setVisibility(View.GONE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        editText.setText("");
     }
 }

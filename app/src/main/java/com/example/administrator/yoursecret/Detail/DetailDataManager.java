@@ -56,11 +56,6 @@ public class DetailDataManager {
     private List<Comment> getList(){
         if(list == null){
             list = new ArrayList<>();
-            list.add(new Comment());
-            list.add(new Comment());
-            list.add(new Comment());
-            list.add(new Comment());
-
         }
         return list;
     }
@@ -70,7 +65,7 @@ public class DetailDataManager {
         adapter.notifyItemInserted(list.size()-1);
     }
 
-    public Observer<? super List<Comment>> getCommentsObserver() {
+    public void getComments() {
         Observer<List<Comment>> observer = new Observer<List<Comment>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
@@ -90,10 +85,15 @@ public class DetailDataManager {
 
             @Override
             public void onComplete() {
+                adapter.notifyDataSetChanged();
                 Log.d(TAG, "onComplete: ");
             }
         };
-        return observer;
+
+        ApplicationDataManager.getInstance().getNetworkManager().getComments(artical.articalHref)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 
     public String getArticalShareDesc() {

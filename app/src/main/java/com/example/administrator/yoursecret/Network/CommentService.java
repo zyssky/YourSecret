@@ -20,4 +20,7 @@ public interface CommentService {
 
     @POST("Rest/comment")
     Observable<ResponseBody> putComment(@Body RequestBody body);
+
+    @POST("Rest/comment/user")
+    Observable<List<Comment>> getUserComments(@Body RequestBody body);
 }
