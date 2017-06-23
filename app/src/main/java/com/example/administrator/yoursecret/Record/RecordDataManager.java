@@ -211,10 +211,11 @@ public class RecordDataManager {
                 adapter.notifyItemRemoved(position);
 
                 AppDatabaseManager.deleteArtical(artical.uuid);
-                if(artical.finished == 1)
+                if(artical.finished == 1) {
                     ApplicationDataManager.getInstance().getNetworkManager()
                             .deleteArtical(ApplicationDataManager.getInstance().getUserManager().getToken(),
                                     artical.articalHref);
+                }
 
             }
         };

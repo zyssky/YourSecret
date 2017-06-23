@@ -1,15 +1,30 @@
 package com.example.administrator.yoursecret.Detail;
 
+import android.util.Log;
+
+import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Entity.Comment;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 /**
  * Created by Administrator on 2017/6/16.
  */
 
 public class DetailDataManager {
+    public String TAG = DetailDataManager.class.getSimpleName();
     private static DetailDataManager instance;
 
     private DetailDataManager(){}
@@ -28,6 +43,8 @@ public class DetailDataManager {
     private List<Comment> list;
     private CommentRecyclerAdapter adapter;
 
+    public Artical artical;
+
     public CommentRecyclerAdapter getAdapter(){
         if(adapter == null){
             adapter = new CommentRecyclerAdapter();
@@ -39,7 +56,90 @@ public class DetailDataManager {
     private List<Comment> getList(){
         if(list == null){
             list = new ArrayList<>();
+            list.add(new Comment());
+            list.add(new Comment());
+            list.add(new Comment());
+            list.add(new Comment());
+
         }
         return list;
+    }
+
+    public void test(){
+        list.add(new Comment());
+        adapter.notifyItemInserted(list.size()-1);
+    }
+
+    public Observer<? super List<Comment>> getCommentsObserver() {
+        Observer<List<Comment>> observer = new Observer<List<Comment>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                Log.d(TAG, "onSubscribe: ");
+            }
+
+            @Override
+            public void onNext(@NonNull List<Comment> comments) {
+                list.addAll(comments);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                e.printStackTrace();
+                Log.d(TAG, "onError: ");
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "onComplete: ");
+            }
+        };
+        return observer;
+    }
+
+    public String getArticalShareDesc() {
+        return artical.title+"\n链接："+artical.articalHref;
+    }
+
+    public void sendComment(String content) {
+        final Comment comment = new Comment();
+        comment.articalHref = artical.articalHref;
+        comment.authorId = artical.authorId;
+        comment.content = content;
+        comment.iconPath = ApplicationDataManager.getInstance().getUserManager().getIconPath();
+        comment.nickName = ApplicationDataManager.getInstance().getUserManager().getNickName();
+        comment.date = new Date().getTime();
+        ApplicationDataManager.getInstance().getNetworkManager().putComment(comment)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ResponseBody>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        Log.d(TAG, "onSubscribe: ");
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ResponseBody responseBody) {
+                        String result = "";
+                        try{
+                            result = responseBody.string();
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
+                        if(result.equals("success")){
+                            list.add(0,comment);
+                            adapter.notifyItemInserted(0);
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d(TAG, "onError: ");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
+                    }
+                });
     }
 }

@@ -21,7 +21,7 @@ public interface UserService {
     @Multipart
     @POST("Rest/user/register")
     Observable<UserResponse> register(@Part("phoneNum") RequestBody phoneNum, @Part("nickName")RequestBody nickname,
-                                      @Part("identifier") RequestBody identifier, @Part("image")RequestBody data);
+                                      @Part("identifier") RequestBody identifier);
 
 
     @POST("Rest/user/login")

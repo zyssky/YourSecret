@@ -10,8 +10,10 @@ import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Entity.ArticalResponse;
+import com.example.administrator.yoursecret.Entity.Comment;
 import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.Entity.UserResponse;
+import com.example.administrator.yoursecret.utils.FunctionUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -45,6 +47,7 @@ public class NetworkManager {
 
     private UserService userService;
     private ArticalService articalService;
+    private CommentService commentService;
 
     private UserService getUserService(){
         if(userService == null){
@@ -58,6 +61,12 @@ public class NetworkManager {
             articalService = getRetrofit().create(ArticalService.class);
         }
         return articalService;
+    }
+
+    private CommentService getCommentService(){
+        if(null == commentService )
+            commentService = getRetrofit().create(CommentService.class);
+        return commentService;
     }
 
     public Observable<ArticalResponse> uploadArtical(){
@@ -137,15 +146,11 @@ public class NetworkManager {
         return RequestBody.create(MediaType.parse("text/plain"),value);
     }
 
-    public Observable<UserResponse> register(){
-        UserManager userManager = ApplicationDataManager.getInstance().getUserManager();
-        String identifier = userManager.getIdentifier();
-        String phoneNum = userManager.getPhoneNum();
-        String nickName = userManager.getNickName();
-        RequestBody requestBody = getFileRequestBody(userManager.getIconLocalTempPath());
+    public Observable<UserResponse> register(String phoneNum , String nickName , String password){
+        String identifier = FunctionUtils.getSHA256String(phoneNum+password);
 
         UserService service = getUserService();
-        return service.register(getTextRequestBody(phoneNum),getTextRequestBody(nickName),getTextRequestBody(identifier),requestBody);
+        return service.register(getTextRequestBody(phoneNum),getTextRequestBody(nickName),getTextRequestBody(identifier));
     }
 
     public Observable<UserResponse> login(){
@@ -164,6 +169,22 @@ public class NetworkManager {
         return service.modify(getTextRequestBody(token),getTextRequestBody(nickName),requestBody);
     }
 
+
+    public Observable<List<Comment>> getComments(String articalHref){
+        RequestBody requestBody = new FormBody.Builder()
+                .add("articalHref",articalHref).build();
+        return getCommentService().getComments(requestBody);
+    }
+
+    public Observable<ResponseBody> putComment(Comment comment){
+        RequestBody requestBody = new FormBody.Builder()
+                .add("articalHref",comment.articalHref)
+                .add("content",comment.content)
+                .add("nickName",comment.nickName)
+                .add("authorId",comment.authorId)
+                .add("iconPath",comment.iconPath).build();
+        return getCommentService().putComment(requestBody);
+    }
 
 
     public Observable<List<Artical>> getUserArticals(String token) {

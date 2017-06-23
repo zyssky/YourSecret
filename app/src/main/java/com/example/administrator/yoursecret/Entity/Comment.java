@@ -5,4 +5,16 @@ package com.example.administrator.yoursecret.Entity;
  */
 
 public class Comment {
+
+    public String articalHref;
+
+    public String content;
+
+    public long date;
+
+    public String nickName;
+
+    public String iconPath;
+
+    public String authorId;
 }

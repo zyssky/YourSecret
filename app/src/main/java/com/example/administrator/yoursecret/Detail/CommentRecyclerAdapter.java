@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.administrator.yoursecret.Entity.Comment;
 import com.example.administrator.yoursecret.R;
@@ -32,8 +34,13 @@ public class CommentRecyclerAdapter extends BaseRecyclerAdapter<Comment> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+        TextView date;
+        TextView nickName;
+        TextView content;
         public ViewHolder(View itemView) {
             super(itemView);
+//            imageView = (ImageView) itemView.findViewById()
         }
     }
 }

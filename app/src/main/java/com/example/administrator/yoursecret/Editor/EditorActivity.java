@@ -269,7 +269,7 @@ public class EditorActivity extends AppCompatActivity {
                 if(v.getId()==R.id.save_delete){
                     articalManager.deleteArtical();
                     if(!isNew){
-                        AppDatabaseManager.deleteImages(articalManager.getArtical().uuid);
+//                        AppDatabaseManager.deleteImages(articalManager.getArtical().uuid);
                         AppDatabaseManager.deleteArtical(articalManager.getArtical().uuid);
                     }
                 }
