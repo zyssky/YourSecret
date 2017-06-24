@@ -1,6 +1,7 @@
 package com.example.administrator.yoursecret.Editor;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,8 +54,6 @@ import okhttp3.ResponseBody;
 
 public class EditorActivity extends AppCompatActivity {
 
-//    private Context context;
-
     public static final String TAG = EditorActivity.class.getSimpleName();
 
     private RichEditor editor;
@@ -77,28 +76,10 @@ public class EditorActivity extends AppCompatActivity {
 
     private NetworkManager networkManager;
 
-    private boolean isNew = true;
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.type_menu,menu);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        //memory operation
-        articalManager.saveTempArtical(editor.getHtml());
-        ApplicationDataManager.getInstance().getRecordDataManager().saveTempArtical(articalManager.getArtical());
-
-        //Database operation
-        if(isNew)
-            AppDatabaseManager.addArtical(articalManager.getArtical());
-        else
-            AppDatabaseManager.updateArtical(articalManager.getArtical());
-        AppDatabaseManager.saveImages(photoManager.getImages());
     }
 
     @Override
@@ -130,24 +111,12 @@ public class EditorActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if(intent.getExtras()!=null) {
-            isNew = false;
             KV kv = intent.getExtras().getParcelable(AppContants.FROM_RECORD);
 
-            //get artical from memory
-            Artical artical = ApplicationDataManager.getInstance().getRecordDataManager().getArtical(kv);
-            articalManager.setArtical(artical);
+            articalManager.setArticalFromRecord(kv);
             //to set the loaded choosed
-            TypeDialog.setChoosed(artical.articalType);
+            TypeDialog.setChoosed(articalManager.getArtical().articalType);
 
-
-            //update recordfragment
-            ApplicationDataManager.getInstance().getRecordDataManager().removeArtical(kv);
-
-            //get data form database
-            AppDatabaseManager.getImages(artical.uuid)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(photoManager.getObserver());
         }
 
         initAdapters();
@@ -202,13 +171,14 @@ public class EditorActivity extends AppCompatActivity {
         AdapterManager.onDestroy();
     }
 
-    public void insertImageIntoEditor(int position){
-        String path = adapter.getmDatas().get(position).path;
-        if(!articalManager.hasImageUri())
-            articalManager.setImageUri(path);
-        editor.insertImage(path,"image");
-    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        articalManager.saveTempArtical(editor.getHtml());
+
+    }
 
     //一级功能按钮的点击事件响应
 
@@ -266,42 +236,27 @@ public class EditorActivity extends AppCompatActivity {
         dialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(v.getId()==R.id.save_delete){
-                    articalManager.deleteArtical();
-                    if(!isNew){
-//                        AppDatabaseManager.deleteImages(articalManager.getArtical().uuid);
-                        AppDatabaseManager.deleteArtical(articalManager.getArtical().uuid);
-                    }
+                switch (v.getId()){
+                    case R.id.save_delete:
+                        articalManager.deleteArtical();
+                        break;
+                    case R.id.save_public:
+                        if(!ApplicationDataManager.getInstance().getUserManager().hasLogin()){
+                            Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"请先登录！",Toast.LENGTH_LONG).show();
+                            articalManager.saveTempArtical(editor.getHtml());
+                        }
+                        else
+                            articalManager.saveAsPublic(editor.getHtml());
+                        break;
+                    case R.id.save_private:
+                        if(!ApplicationDataManager.getInstance().getUserManager().hasLogin()){
+                            Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"请先登录！",Toast.LENGTH_LONG).show();
+                            articalManager.saveTempArtical(editor.getHtml());
+                        }
+                        else
+                            articalManager.saveAsPrivate(editor.getHtml());
+                        break;
                 }
-                else {
-                    if(v.getId() == R.id.save_public){
-                        articalManager.setArticalSaveType(AppContants.PUBLIC);
-                    }
-                    if(v.getId() == R.id.save_private){
-                        articalManager.setArticalSaveType(AppContants.PRIVATE);
-                    }
-
-                    //memory operation
-                    articalManager.saveFinishedArtical(editor.getHtml());
-                    ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(articalManager.getArtical());
-
-                    //Database operation
-                    if(isNew)
-                        AppDatabaseManager.addArtical(articalManager.getArtical());
-                    else
-                        AppDatabaseManager.updateArtical(articalManager.getArtical());
-
-                    //delete after confirm upload to server
-                    AppDatabaseManager.saveImages(photoManager.getImages());
-
-                    //nerwork operation
-                    ApplicationDataManager.getInstance().getNetworkMonitor().pushArtical(articalManager.getArtical());
-                    networkManager.uploadArtical()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(ApplicationDataManager.getInstance().getNetworkMonitor().getUploadArticalObserver());
-                }
-
                 dialog.dismiss();
                 finish();
             }
@@ -313,6 +268,14 @@ public class EditorActivity extends AppCompatActivity {
         Intent intent = new Intent(this,PhotosActivity.class);
         this.startActivity(intent);
     }
+
+    public void insertImageIntoEditor(int position){
+        String path = adapter.getmDatas().get(position).path;
+        if(!articalManager.hasImageUri())
+            articalManager.setImageUri(path);
+        editor.insertImage(path,"image");
+    }
+
 
     //文字模式选择
 

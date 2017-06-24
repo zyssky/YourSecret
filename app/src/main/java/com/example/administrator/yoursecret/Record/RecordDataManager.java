@@ -98,8 +98,10 @@ public class RecordDataManager {
         return datas.get(kv.key).get(kv.value);
     }
 
-    public void removeArtical(KV kv){
-        datas.get(kv.key).remove(kv.value);
+    public Artical removeArtical(KV kv){
+        Artical artical = datas.get(kv.key).remove(kv.value);
+        adapter.notifyDataSetChanged();
+        return artical;
     }
 
     public Observer<List<Artical>> getObserverForTemp(){
@@ -209,16 +211,38 @@ public class RecordDataManager {
                 KV kv = adapter.getLocation(position);
                 Artical artical = datas.get(kv.key).remove(kv.value);
                 adapter.notifyItemRemoved(position);
+                if(artical.finished == 0) {
+                    AppDatabaseManager.deleteArtical(artical);
+                    return;
+                }
 
-                AppDatabaseManager.deleteArtical(artical.uuid);
                 if(artical.finished == 1) {
-                    ApplicationDataManager.getInstance().getNetworkManager()
-                            .deleteArtical(ApplicationDataManager.getInstance().getUserManager().getToken(),
-                                    artical.articalHref);
+                    String token = ApplicationDataManager.getInstance().getUserManager().getToken();
+
+                    ApplicationDataManager.getInstance().getNetworkManager().deleteArtical(token, artical.articalHref)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(ApplicationDataManager.getInstance().getNetworkMonitor().getDeleteArticalObserver(artical));
                 }
 
             }
         };
+    }
+
+    public void refresh(){
+        datas.get(AppContants.RECORD_CATOGORY_TEMP).clear();
+        datas.get(AppContants.RECORD_CATOGORY_HISTORY).clear();
+
+        AppDatabaseManager.getTempArticals()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getObserverForTemp());
+
+        AppDatabaseManager.getFinishedArticals()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getObserverForFinished());
+
     }
 
     public interface OnSwipeListener{

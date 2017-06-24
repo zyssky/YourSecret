@@ -1,10 +1,16 @@
 package com.example.administrator.yoursecret.Entity;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 /**
  * Created by Administrator on 2017/5/27.
  */
-
+@Entity
 public class Comment {
+
+    @PrimaryKey(autoGenerate = true)
+    public int id;
 
     public String articalHref;
 

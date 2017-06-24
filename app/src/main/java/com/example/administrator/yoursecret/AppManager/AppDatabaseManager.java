@@ -2,7 +2,9 @@ package com.example.administrator.yoursecret.AppManager;
 
 import android.util.Log;
 
+import com.example.administrator.yoursecret.DAO.CommentDao;
 import com.example.administrator.yoursecret.Entity.Artical;
+import com.example.administrator.yoursecret.Entity.Comment;
 import com.example.administrator.yoursecret.Entity.Image;
 
 import java.util.List;
@@ -66,12 +68,24 @@ public class AppDatabaseManager {
         thread.start();
     }
 
+    public static void deleteArtical(final Artical artical){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ApplicationDataManager.getInstance().getAppDatabase().articalDao().deleteByHref(artical.articalHref);
+            }
+        });
+        thread.start();
+
+    }
+
     public static Observable<List<Artical>> getFinishedArticals(){
         Observable<List<Artical>> observable = new Observable<List<Artical>>() {
             @Override
             protected void subscribeActual(Observer<? super List<Artical>> observer) {
                 try {
-                    List<Artical> list = ApplicationDataManager.getInstance().getAppDatabase().articalDao().getAllFinishedArtical();
+                    String authorID = ApplicationDataManager.getInstance().getUserManager().getPhoneNum();
+                    List<Artical> list = ApplicationDataManager.getInstance().getAppDatabase().articalDao().getAllFinishedArtical(authorID);
                     observer.onNext(list);
                 }catch (Exception e){
                     observer.onError(e);
@@ -87,7 +101,8 @@ public class AppDatabaseManager {
             @Override
             protected void subscribeActual(Observer<? super List<Artical>> observer) {
                 try {
-                    List<Artical> list = ApplicationDataManager.getInstance().getAppDatabase().articalDao().getAllTempArticals();
+                    String authorID = ApplicationDataManager.getInstance().getUserManager().getPhoneNum();
+                    List<Artical> list = ApplicationDataManager.getInstance().getAppDatabase().articalDao().getAllTempArticals(authorID);
                     observer.onNext(list);
                 }catch (Exception e){
                     observer.onError(e);
@@ -146,6 +161,32 @@ public class AppDatabaseManager {
                 for (Artical artical : articals) {
                     artical.finished = 1;
                     ApplicationDataManager.getInstance().getAppDatabase().articalDao().insert(artical);
+                }
+            }
+        });
+        thread.start();
+    }
+
+    public static Observable<List<Comment>> getComments(final String authorId){
+        Observable<List<Comment>> observable = new Observable<List<Comment>>() {
+            @Override
+            protected void subscribeActual(Observer<? super List<Comment>> observer) {
+                List<Comment> list = ApplicationDataManager.getInstance().getAppDatabase().commentDao().getComments(authorId);
+                observer.onNext(list);
+                observer.onComplete();
+            }
+        };
+        return observable;
+    }
+
+    public static void addComments(final List<Comment> list){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                CommentDao dao = ApplicationDataManager.getInstance().getAppDatabase().commentDao();
+                for (Comment c :
+                        list) {
+                    dao.addComment(c);
                 }
             }
         });

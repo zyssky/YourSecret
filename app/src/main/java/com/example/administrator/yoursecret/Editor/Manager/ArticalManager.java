@@ -1,18 +1,16 @@
 package com.example.administrator.yoursecret.Editor.Manager;
 
-import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.Entity.Artical;
-import com.example.administrator.yoursecret.Entity.ArticalResponse;
 import com.example.administrator.yoursecret.Entity.Image;
+import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FileUtils;
+import com.example.administrator.yoursecret.utils.KV;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -20,9 +18,8 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.reactivex.Observer;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2017/6/8.
@@ -104,40 +101,21 @@ public class ArticalManager {
 
     private Artical artical;
 
+    private boolean isNew;
+
     public ArticalManager(){
         artical = new Artical();
+        isNew = true;
         artical.uuid = ""+new Random().nextLong();
-    }
-
-    public void setArticalType(String type){
-        artical.articalType = type;
-    }
-
-    public void deleteArtical(){
-        List<Image> list = EditorDataManager.getInstance().getPhotoManager().getImages();
-        for (int i = 0; i < list.size(); i++) {
-                FileUtils.fileDelete(list.get(i).path);
-        }
     }
 
     public Artical getArtical(){
         return artical;
     }
 
-    public void setArtical(Artical artical) {
-        this.artical = artical;
-    }
 
-    public void setArticalSaveType(int type){
-        artical.saveType = type;
-    }
 
-    public void saveArtical(String html){
-        if(artical.saveType == -1){
-            deleteArtical();
-        }
-
-        Log.d("HTML  ", "saveArtical: "+html);
+    private void save(String html){
 
         String pattern = "^<h1>(.+?)</h1>(<hr>)?(.*)";
         Pattern r = Pattern.compile(pattern);
@@ -155,38 +133,42 @@ public class ArticalManager {
 
         artical.title = title;
         artical.contentHtml = content;
-
         artical.authorId = ApplicationDataManager.getInstance().getUserManager().getPhoneNum();
-
         artical.introduction = getIntroduction(content);
-
         artical.images = EditorDataManager.getInstance().getPhotoManager().getImages();
-
         artical.html = html;
-
         artical.date = new Date().getTime();
     }
 
-    public void saveFinishedArtical(String html){
+    private void saveToDatabase(){
+        //Database operation
+        if(isNew)
+            AppDatabaseManager.addArtical(artical);
+        else
+            AppDatabaseManager.updateArtical(artical);
+    }
+
+    private void saveFinishedArtical(String html){
         artical.finished = 1;
-        saveArtical(html);
+        save(html);
+
+        ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(artical);
+
+        saveToDatabase();
+
+        //delete after confirm upload to server
+        AppDatabaseManager.saveImages(EditorDataManager.getInstance().getPhotoManager().getImages());
+
+        //nerwork operation
+//        ApplicationDataManager.getInstance().getNetworkMonitor().pushArtical(artical);
+        EditorDataManager.getInstance().getNetworkManager().uploadArtical()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(ApplicationDataManager.getInstance().getNetworkMonitor().getUploadArticalObserver(artical));
+
     }
 
-    public void saveTempArtical(String html){
-        artical.finished = 0;
-        saveArtical(html);
-    }
-
-    public void setArticalFinishedStatus(boolean status){
-        if(status){
-            artical.finished = 1;
-        }
-        else{
-            artical.finished = 0;
-        }
-    }
-
-    public String getIntroduction(String content_html){
+    private String getIntroduction(String content_html){
         String pattern = "<.+?>";
         Pattern r = Pattern.compile(pattern);
         String[] ss = r.split(content_html);
@@ -207,28 +189,61 @@ public class ArticalManager {
         return sb.toString();
     }
 
-    public void setLocation(Image image){
-        artical.latitude = image.latitude;
-        artical.longtitude = image.longtitude;
-        artical.locationDesc = image.description;
+
+    //provide for editor to change artical
+
+    public void setArticalType(String type){
+        artical.articalType = type;
     }
 
-    public void setImageUri(String path){
-        artical.imageUri = path;
+    public void setArticalFromRecord(KV kv) {
+        artical = ApplicationDataManager.getInstance().getRecordDataManager().removeArtical(kv);
+
+        isNew = false;
+        //get data form database
+        AppDatabaseManager.getImages(artical.uuid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(EditorDataManager.getInstance().getPhotoManager().getObserver());
     }
 
-    public boolean hasLocation(){
-        if(!artical.locationDesc.isEmpty())
-            return true;
-        return false;
-    }
 
-    public boolean hasImageUri(){
-        if(!artical.imageUri.isEmpty()){
-            return true;
+    //when exit editor the four choices
+    public void deleteArtical(){
+        List<Image> list = EditorDataManager.getInstance().getPhotoManager().getImages();
+        for (int i = 0; i < list.size(); i++) {
+            FileUtils.fileDelete(list.get(i).path);
         }
-        return false;
+
+        if(!isNew){
+            AppDatabaseManager.deleteArtical(artical.uuid);
+        }
     }
+
+
+    public void saveTempArtical(String html){
+        artical.finished = 0;
+        save(html);
+        ApplicationDataManager.getInstance().getRecordDataManager().saveTempArtical(artical);
+
+        saveToDatabase();
+
+        AppDatabaseManager.saveImages(EditorDataManager.getInstance().getPhotoManager().getImages());
+    }
+
+    public void saveAsPublic(String html) {
+        artical.saveType = AppContants.PUBLIC;
+        saveFinishedArtical(html);
+
+    }
+
+    public void saveAsPrivate(String html) {
+        artical.saveType = AppContants.PRIVATE;
+        saveFinishedArtical(html);
+    }
+
+
+    //provide to other model to deal with the aritcal
 
     public String getArticalHtml(){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -254,7 +269,32 @@ public class ArticalManager {
         return template;
     }
 
+    public void setLocation(Image image){
+        artical.latitude = image.latitude;
+        artical.longtitude = image.longtitude;
+        artical.locationDesc = image.description;
+    }
 
+    public void setImageUri(String path){
+        artical.imageUri = path;
+    }
+
+    public boolean hasLocation(){
+        if(!artical.locationDesc.isEmpty())
+            return true;
+        return false;
+    }
+
+    public boolean hasImageUri(){
+        if(!artical.imageUri.isEmpty()){
+            return true;
+        }
+        return false;
+    }
+
+
+
+    //replace the template html
 
     public void setHtmlContent(String value){
         String old = "{artical_content}";
@@ -314,8 +354,4 @@ public class ArticalManager {
     }
 
 
-//    public void setHtmlArticalHref(String value){
-//        String old = "{artical_href}";
-//        template = template.replace(old,value);
-//    }
 }

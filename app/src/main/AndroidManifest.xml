@@ -85,7 +85,7 @@
 
         <service android:name="com.amap.api.location.APSService" />
         <service
-            android:name=".Editor.Photo.LocationService"
+            android:name=".Service.LocationService"
             android:enabled="true"
             android:exported="true" />
 

@@ -15,17 +15,17 @@ import java.util.List;
  */
 @Dao
 public interface ArticalDao {
-    @Query("SELECT * FROM artical WHERE finished = 0 ORDER BY date DESC")
-    List<Artical> getAllTempArticals();
+    @Query("SELECT * FROM artical WHERE finished = 0 AND authorId = :authorId ORDER BY date DESC")
+    List<Artical> getAllTempArticals(String authorId);
 
-    @Query("SELECT * FROM artical WHERE finished = 1 ORDER BY date DESC")
-    List<Artical> getAllFinishedArtical();
+    @Query("SELECT * FROM artical WHERE finished = 1 AND authorId = :authorId ORDER BY date DESC")
+    List<Artical> getAllFinishedArtical(String authorId);
 
     @Insert
     void insert(Artical artical);
 
-    @Delete
-    void delete(Artical artical);
+    @Query("DELETE FROM artical WHERE articalHref = :key")
+    void deleteByHref(String key);
 
     @Query("DELETE FROM artical WHERE uuid = :key")
     void delete(String key);

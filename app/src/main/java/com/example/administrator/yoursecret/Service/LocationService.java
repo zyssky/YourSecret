@@ -1,4 +1,4 @@
-package com.example.administrator.yoursecret.Editor.Photo;
+package com.example.administrator.yoursecret.Service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -10,11 +10,6 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
-import com.example.administrator.yoursecret.Entity.Image;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class LocationService extends Service implements AMapLocationListener{
 
@@ -27,9 +22,15 @@ public class LocationService extends Service implements AMapLocationListener{
 
     public MyBinder binder;
 
+    private CallbackListener listener;
+
     public class MyBinder extends Binder{
         public void getLocation(){
             startOnceLoaction();
+        }
+
+        public void setCallBackListener(CallbackListener listener1){
+            listener = listener1;
         }
     }
 
@@ -83,21 +84,24 @@ public class LocationService extends Service implements AMapLocationListener{
             if (amapLocation.getErrorCode() == 0) {
             //可在其中解析amapLocation获取相应内容。
                 //获取定位时间
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date date = new Date(amapLocation.getTime());
-                String day = df.format(date);
+//                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                Date date = new Date(amapLocation.getTime());
+//                String day = df.format(date);
 
                 double latitude = amapLocation.getLatitude();//获取纬度
                 double longtitude = amapLocation.getLongitude();//获取经度
 
                 String address = amapLocation.getAddress();//地址，
 
-                Image location = new Image();
-                location.description = address;
-                location.longtitude = longtitude;
-                location.latitude = latitude;
-                EditorDataManager.getInstance().getPhotoManager().addLatestImageLocation(location);
-                Log.d("Location: ", "onLocationChanged: "+day+"时间, "+latitude+"维度, "+longtitude+"经度， "+address);
+//                Image location = new Image();
+//                location.description = address;
+//                location.longtitude = longtitude;
+//                location.latitude = latitude;
+                if(listener!=null){
+                    listener.onCall(latitude,longtitude,address);
+                }
+//                EditorDataManager.getInstance().getPhotoManager().addLatestImageLocation(location);
+                Log.d("Location: ", "onLocationChanged: "+"时间, "+latitude+"维度, "+longtitude+"经度， "+address);
             }else {
                 //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
                 Log.e("AmapError","location Error, ErrCode:"
@@ -108,3 +112,4 @@ public class LocationService extends Service implements AMapLocationListener{
 //        mLocationClient.stopLocation();
     }
 }
+

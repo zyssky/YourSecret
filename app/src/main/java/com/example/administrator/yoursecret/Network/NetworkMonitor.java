@@ -8,12 +8,14 @@ import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Entity.ArticalResponse;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import okhttp3.ResponseBody;
 
 /**
  * Created by Administrator on 2017/6/22.
@@ -30,16 +32,17 @@ public class NetworkMonitor {
 
     public Artical popLatestArtical(){
         if(operatingArticalQueue.size()>0)
-            return operatingArticalQueue.get(0);
+            return operatingArticalQueue.remove(0);
         return null;
     }
 
-    public void pushArtical(Artical artical){
+//    public void pushArtical(Artical artical){
+//        operatingArticalQueue.add(artical);
+//    }
+
+
+    public Observer<? super ArticalResponse> getUploadArticalObserver(Artical artical) {
         operatingArticalQueue.add(artical);
-    }
-
-
-    public Observer<? super ArticalResponse> getUploadArticalObserver() {
         Observer<ArticalResponse> observer = new Observer<ArticalResponse>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
@@ -83,4 +86,51 @@ public class NetworkMonitor {
         return observer;
     }
 
+    public Observer<? super ResponseBody> getDeleteArticalObserver(Artical artical){
+        operatingArticalQueue.add(artical);
+
+        Observer<ResponseBody> observer = new Observer<ResponseBody>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                Log.d(TAG, "onSubscribe: ");
+            }
+
+            @Override
+            public void onNext(@NonNull ResponseBody response) {
+                Artical artical = popLatestArtical();
+                String result = null;
+                try{
+                    result = response.string();
+                    if(result!=null && result.equals("success")){
+                        AppDatabaseManager.deleteArtical(artical);
+                        Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"删除成功！",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    else{
+                        ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(artical);
+                        Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"删除失败！",Toast.LENGTH_LONG).show();
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                    ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(artical);
+                    Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"删除失败！",Toast.LENGTH_LONG).show();
+
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                Artical artical = popLatestArtical();
+                ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(artical);
+                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"删除失败！",Toast.LENGTH_LONG).show();
+                Log.d(TAG, "onError: ");
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "onComplete: ");
+            }
+        };
+        return observer;
+    }
 }

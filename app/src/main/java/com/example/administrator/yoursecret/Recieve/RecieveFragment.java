@@ -48,6 +48,7 @@ public class RecieveFragment extends Fragment {
     private Context context;
 
 
+
     public RecieveFragment() {
         // Required empty public constructor
     }
@@ -71,37 +72,11 @@ public class RecieveFragment extends Fragment {
         refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recieve_recyclerview);
 
-//        refreshLayout.setColorSchemeColors(Color.GREEN,Color.RED,Color.YELLOW,Color.BLUE);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // TODO: 2017/5/27 get new items
-                Observable<Map<String, ArrayList<Artical>>> observable = ApplicationDataManager.getInstance().getNetworkManager().getArticals();
-                observable.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<Map<String, ArrayList<Artical>>>() {
-                            @Override
-                            public void onSubscribe(@NonNull Disposable d) {
-                                Log.d("subscribe ", "onSubscribe: ");
-                            }
-
-                            @Override
-                            public void onNext(@NonNull Map<String, ArrayList<Artical>> stringArrayListMap) {
-                                ApplicationDataManager.getInstance().getRecieveDataManager().addArticals(stringArrayListMap);
-                            }
-
-                            @Override
-                            public void onError(@NonNull Throwable e) {
-                                e.printStackTrace();
-                                refreshLayout.setRefreshing(false);
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                Log.d("success recieve ", "onComplete: ");
-                                refreshLayout.setRefreshing(false);
-                            }
-                        });
+                ApplicationDataManager.getInstance().getRecieveDataManager().refresh();
             }
         });
         return rootView;
@@ -147,10 +122,24 @@ public class RecieveFragment extends Fragment {
                 context.startActivity(intent);
             }
         });
-
-//        ApplicationDataManager.getInstance().getRecieveDataManager().addArtical(AppContants.ARTICAL_CATOGORY_HOT,new Artical());
         recyclerView.setAdapter(adapter);
+
+        ApplicationDataManager.getInstance().getRecieveDataManager().setListener(new OnRefreshChangeListener() {
+            @Override
+            public void changeRefreshStatus(boolean status) {
+                refreshLayout.setRefreshing(status);
+            }
+
+        });
+
+        ApplicationDataManager.getInstance().getRecieveDataManager().refresh();
+
+
 
     }
 
+}
+
+interface OnRefreshChangeListener{
+    void changeRefreshStatus(boolean status);
 }
