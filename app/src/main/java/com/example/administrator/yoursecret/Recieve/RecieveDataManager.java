@@ -1,5 +1,8 @@
 package com.example.administrator.yoursecret.Recieve;
 
+import android.util.Log;
+
+import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.KV;
@@ -12,9 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2017/6/16.
@@ -38,6 +44,12 @@ public class RecieveDataManager {
 
         }
         return adapter;
+    }
+
+    private OnRefreshChangeListener listener;
+
+    public void setListener(OnRefreshChangeListener listener){
+        this.listener = listener;
     }
 
     private List<String> getTitles() {
@@ -81,6 +93,36 @@ public class RecieveDataManager {
 //        datas.get(AppContants.ARTICAL_CATOGORY_HOT).addAll(stringArrayListMap.get());
         datas.putAll(stringArrayListMap);
         adapter.notifyDataSetChanged();
+    }
+
+    public void refresh(){
+        Observable<Map<String, ArrayList<Artical>>> observable = ApplicationDataManager.getInstance().getNetworkManager().getArticals();
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Map<String, ArrayList<Artical>>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        Log.d("subscribe ", "onSubscribe: ");
+                        listener.changeRefreshStatus(true);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Map<String, ArrayList<Artical>> stringArrayListMap) {
+                        addArticals(stringArrayListMap);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        e.printStackTrace();
+                        listener.changeRefreshStatus(false);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d("success recieve ", "onComplete: ");
+                        listener.changeRefreshStatus(false);
+                    }
+                });
     }
 
 }

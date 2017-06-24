@@ -61,6 +61,12 @@ public class UserManager {
         this.iconLocalTempPath = iconLocalTempPath;
     }
 
+    public boolean hasLogin(){
+        if(token!=null && !token.isEmpty()){
+            return true;
+        }
+        return false;
+    }
 
     public String getPhoneNum() {
         return phoneNum;

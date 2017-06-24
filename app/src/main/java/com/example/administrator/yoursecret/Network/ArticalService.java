@@ -40,7 +40,7 @@ public interface ArticalService {
     Observable<List<Artical>> getUserArticals(@Body RequestBody body);
 
     @POST("Rest/artical/delete")
-    Call<ResponseBody> deleteArtical(@Body RequestBody body);
+    Observable<ResponseBody> deleteArtical(@Body RequestBody body);
 
 
 

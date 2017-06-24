@@ -80,7 +80,7 @@ public class NetworkManager {
 //                .create();
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(30,TimeUnit.SECONDS)
                 .readTimeout(30,TimeUnit.SECONDS)
                 .build();
@@ -210,30 +210,9 @@ public class NetworkManager {
         return getArticalService().getUserArticals(requestBody);
     }
 
-    public void deleteArtical(String token,String articalHref) {
+    public Observable<ResponseBody> deleteArtical(String token,String articalHref) {
         RequestBody requestBody = new FormBody.Builder().add("token",token).add("articalHref",articalHref).build();
-        getArticalService().deleteArtical(requestBody).enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                String result = "";
-                try {
-                    result = response.body().string();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if(result.equals("success")){
-                    Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"云端删除成功！",Toast.LENGTH_LONG).show();
-                }
-                else{
-                    Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"云端删除失败！",Toast.LENGTH_LONG).show();
-                }
-            }
+        return getArticalService().deleteArtical(requestBody);
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                t.printStackTrace();
-                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"云端删除失败！",Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }

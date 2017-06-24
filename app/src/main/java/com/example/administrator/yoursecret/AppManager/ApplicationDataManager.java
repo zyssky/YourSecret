@@ -95,4 +95,10 @@ public class ApplicationDataManager {
         }
         return db;
     }
+
+    public static void onDestroy() {
+        instance = null;
+    }
+
+
 }

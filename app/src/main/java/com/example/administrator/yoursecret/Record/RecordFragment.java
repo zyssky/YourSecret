@@ -95,16 +95,7 @@ public class RecordFragment extends Fragment{
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recordsView);
 
-
-        AppDatabaseManager.getTempArticals()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(ApplicationDataManager.getInstance().getRecordDataManager().getObserverForTemp());
-
-        AppDatabaseManager.getFinishedArticals()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(ApplicationDataManager.getInstance().getRecordDataManager().getObserverForFinished());
+        ApplicationDataManager.getInstance().getRecordDataManager().refresh();
     }
 
     @Override

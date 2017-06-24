@@ -116,5 +116,10 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         currentFragment = targetFragment;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ApplicationDataManager.onDestroy();
+    }
 }
 

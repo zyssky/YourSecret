@@ -2,6 +2,7 @@ package com.example.administrator.yoursecret.Comment;
 
 import android.util.Log;
 
+import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Entity.Comment;
 
@@ -35,6 +36,12 @@ public class CommentDataManager {
         instance = null;
     }
 
+    private OnHasCommentsListener listener;
+
+    public void setListener(OnHasCommentsListener listener){
+        this.listener = listener;
+    }
+
     private List<Comment> datas;
 
     private CommentsAdapter adapter;
@@ -54,35 +61,73 @@ public class CommentDataManager {
     }
 
     public void loadComments(){
-        String lastDate = "0";
-        if(!datas.isEmpty()){
-            lastDate = ""+datas.get(0).date;
+//        if(getDatas().size()>0){
+//            return;
+//        }
+
+        if(ApplicationDataManager.getInstance().getUserManager().hasLogin()) {
+            String authorId = ApplicationDataManager.getInstance().getUserManager().getPhoneNum();
+            AppDatabaseManager.getComments(authorId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<List<Comment>>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
+                            Log.d(TAG, "onSubscribe: ");
+                        }
+
+                        @Override
+                        public void onNext(@NonNull List<Comment> comments) {
+                            datas.addAll(comments);
+
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                            Log.d(TAG, "onError: ");
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            String lastDate = "0";
+                            if(!datas.isEmpty()){
+                                lastDate = ""+datas.get(0).date;
+                                listener.onUIChange();
+                            }
+                            ApplicationDataManager.getInstance().getNetworkManager().getUserComments(lastDate)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Observer<List<Comment>>() {
+                                        @Override
+                                        public void onSubscribe(@NonNull Disposable d) {
+                                            Log.d(TAG, "onSubscribe: ");
+                                        }
+
+                                        @Override
+                                        public void onNext(@NonNull List<Comment> comments) {
+                                            datas.addAll(0,comments);
+                                            if(datas.size()>0){
+                                                listener.onUIChange();
+                                                AppDatabaseManager.addComments(comments);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onError(@NonNull Throwable e) {
+                                            Log.d(TAG, "onError: ");
+                                        }
+
+                                        @Override
+                                        public void onComplete() {
+                                            adapter.notifyDataSetChanged();
+                                            Log.d(TAG, "onComplete: ");
+                                        }
+                                    });
+                        }
+                    });
         }
-        ApplicationDataManager.getInstance().getNetworkManager().getUserComments(lastDate)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Comment>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        Log.d(TAG, "onSubscribe: ");
-                    }
 
-                    @Override
-                    public void onNext(@NonNull List<Comment> comments) {
-                        datas.addAll(0,comments);
-                    }
 
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.d(TAG, "onError: ");
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        adapter.notifyDataSetChanged();
-                        Log.d(TAG, "onComplete: ");
-                    }
-                });
     }
 
 
