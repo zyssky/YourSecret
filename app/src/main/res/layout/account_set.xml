@@ -140,38 +140,8 @@
                     android:layout_marginTop="5dp"
                     android:background="#f0f0f0" />
 
-                <LinearLayout
-                    android:id="@+id/mim"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:background="@drawable/bg_btn_account_selected"
-                    android:gravity="center_vertical"
 
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="密码"
-                        android:textColor="#000"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/mima"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="180dp"
-                        android:text="13662456616"
-                        android:textColor="#000"
-                        android:textSize="16sp" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:layout_marginTop="5dp"
-                    android:background="#f0f0f0" />
 
             </LinearLayout>
 

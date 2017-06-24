@@ -18,13 +18,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.Entity.UserResponse;
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.utils.FileUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by j on 2017/6/19.
@@ -34,9 +44,10 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
     static final int RG_REQUEST = 0;
     private Context context;
     private ImageView touxiang;
-    private LinearLayout nicheng,mima,click_touxiang;
+    private LinearLayout nicheng,click_touxiang;
     private TextView m_nicheng,m_zhanghao,m_mima;
     String s ;
+    String parent = FileUtils.toRootPath();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.account_set);
@@ -49,10 +60,8 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
         getView();
         touxiang=(ImageView) findViewById(R.id.touxiang2) ;
         nicheng=(LinearLayout)findViewById(R.id.nic);
-        mima=(LinearLayout)findViewById(R.id.mim) ;
         touxiang.setOnClickListener(this);
         nicheng.setOnClickListener(this);
-        mima.setOnClickListener(this);
 
     }
 
@@ -67,12 +76,6 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                 intent1.setClass(this,activity_setItem.class);
                 intent1.putExtra("title","昵称");
                 startActivity(intent1);
-                break;
-            case R.id.mim:
-                Intent intent2=new Intent();
-                intent2.setClass(this,activity_setItem.class);
-                intent2.putExtra("title","密码");
-                startActivity(intent2);
                 break;
 
         }
@@ -100,10 +103,10 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                         Intent intent = new Intent(
                                 MediaStore.ACTION_IMAGE_CAPTURE);
 // 下面这句指定调用相机拍照后的照片存储的路径
+
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri
-                                .fromFile(new File(Environment
-                                        .getExternalStorageDirectory(),
-                                        "xiaoma.jpg")));
+                                .fromFile(new File(parent,
+                                        "icon.jpg")));
                         startActivityForResult(intent, 2);
                     }
                 }).show();
@@ -120,8 +123,8 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                     break;
 // 如果是调用相机拍照时
                 case 2:
-                    File temp = new File(Environment.getExternalStorageDirectory()
-                            + "/xiaoma.jpg");
+                    File temp = new File(parent
+                            + "/icon.jpg");
                     startPhotoZoom(Uri.fromFile(temp));
                     break;
 // 取得裁剪后的图片
@@ -168,10 +171,46 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
             Bitmap photo = extras.getParcelable("data");
             Drawable drawable = new BitmapDrawable(photo);
             touxiang.setImageDrawable(drawable);
-            saveImage(photo);
+            String path = parent+File.separator+"icon.png" ;
+            FileUtils.saveAsPng(path,photo);
+            ApplicationDataManager.getInstance().getNetworkManager().modify("",path)
+                   .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<UserResponse>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(@NonNull UserResponse userResponse) {
+                            if(userResponse.code==200)
+                            {
+                                Toast.makeText(activity_setBasic.this,"successful",Toast.LENGTH_LONG).show();
+                            }
+                            else
+                            {
+                                Toast.makeText(activity_setBasic.this,"fail",Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+            //saveImage(photo);
+
+
         }
     }
-    private void saveImage(Bitmap bitmap) {
+    /*private void saveImage(Bitmap bitmap) {
         File filesDir;
         if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){//判断sd卡是否挂载
             //路径1：storage/sdcard/Android/data/包名/files
@@ -199,13 +238,14 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                 }
             }
         }
-    }
+    }*/
 
     //如果本地有,就不需要再去联网去请求
 
     private boolean readImage() {
-        File filesDir;
-        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){//判断sd卡是否挂载
+        String filesDir;
+        filesDir = FileUtils.toRootPath();
+        /*if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){//判断sd卡是否挂载
             //路径1：storage/sdcard/Android/data/包名/files
             filesDir = getApplicationContext().getExternalFilesDir("");
 
@@ -213,7 +253,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
             //路径：data/data/包名/files
             filesDir = getApplicationContext().getFilesDir();
 
-        }
+        }*/
         File file = new File(filesDir,"icon.png");
         if(file.exists()){
             //存储--->内存
@@ -221,7 +261,9 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
             touxiang.setImageBitmap(bitmap);
             return true;
         }
-        return false;
+        else
+            return false;
+
     }
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());

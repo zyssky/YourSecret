@@ -169,6 +169,35 @@
                     android:layout_marginTop="5dp"
                     android:background="#f0f0f0" />
 
+
+                <LinearLayout
+                    android:id="@+id/set_pas"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:background="@drawable/bg_btn_account_selected"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="13dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:src="@drawable/ic_lock_outline_black_24dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="修改密码"
+                        android:textColor="#000"
+                        android:textSize="18sp" />
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#f0f0f0" />
+
                 <LinearLayout
                     android:id="@+id/exit1"
                     android:layout_width="match_parent"

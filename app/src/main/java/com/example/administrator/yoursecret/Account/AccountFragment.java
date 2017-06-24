@@ -27,6 +27,7 @@ import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Login.LoginActivity;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
+import com.example.administrator.yoursecret.utils.FileUtils;
 
 import java.io.File;
 
@@ -35,7 +36,7 @@ import static android.support.v7.appcompat.R.styleable.CompoundButton;
 
 public class AccountFragment extends Fragment implements View.OnClickListener , OnCheckedChangeListener{
 
-    private LinearLayout basic_set,exit,login;
+    private LinearLayout basic_set,exit,login,pssword_set;
     private Switch wifi_set;
     private ImageView touxiang;
     private TextView m_nickname,m_account;
@@ -62,6 +63,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
 
         View rootView= inflater.inflate(R.layout.fragment_account, container, false);
         wifi_set=(Switch) rootView.findViewById(R.id.wifi_kaiguan);
+        pssword_set=(LinearLayout) rootView.findViewById(R.id.set_pas);
         basic_set=(LinearLayout)rootView.findViewById(R.id.basics_set);
         exit=(LinearLayout) rootView.findViewById(R.id.exit1);
         login=(LinearLayout)rootView.findViewById(R.id.denglu) ;
@@ -70,6 +72,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
         wifi_set.setOnCheckedChangeListener(this);
         login.setOnClickListener(this);
         exit.setOnClickListener(this);
+        pssword_set.setOnClickListener(this);
         m_account = (TextView) rootView.findViewById(R.id.m_zhanghao) ;
         m_nickname = (TextView) rootView.findViewById(R.id.m_nickname) ;
         initView();
@@ -99,18 +102,23 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
                 startActivity(intent1 );
                 break;
             case R.id.denglu:
-
                 Intent intent2=new Intent();
                 intent2.setClass(getActivity(),activity_login.class);
                 startActivity(intent2 );
                 break;
             case R.id.exit1:
                 break;
+            case R.id.set_pas:
+                Intent intent3=new Intent();
+                intent3.setClass(getActivity(),activity_set_pas.class);
+                startActivity(intent3 );
+               break;
         }
     }
 
 
-     private boolean isConnectWithWifi(Context context) {
+
+    private boolean isConnectWithWifi(Context context) {
          {
              ConnectivityManager manager =(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
              NetworkInfo networkInfo = manager.getActiveNetworkInfo();
@@ -126,16 +134,17 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
 
 
     private boolean readImage() {
-        File filesDir;
-        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){//判断sd卡是否挂载
+        String filesDir;
+        filesDir = FileUtils.toRootPath();
+        /*if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){//判断sd卡是否挂载
             //路径1：storage/sdcard/Android/data/包名/files
-            filesDir = getContext().getExternalFilesDir("");
+            filesDir = getApplicationContext().getExternalFilesDir("");
 
         }else{//手机内部存储
             //路径：data/data/包名/files
-            filesDir = getContext().getFilesDir();
+            filesDir = getApplicationContext().getFilesDir();
 
-        }
+        }*/
         File file = new File(filesDir,"icon.png");
         if(file.exists()){
             //存储--->内存
@@ -143,7 +152,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
             touxiang.setImageBitmap(bitmap);
             return true;
         }
-        return false;
+        else
+            return false;
+
     }
     public void onResume() {
         super.onResume();

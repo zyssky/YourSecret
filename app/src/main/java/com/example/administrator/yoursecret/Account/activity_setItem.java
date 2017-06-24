@@ -66,8 +66,8 @@ public class activity_setItem extends Activity {
 
             @Override
             public void onRightClick() {
-
-                ApplicationDataManager.getInstance().getNetworkManager().modify("","")
+                String nic = editText.getText().toString();
+                ApplicationDataManager.getInstance().getNetworkManager().modify(nic,"")
                          .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Observer<UserResponse>() {
@@ -79,6 +79,13 @@ public class activity_setItem extends Activity {
                             @Override
                             public void onNext(@NonNull UserResponse userResponse) {
 
+                                if(userResponse.code==200)
+                                {
+                                    Toast.makeText(activity_setItem.this,"successful",Toast.LENGTH_LONG).show();
+                                }
+                                else{
+                                    Toast.makeText(activity_setItem.this,"fail",Toast.LENGTH_LONG).show();
+                                }
 
                             }
 
@@ -131,21 +138,7 @@ public class activity_setItem extends Activity {
             }
         });
 
-        navigationView.setClickCallback(new NavigationView.ClickCallback() {
 
-            @Override
-            public void onBackClick() {
-
-                finish();
-
-            }
-
-            @Override
-            public void onRightClick() {
-
-                editText.setText("right");
-            }
-        });
 
     }
 

@@ -104,6 +104,7 @@
         <activity android:name=".Account.activity_setBasic" />
         <activity android:name=".Account.activity_setItem" />
         <activity android:name=".Comment.CommentActivity"></activity>
+        <activity android:name=".Account.activity_set_pas" />
     </application>
 
 </manifest>
