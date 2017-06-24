@@ -1,14 +1,15 @@
 package com.example.administrator.yoursecret.Recieve;
 
+import android.content.ComponentName;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.util.Log;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Entity.Artical;
+import com.example.administrator.yoursecret.Service.LocationService;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.KV;
-
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,8 +122,23 @@ public class RecieveDataManager {
                     public void onComplete() {
                         Log.d("success recieve ", "onComplete: ");
                         listener.changeRefreshStatus(false);
+
                     }
                 });
+    }
+
+    private void getLocation(){
+//        final LocationService.MyBinder myBinder = null;
+//        ServiceConnection connection = new ServiceConnection() {
+//            @Override
+//            public void onServiceConnected(ComponentName name, IBinder service) {
+//                myBinder = (LocationService.MyBinder) service;
+//            }
+//
+//            @Override
+//            public void onServiceDisconnected(ComponentName name) {
+//            }
+//        };
     }
 
 }

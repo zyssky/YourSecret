@@ -48,6 +48,7 @@ public class RecieveFragment extends Fragment {
     private Context context;
 
 
+
     public RecieveFragment() {
         // Required empty public constructor
     }
@@ -128,6 +129,7 @@ public class RecieveFragment extends Fragment {
             public void changeRefreshStatus(boolean status) {
                 refreshLayout.setRefreshing(status);
             }
+
         });
 
         ApplicationDataManager.getInstance().getRecieveDataManager().refresh();

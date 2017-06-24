@@ -20,6 +20,8 @@ import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.Editor.Manager.PhotoManager;
 import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.Service.CallbackListener;
+import com.example.administrator.yoursecret.Service.LocationService;
 import com.example.administrator.yoursecret.utils.BitmapUtil;
 import com.example.administrator.yoursecret.Editor.Adapter.WriteImagesAdapter;
 import com.example.administrator.yoursecret.utils.AppContants;
@@ -67,6 +69,16 @@ public class PhotosActivity extends AppCompatActivity {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 myBinder = (LocationService.MyBinder) service;
+                myBinder.setCallBackListener(new CallbackListener() {
+                    @Override
+                    public void onCall(double latitude, double longtitude, String address) {
+                        Image location = new Image();
+                        location.description = address;
+                        location.longtitude = longtitude;
+                        location.latitude = latitude;
+                        EditorDataManager.getInstance().getPhotoManager().addLatestImageLocation(location);
+                    }
+                });
             }
 
             @Override
