@@ -32,7 +32,7 @@ public class NetworkMonitor {
 
     public Artical popLatestArtical(){
         if(operatingArticalQueue.size()>0)
-            return operatingArticalQueue.get(0);
+            return operatingArticalQueue.remove(0);
         return null;
     }
 

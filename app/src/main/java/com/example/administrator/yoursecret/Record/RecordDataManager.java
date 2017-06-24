@@ -231,7 +231,7 @@ public class RecordDataManager {
 
     public void refresh(){
         datas.get(AppContants.RECORD_CATOGORY_TEMP).clear();
-        datas.get(AppContants.RECORD_CATOGORY_TEMP).clear();
+        datas.get(AppContants.RECORD_CATOGORY_HISTORY).clear();
 
         AppDatabaseManager.getTempArticals()
                 .subscribeOn(Schedulers.io())

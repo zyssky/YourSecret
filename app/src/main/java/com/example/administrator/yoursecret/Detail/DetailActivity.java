@@ -16,6 +16,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Entity.Artical;
@@ -135,6 +136,10 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void sendComment(View view){
+        if(!ApplicationDataManager.getInstance().getUserManager().hasLogin()){
+            Toast.makeText(this,"请先登录！",Toast.LENGTH_LONG).show();
+            return;
+        }
         String content = editText.getText().toString();
         Log.d("DetailActivity ", "sendComment: "+content);
         DetailDataManager.getInstance().sendComment(content);

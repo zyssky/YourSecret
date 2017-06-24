@@ -72,7 +72,7 @@ public class AppDatabaseManager {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ApplicationDataManager.getInstance().getAppDatabase().articalDao().delete(artical);
+                ApplicationDataManager.getInstance().getAppDatabase().articalDao().deleteByHref(artical.articalHref);
             }
         });
         thread.start();

@@ -24,8 +24,8 @@ public interface ArticalDao {
     @Insert
     void insert(Artical artical);
 
-    @Delete
-    void delete(Artical artical);
+    @Query("DELETE FROM artical WHERE articalHref = :key")
+    void deleteByHref(String key);
 
     @Query("DELETE FROM artical WHERE uuid = :key")
     void delete(String key);
