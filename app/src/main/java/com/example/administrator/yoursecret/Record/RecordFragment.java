@@ -98,7 +98,6 @@ public class RecordFragment extends Fragment{
         ApplicationDataManager.getInstance().getRecordDataManager().refresh();
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
