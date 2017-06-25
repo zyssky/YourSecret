@@ -119,6 +119,8 @@ public class NetworkManager {
     }
 
     public RequestBody getFileRequestBody(String path){
+        if(path == null)
+            return null;
         File file = new File(path);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"),file);
         return requestBody;
@@ -143,6 +145,8 @@ public class NetworkManager {
     }
 
     public RequestBody getTextRequestBody(String value){
+        if(null == value)
+            return null;
         return RequestBody.create(MediaType.parse("text/plain"),value);
     }
 
