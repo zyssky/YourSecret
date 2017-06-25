@@ -90,7 +90,7 @@
                         android:textSize="18sp" />
 
                     <TextView
-                        android:id="@+id/nicheng"
+                        android:id="@+id/set_basic_nic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="180dp"
@@ -124,7 +124,7 @@
                         android:textSize="18sp" />
 
                     <TextView
-                        android:id="@+id/zhanghao"
+                        android:id="@+id/set_basic_acc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="180dp"

@@ -52,7 +52,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
 
     }
 
@@ -75,22 +77,24 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
         pssword_set.setOnClickListener(this);
         m_account = (TextView) rootView.findViewById(R.id.m_zhanghao) ;
         m_nickname = (TextView) rootView.findViewById(R.id.m_nickname) ;
-        initView();
-        return rootView;
-
-
-    }
-
-    private void initView() {
         UserManager user = ApplicationDataManager.getInstance().getUserManager();
         String nic = user.getNickName();
         String acc = user.getPhoneNum();
         m_account.setText(acc);
         m_nickname.setText(nic);
-
+//        initView();
+        return rootView;
 
 
     }
+
+    /*private void initView() {
+
+
+
+
+
+    }*/
 
 
     @Override
@@ -160,11 +164,21 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
         super.onResume();
         if(readImage()){
 
-            return;
+
         }
         else{
+            String filesDir = ApplicationDataManager.getInstance().getUserManager().getIconPath();
+            File file = new File(filesDir);
+            if(file.exists()){
+                //存储--->内存
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                touxiang.setImageBitmap(bitmap);
+
+            }
+            else{
 
 
+        }
         }
     }
 

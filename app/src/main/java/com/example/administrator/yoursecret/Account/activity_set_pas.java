@@ -69,37 +69,48 @@ public class activity_set_pas extends Activity  implements View.OnClickListener{
             public void onRightClick() {
                 String old_password = set_old_password.getText().toString();
                 String new_password = set_new_password.getText().toString();
-                ApplicationDataManager.getInstance().getNetworkManager().modifyPassword(old_password,new_password)
-                         .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<UserResponse>() {
-                            @Override
-                            public void onSubscribe(@NonNull Disposable d) {
+                if(old_password.length()==0)
+                {
+                    Toast.makeText(activity_set_pas.this,"旧密码不能为空",Toast.LENGTH_SHORT).show();
+                }
+                else if( new_password.length()==0)
+                {
+                    Toast.makeText(activity_set_pas.this,"新密码不能为空",Toast.LENGTH_SHORT).show();
+                }
+                else if(old_password.length()!=0&&new_password.length()!=0) {
 
-                            }
 
-                            @Override
-                            public void onNext(@NonNull UserResponse userResponse) {
-                                if(userResponse.code==200)
-                                {
-                                    Toast.makeText(activity_set_pas.this,"successful",Toast.LENGTH_LONG).show();
+                    ApplicationDataManager.getInstance().getNetworkManager().modifyPassword(old_password, new_password)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Observer<UserResponse>() {
+                                @Override
+                                public void onSubscribe(@NonNull Disposable d) {
+
                                 }
-                                else{
-                                    Toast.makeText(activity_set_pas.this,"fail",Toast.LENGTH_LONG).show();
+
+                                @Override
+                                public void onNext(@NonNull UserResponse userResponse) {
+                                    if (userResponse.code == 200) {
+
+                                        Toast.makeText(activity_set_pas.this, "successful", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(activity_set_pas.this, "fail", Toast.LENGTH_LONG).show();
+                                    }
+
                                 }
 
-                            }
+                                @Override
+                                public void onError(@NonNull Throwable e) {
 
-                            @Override
-                            public void onError(@NonNull Throwable e) {
+                                }
 
-                            }
+                                @Override
+                                public void onComplete() {
 
-                            @Override
-                            public void onComplete() {
-
-                            }
-                        });
+                                }
+                            });
+                }
 
 
             }

@@ -66,41 +66,49 @@ public class activity_setItem extends Activity {
 
             @Override
             public void onRightClick() {
-                String nic = editText.getText().toString();
-                ApplicationDataManager.getInstance().getNetworkManager().modify(nic,"")
-                         .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<UserResponse>() {
-                            @Override
-                            public void onSubscribe(@NonNull Disposable d) {
+               final String nic = editText.getText().toString();
+                if (nic.length()==0)
+                {
 
-                            }
+                    Toast.makeText(activity_setItem.this,"昵称不能为空",Toast.LENGTH_SHORT).show();
 
-                            @Override
-                            public void onNext(@NonNull UserResponse userResponse) {
+                }
+                else {
+                    ApplicationDataManager.getInstance().getNetworkManager().modify(nic,null )
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Observer<UserResponse>() {
+                                @Override
+                                public void onSubscribe(@NonNull Disposable d) {
 
-                                if(userResponse.code==200)
-                                {
-                                    Toast.makeText(activity_setItem.this,"successful",Toast.LENGTH_LONG).show();
-                                }
-                                else{
-                                    Toast.makeText(activity_setItem.this,"fail",Toast.LENGTH_LONG).show();
                                 }
 
-                            }
+                                @Override
+                                public void onNext(@NonNull UserResponse userResponse) {
 
-                            @Override
-                            public void onError(@NonNull Throwable e) {
+                                    if (userResponse.code == 200) {
+                                        ApplicationDataManager.getInstance().getUserManager().setNickName(nic);
+                                        Toast.makeText(activity_setItem.this, "successful", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(activity_setItem.this, "fail", Toast.LENGTH_SHORT).show();
+                                    }
 
-                            }
+                                }
 
-                            @Override
-                            public void onComplete() {
+                                @Override
+                                public void onError(@NonNull Throwable e) {
 
-                            }
-                        });
+                                }
+
+                                @Override
+                                public void onComplete() {
+
+                                }
+                            });
+                }
             }
         });
+
     }
     private void initListener() {
         editText.addTextChangedListener(new TextWatcher() {

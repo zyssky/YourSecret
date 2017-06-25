@@ -9,7 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -21,14 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Entity.UserResponse;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.FileUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -45,7 +42,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
     private Context context;
     private ImageView touxiang;
     private LinearLayout nicheng,click_touxiang;
-    private TextView m_nicheng,m_zhanghao,m_mima;
+    private TextView m_nic,m_zhanghao;
     String s ;
     String parent = FileUtils.toRootPath();
     @Override
@@ -60,9 +57,15 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
         getView();
         touxiang=(ImageView) findViewById(R.id.touxiang2) ;
         nicheng=(LinearLayout)findViewById(R.id.nic);
+        m_nic =(TextView)findViewById(R.id.set_basic_nic) ;
+        m_zhanghao=(TextView)findViewById(R.id.set_basic_acc);
         touxiang.setOnClickListener(this);
         nicheng.setOnClickListener(this);
-
+        UserManager user = ApplicationDataManager.getInstance().getUserManager();
+        String nic = user.getNickName();
+        String acc = user.getPhoneNum();
+        m_zhanghao.setText(acc);
+        m_nic.setText(nic);
     }
 
     @Override
@@ -107,6 +110,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri
                                 .fromFile(new File(parent,
                                         "icon.jpg")));
+                        ApplicationDataManager.getInstance().getUserManager().setIconLocalTempPath(parent+"/icon.jpg");
                         startActivityForResult(intent, 2);
                     }
                 }).show();
@@ -123,8 +127,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                     break;
 // 如果是调用相机拍照时
                 case 2:
-                    File temp = new File(parent
-                            + "/icon.jpg");
+                    File temp = new File(ApplicationDataManager.getInstance().getUserManager().getIconLocalTempPath());
                     startPhotoZoom(Uri.fromFile(temp));
                     break;
 // 取得裁剪后的图片
@@ -279,6 +282,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
         if(readImage()){
             return;
         }
+
     }
 
     public void getView() {

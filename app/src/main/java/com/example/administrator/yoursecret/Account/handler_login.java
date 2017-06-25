@@ -68,14 +68,17 @@ public class handler_login {
                                 usermanager.setNickName(userResponse.nickName);
                                 usermanager.setIconPath(userResponse.userIconPath);
                                 usermanager.setToken(userResponse.token);
+                                Intent intent = new Intent(context, HomeActivity.class);
+                                context.startActivity(intent);
                             }
-                            String s=userResponse.message;
-                            Intent intent = new Intent(context, WaitingActivity.class);
-                            intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));
+
+
+                          /*  Intent intent = new Intent(context, WaitingActivity.class);*/
+                          /*  intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));
                             intent.putExtra(AppContants.PASSWORD, bundle.getString(AppContants.PASSWORD));
                             intent.putExtra(AppContants.TYPE, AppContants.LOGIN);
-                            intent.putExtra("code",s);
-                            context.startActivity(intent);
+                            intent.putExtra("code",s);*/
+                            /*context.startActivity(intent);*/
                                 //设置ui，保存对应数据
                                 //注册,登录，修改 成功后返回的数据不一样的，有的会没有，需要的就跟我说}
                             }
