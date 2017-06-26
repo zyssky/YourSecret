@@ -1,18 +1,14 @@
 package com.example.administrator.yoursecret.Editor;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.widget.Button;
-import android.widget.RadioGroup;
 
 import com.example.administrator.yoursecret.R;
-import com.example.administrator.yoursecret.View.MyButton;
 import com.example.administrator.yoursecret.utils.AppContants;
 
 import java.util.ArrayList;
@@ -46,24 +42,21 @@ public class TypeDialog extends Dialog {
 
         buttons = new ArrayList<>();
 
-        buttons.add((Button) findViewById(R.id.scenery));
-        buttons.add((Button) findViewById(R.id.person));
-        buttons.add((Button) findViewById(R.id.thing));
-        buttons.add((Button) findViewById(R.id.interest));
+        buttons.add((Button) findViewById(R.id.hot_type));
+        buttons.add((Button) findViewById(R.id.notice_type));
+        buttons.add((Button) findViewById(R.id.article_type));
 
         buttons.get(choosed).setSelected(true);
 
     }
 
     public static void setChoosed(String articalType){
-        if(articalType.equals(AppContants.ARTICAL_TYPE_SCENERY))
+        if(articalType.equals(AppContants.ARTICLE_TYPE_HOT))
             choosed = 0;
-        if(articalType.equals(AppContants.ARTICAL_TYPE_PERSON))
+        if(articalType.equals(AppContants.ARTICLE_TYPE_NOTICE))
             choosed = 1;
-        if (articalType.equals(AppContants.ARTICAL_TYPE_THING))
+        if (articalType.equals(AppContants.ARTICLE_TYPE_ARTICLE))
             choosed = 2;
-        if (articalType.equals(AppContants.ARTICAL_TYPE_INTEREST))
-            choosed = 3;
     }
 
     public void clearSelected(){

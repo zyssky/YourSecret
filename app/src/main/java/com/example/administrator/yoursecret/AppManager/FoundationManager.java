@@ -3,6 +3,7 @@ package com.example.administrator.yoursecret.AppManager;
 import android.content.Context;
 
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.PropUtil;
 
 import java.io.File;
@@ -34,6 +35,10 @@ public class FoundationManager {
         APP_ICON_URL = SERVER_BASE_URL+"static/logo.png";
 
         LOCATION_ICON_URL = SERVER_BASE_URL+"static/location.png";
+
+        AppContants.ARTICLE_TYPE_HOT = context.getResources().getString(R.string.hot);
+        AppContants.ARTICLE_TYPE_NOTICE = context.getResources().getString(R.string.notice);
+        AppContants.ARTICLE_TYPE_ARTICLE = context.getResources().getString(R.string.article);
     }
 
     public static String getCssPath(){

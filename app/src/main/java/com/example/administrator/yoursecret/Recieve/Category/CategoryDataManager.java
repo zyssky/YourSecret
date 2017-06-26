@@ -33,6 +33,12 @@ public class CategoryDataManager {
     private List<String> titles;
     private Map<String,List<Artical>> datas;
 
+    private String categoryType;
+
+    public void setCategoryType(String categoryType){
+        this.categoryType = categoryType;
+    }
+
     public CategoryAdapter getAdapter() {
         if(adapter==null){
             adapter = new CategoryAdapter();
@@ -40,6 +46,10 @@ public class CategoryDataManager {
 
         }
         return adapter;
+    }
+
+    public void loadMore(){
+
     }
 
     private List<String> getTitles() {

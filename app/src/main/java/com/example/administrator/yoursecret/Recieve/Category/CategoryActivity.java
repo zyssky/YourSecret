@@ -38,6 +38,8 @@ public class CategoryActivity extends AppCompatActivity {
             KV kv = bundle.getParcelable(AppContants.KEY);
 
             getSupportActionBar().setTitle(kv.key);
+
+            CategoryDataManager.getInstance().setCategoryType(kv.key);
         }
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.category_refresh);

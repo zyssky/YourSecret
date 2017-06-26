@@ -1,5 +1,7 @@
 package com.example.administrator.yoursecret.utils;
 
+import com.example.administrator.yoursecret.R;
+
 /**
  * Created by Administrator on 2017/3/31.
  */
@@ -23,11 +25,9 @@ public class AppContants {
     public static String ARTICAL_CATOGORY_PUSH = "附近推荐";
     public static String ARTICAL_CATOGORY_OUTSIDE = "外面的世界";
 
-    public static String ARTICAL_TYPE_SCENERY = "风景";
-    public static String ARTICAL_TYPE_PERSON = "人物";
-    public static String ARTICAL_TYPE_THING = "事物";
-    public static String ARTICAL_TYPE_INTEREST = "值得";
-    public static String ARTICAL_TYPE_ADS = "广告";
+    public static String ARTICLE_TYPE_HOT ;
+    public static String ARTICLE_TYPE_NOTICE ;
+    public static String ARTICLE_TYPE_ARTICLE ;
 
     public static int PUBLIC = 1;
     public static int PRIVATE = 0;

@@ -4,10 +4,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.Recieve.RecieveRecyclerAdapter;
+import com.example.administrator.yoursecret.Record.RecordsAdapter;
+import com.example.administrator.yoursecret.utils.GlideImageLoader;
 import com.example.administrator.yoursecret.utils.MultiRecyclerAdapter;
 
 /**
@@ -49,17 +53,30 @@ public class CategoryAdapter extends MultiRecyclerAdapter<Artical> {
 
     @Override
     public void onBindTitle(RecyclerView.ViewHolder holder, String title) {
-
+        if(holder instanceof TitleViewHolder){
+            String[] times = title.split("-");
+            if(times.length == 2) {
+                TitleViewHolder titleViewHolder = (TitleViewHolder) holder;
+                titleViewHolder.day.setText(times[1]);
+                titleViewHolder.year.setText(times[0]);
+            }
+        }
     }
 
     @Override
     public void onBindItem(RecyclerView.ViewHolder holder, Artical data) {
-
+        if(holder instanceof CategoryAdapter.ItemViewHolder){
+            CategoryAdapter.ItemViewHolder itemViewHolder = (CategoryAdapter.ItemViewHolder) holder;
+            itemViewHolder.title.setText(data.title);
+            itemViewHolder.introduction.setText(data.introduction);
+            itemViewHolder.locationDesc.setText(data.locationDesc);
+            GlideImageLoader.loadImageNail(itemViewHolder.itemView.getContext(),data.imageUri,itemViewHolder.imageView);
+        }
     }
 
     class TitleViewHolder extends RecyclerView.ViewHolder{
-        TextView day ;
-        TextView year;
+        public TextView day ;
+        public TextView year;
         public TitleViewHolder(View itemView) {
             super(itemView);
             day = (TextView) itemView.findViewById(R.id.day_text);
@@ -68,9 +85,17 @@ public class CategoryAdapter extends MultiRecyclerAdapter<Artical> {
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder{
+        public TextView title;
+        public TextView introduction;
+        public ImageView imageView;
+        public TextView locationDesc;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
+            title = (TextView) itemView.findViewById(R.id.title_msg);
+            introduction = (TextView) itemView.findViewById(R.id.content_msg);
+            imageView = (ImageView) itemView.findViewById(R.id.image_msg);
+            locationDesc = (TextView) itemView.findViewById(R.id.location_msg);
         }
     }
 }
