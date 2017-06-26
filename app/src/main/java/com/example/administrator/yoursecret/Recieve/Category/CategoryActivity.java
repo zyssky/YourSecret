@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.example.administrator.yoursecret.Detail.DetailActivity;
+import com.example.administrator.yoursecret.Detail.DetailDataManager;
+import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
@@ -44,6 +46,7 @@ public class CategoryActivity extends AppCompatActivity {
             @Override
             public void onLoadMore(int currentPage) {
                 Log.d("RecieveFragment", "onLoadMore: ");
+                CategoryDataManager.getInstance().loadMore();
 
             }
         });
@@ -53,11 +56,20 @@ public class CategoryActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position, Object data) {
                 Intent intent = new Intent(activity, DetailActivity.class);
-                intent.putExtra(AppContants.COMMENT_POSITION,position);
+                KV kv = CategoryDataManager.getInstance().getAdapter().getLocation(position);
+                Artical artical = CategoryDataManager.getInstance().getArtical(kv);
+                intent.putExtra(AppContants.KEY,artical);
                 activity.startActivity(intent);
             }
         });
         recyclerView.setAdapter(adapter);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshLayout.setRefreshing(false);
+            }
+        });
 
         Bundle bundle = getIntent().getExtras();
         if(null!=bundle) {

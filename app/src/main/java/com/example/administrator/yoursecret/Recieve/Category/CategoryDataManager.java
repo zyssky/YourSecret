@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.utils.AppContants;
+import com.example.administrator.yoursecret.utils.KV;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,6 +63,10 @@ public class CategoryDataManager {
 
         }
         return adapter;
+    }
+
+    public Artical getArtical(KV kv){
+        return datas.get(kv.key).get(kv.value);
     }
 
     public void loadMore(){

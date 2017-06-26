@@ -96,15 +96,8 @@ public class DetailActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-            KV kv1 = bundle.getParcelable(AppContants.FROM_RECORD);
-            KV kv2 = bundle.getParcelable(AppContants.FROM_RECIEVE);
-            Artical artical = null;
-            if(kv1!=null){
-                artical = ApplicationDataManager.getInstance().getRecordDataManager().getArtical(kv1);
-            }
-            if(kv2!=null){
-                artical = ApplicationDataManager.getInstance().getRecieveDataManager().getArtical(kv2);
-            }
+
+            Artical artical = bundle.getParcelable(AppContants.KEY);
             if(artical!=null) {
                 DetailDataManager.getInstance().artical = artical;
                 webView.loadUrl(artical.articalHref);
