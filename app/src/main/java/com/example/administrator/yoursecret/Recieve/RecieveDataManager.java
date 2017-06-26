@@ -60,12 +60,13 @@ public class RecieveDataManager {
         return titles;
     }
 
-    private Map<String, List<Artical>> getDatas() {
+    public Map<String, List<Artical>> getDatas() {
         if(datas==null){
             datas = new HashMap<>();
         }
         return datas;
     }
+
 
     private void addCatogory(String title){
         if(getDatas().containsKey(title)){

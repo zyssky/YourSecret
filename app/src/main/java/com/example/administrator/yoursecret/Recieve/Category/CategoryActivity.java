@@ -33,14 +33,7 @@ public class CategoryActivity extends AppCompatActivity {
 
         final Activity activity = this;
 
-        Bundle bundle = getIntent().getExtras();
-        if(null!=bundle) {
-            KV kv = bundle.getParcelable(AppContants.KEY);
 
-            getSupportActionBar().setTitle(kv.key);
-
-            CategoryDataManager.getInstance().setCategoryType(kv.key);
-        }
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.category_refresh);
         recyclerView = (RecyclerView) findViewById(R.id.category_recyclerview);
@@ -65,6 +58,15 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
         recyclerView.setAdapter(adapter);
+
+        Bundle bundle = getIntent().getExtras();
+        if(null!=bundle) {
+            KV kv = bundle.getParcelable(AppContants.KEY);
+
+            getSupportActionBar().setTitle(kv.key);
+
+            CategoryDataManager.getInstance().setCategoryType(kv.key);
+        }
     }
 
     @Override
