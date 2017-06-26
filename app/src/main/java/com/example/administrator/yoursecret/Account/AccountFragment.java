@@ -28,6 +28,7 @@ import com.example.administrator.yoursecret.Login.LoginActivity;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FileUtils;
+import com.example.administrator.yoursecret.utils.GlideImageLoader;
 
 import java.io.File;
 
@@ -40,6 +41,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
     private Switch wifi_set;
     private ImageView touxiang;
     private TextView m_nickname,m_account;
+    String parent = FileUtils.toRootPath();
+    String savepath = parent+File.separator+"icon.png" ;
     public AccountFragment() {
         // Required empty public constructor
     }
@@ -77,15 +80,20 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
         pssword_set.setOnClickListener(this);
         m_account = (TextView) rootView.findViewById(R.id.m_zhanghao) ;
         m_nickname = (TextView) rootView.findViewById(R.id.m_nickname) ;
+        initView();
+
+//        initView();
+        return rootView;
+
+
+    }
+
+    private void initView() {
         UserManager user = ApplicationDataManager.getInstance().getUserManager();
         String nic = user.getNickName();
         String acc = user.getPhoneNum();
         m_account.setText(acc);
         m_nickname.setText(nic);
-//        initView();
-        return rootView;
-
-
     }
 
     /*private void initView() {
@@ -162,24 +170,28 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
     }
     public void onResume() {
         super.onResume();
-        if(readImage()){
+        initView();
+
+        UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
 
 
+        if(usermanager.hasLogin()){
+            String iconPath = usermanager.getIconPath();
+            GlideImageLoader.loadImageNail(this,iconPath,touxiang);
         }
-        else{
-            String filesDir = ApplicationDataManager.getInstance().getUserManager().getIconPath();
-            File file = new File(filesDir);
-            if(file.exists()){
-                //存储--->内存
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                touxiang.setImageBitmap(bitmap);
+//            String filesDir = ApplicationDataManager.getInstance().getUserManager().getIconPath();
+//            File file = new File(filesDir);
+//            if(file.exists()){
+//                //存储--->内存
+//                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+//                touxiang.setImageBitmap(bitmap);
+//
+//            }
+//            else{
+//
+//
+//            }
 
-            }
-            else{
-
-
-        }
-        }
     }
 
     @Override
