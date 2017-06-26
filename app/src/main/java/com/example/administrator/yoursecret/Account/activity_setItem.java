@@ -17,7 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Entity.UserResponse;
+import com.example.administrator.yoursecret.Home.HomeActivity;
 import com.example.administrator.yoursecret.R;
 
 import io.reactivex.Observer;
@@ -87,8 +89,12 @@ public class activity_setItem extends Activity {
                                 public void onNext(@NonNull UserResponse userResponse) {
 
                                     if (userResponse.code == 200) {
-                                        ApplicationDataManager.getInstance().getUserManager().setNickName(nic);
+                                        UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
+                                        usermanager.setNickName(nic);
                                         Toast.makeText(activity_setItem.this, "successful", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent();
+                                        finish();
+
                                     } else {
                                         Toast.makeText(activity_setItem.this, "fail", Toast.LENGTH_SHORT).show();
                                     }

@@ -71,7 +71,7 @@ public class handler_login {
                                 Intent intent = new Intent(context, HomeActivity.class);
                                 context.startActivity(intent);
                             }
-
+                          
 
                           /*  Intent intent = new Intent(context, WaitingActivity.class);*/
                           /*  intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));

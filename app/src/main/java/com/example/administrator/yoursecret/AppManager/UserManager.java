@@ -25,6 +25,8 @@ public class UserManager {
 
     private String iconPath;
 
+    private String iconLocalPath;
+
     private String iconLocalTempPath;
 
     private String tempPhoneNum;
@@ -53,13 +55,23 @@ public class UserManager {
         this.tempPhoneNum = tempPhoneNum;
     }
 
-    public String getIconLocalTempPath() {
+    public void setIconLocalPath(String iconLocalPath){
+        this.iconLocalPath = iconLocalPath;
+    }
+
+    public void setIconLocalTempPath(String iconLocalTempPath){
+        this.iconLocalTempPath = iconLocalTempPath;
+    }
+
+    public String getIconLocalPath(){
+        return iconLocalPath;
+    }
+
+    public String getIconLocalTempPath(){
         return iconLocalTempPath;
     }
 
-    public void setIconLocalTempPath(String iconLocalTempPath) {
-        this.iconLocalTempPath = iconLocalTempPath;
-    }
+
 
     public boolean hasLogin(){
         if(token!=null && !token.isEmpty()){
