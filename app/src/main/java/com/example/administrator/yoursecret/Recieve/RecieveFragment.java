@@ -109,7 +109,8 @@ public class RecieveFragment extends Fragment {
             public void onItemClick(int position, Object data) {
                 Intent intent = new Intent(context, DetailActivity.class);
                 KV kv = ApplicationDataManager.getInstance().getRecieveDataManager().getAdapter().getLocation(position);
-                intent.putExtra(AppContants.FROM_RECIEVE,kv);
+                Artical artical = ApplicationDataManager.getInstance().getRecieveDataManager().getArtical(kv);
+                intent.putExtra(AppContants.KEY,artical);
                 context.startActivity(intent);
             }
         });

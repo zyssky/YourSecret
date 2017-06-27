@@ -20,11 +20,13 @@ import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Comment.CommentActivity;
 import com.example.administrator.yoursecret.Detail.DetailActivity;
 import com.example.administrator.yoursecret.Editor.EditorActivity;
+import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 import com.example.administrator.yoursecret.utils.DividerItemDecoration;
 import com.example.administrator.yoursecret.utils.ItemTouchCallback;
+import com.example.administrator.yoursecret.utils.KV;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -75,7 +77,9 @@ public class RecordFragment extends Fragment{
             @Override
             public void onItemClick(int position, Object data) {
                 Intent intent = new Intent(context,DetailActivity.class);
-                intent.putExtra(AppContants.FROM_RECORD,adapter.getLocation(position));
+                KV kv= adapter.getLocation(position);
+                Artical artical = ApplicationDataManager.getInstance().getRecordDataManager().getArtical(kv);
+                intent.putExtra(AppContants.KEY,artical);
                 context.startActivity(intent);
             }
         });
