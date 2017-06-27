@@ -24,6 +24,7 @@ import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Entity.UserResponse;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.FileUtils;
+import com.example.administrator.yoursecret.utils.GlideImageLoader;
 
 import java.io.File;
 
@@ -45,13 +46,25 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
     private TextView m_nic,m_zhanghao;
     String s ;
     String parent = FileUtils.toRootPath();
+    String savepath = parent+File.separator+"icon.png" ;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.account_set);
         initView();
+        initView2();
         super.onCreate(savedInstanceState);
 
     }
+
+    private void initView2() {
+
+        UserManager user = ApplicationDataManager.getInstance().getUserManager();
+        String nic = user.getNickName();
+        String acc = user.getPhoneNum();
+        m_zhanghao.setText(acc);
+        m_nic.setText(nic);
+    }
+
 
     private void initView() {
         getView();
@@ -61,11 +74,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
         m_zhanghao=(TextView)findViewById(R.id.set_basic_acc);
         touxiang.setOnClickListener(this);
         nicheng.setOnClickListener(this);
-        UserManager user = ApplicationDataManager.getInstance().getUserManager();
-        String nic = user.getNickName();
-        String acc = user.getPhoneNum();
-        m_zhanghao.setText(acc);
-        m_nic.setText(nic);
+
     }
 
     @Override
@@ -110,7 +119,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri
                                 .fromFile(new File(parent,
                                         "icon.jpg")));
-                        ApplicationDataManager.getInstance().getUserManager().setIconLocalTempPath(parent+"/icon.jpg");
+                        ApplicationDataManager.getInstance().getUserManager().setIconLocalPath(parent+"/icon.jpg");
                         startActivityForResult(intent, 2);
                     }
                 }).show();
@@ -174,9 +183,8 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
             Bitmap photo = extras.getParcelable("data");
             Drawable drawable = new BitmapDrawable(photo);
             touxiang.setImageDrawable(drawable);
-            String path = parent+File.separator+"icon.png" ;
-            FileUtils.saveAsPng(path,photo);
-            ApplicationDataManager.getInstance().getNetworkManager().modify("",path)
+           FileUtils.saveAsPng(savepath,photo);
+            ApplicationDataManager.getInstance().getNetworkManager().modify(null,savepath)
                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<UserResponse>() {
@@ -189,7 +197,11 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                         public void onNext(@NonNull UserResponse userResponse) {
                             if(userResponse.code==200)
                             {
+                                UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
+                                usermanager.setIconLocalPath(savepath);
+                                usermanager.setIconPath(userResponse.userIconPath);
                                 Toast.makeText(activity_setBasic.this,"successful",Toast.LENGTH_LONG).show();
+                                onResume();
                             }
                             else
                             {
@@ -279,11 +291,28 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
 @Override
     public void onResume() {
         super.onResume();
-        if(readImage()){
+    /*    if(readImage()){
             return;
-        }
-
+        }else{*/
+     initView2();
+    UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
+    if(usermanager.hasLogin()){
+        String iconPath = usermanager.getIconPath();
+        GlideImageLoader.loadImageNail(this,iconPath,touxiang);
     }
+    /*String filesDir = ApplicationDataManager.getInstance().getUserManager().getIconPath();
+    File file = new File(filesDir);
+            if(file.exists())
+                
+            {
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                touxiang.setImageBitmap(bitmap);
+                
+            }*/
+
+        }
+    
+    //}
 
     public void getView() {
 

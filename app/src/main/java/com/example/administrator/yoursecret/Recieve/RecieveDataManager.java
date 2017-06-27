@@ -60,12 +60,13 @@ public class RecieveDataManager {
         return titles;
     }
 
-    private Map<String, List<Artical>> getDatas() {
+    public Map<String, List<Artical>> getDatas() {
         if(datas==null){
             datas = new HashMap<>();
         }
         return datas;
     }
+
 
     private void addCatogory(String title){
         if(getDatas().containsKey(title)){
@@ -97,34 +98,35 @@ public class RecieveDataManager {
     }
 
     public void refresh(){
-        Observable<Map<String, ArrayList<Artical>>> observable = ApplicationDataManager.getInstance().getNetworkManager().getArticals();
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Map<String, ArrayList<Artical>>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        Log.d("subscribe ", "onSubscribe: ");
-                        listener.changeRefreshStatus(true);
-                    }
 
-                    @Override
-                    public void onNext(@NonNull Map<String, ArrayList<Artical>> stringArrayListMap) {
-                        addArticals(stringArrayListMap);
-                    }
+        Observer<Map<String, ArrayList<Artical>>> observer= new Observer<Map<String, ArrayList<Artical>>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                Log.d("subscribe ", "onSubscribe: ");
+                listener.changeRefreshStatus(true);
+            }
 
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        e.printStackTrace();
-                        listener.changeRefreshStatus(false);
-                    }
+            @Override
+            public void onNext(@NonNull Map<String, ArrayList<Artical>> stringArrayListMap) {
+                addArticals(stringArrayListMap);
+            }
 
-                    @Override
-                    public void onComplete() {
-                        Log.d("success recieve ", "onComplete: ");
-                        listener.changeRefreshStatus(false);
+            @Override
+            public void onError(@NonNull Throwable e) {
+                e.printStackTrace();
+                listener.changeRefreshStatus(false);
+            }
 
-                    }
-                });
+            @Override
+            public void onComplete() {
+                Log.d("success recieve ", "onComplete: ");
+                listener.changeRefreshStatus(false);
+
+            }
+        };
+
+        ApplicationDataManager.getInstance().getNetworkManager().getArticals(observer);
+
     }
 
     private void getLocation(){

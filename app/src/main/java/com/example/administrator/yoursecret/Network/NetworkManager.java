@@ -1,6 +1,12 @@
 package com.example.administrator.yoursecret.Network;
 
+import android.app.Service;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,6 +19,8 @@ import com.example.administrator.yoursecret.Entity.ArticalResponse;
 import com.example.administrator.yoursecret.Entity.Comment;
 import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.Entity.UserResponse;
+import com.example.administrator.yoursecret.Service.CallbackListener;
+import com.example.administrator.yoursecret.Service.LocationService;
 import com.example.administrator.yoursecret.utils.FunctionUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,6 +35,8 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -114,10 +124,6 @@ public class NetworkManager {
         return map;
     }
 
-    public Observable<Map<String,ArrayList<Artical>>> getArticals(){
-        //Temporarily acquire articles from here.
-        return getArticalService().getArticals();
-    }
 
     public RequestBody getFileRequestBody(String path){
         if(path == null)
@@ -219,5 +225,105 @@ public class NetworkManager {
         RequestBody requestBody = new FormBody.Builder().add("token",token).add("articalHref",articalHref).build();
         return getArticalService().deleteArtical(requestBody);
 
+    }
+
+
+
+    public void getArticalsOnType(final String articalType,final int pageNo, final Observer<ArrayList<Artical>> observer){
+        Context context = ApplicationDataManager.getInstance().getAppContext();
+        Intent intent = new Intent(context, LocationService.class);
+        context.bindService(intent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                LocationService.MyBinder binder = (LocationService.MyBinder) service;
+                binder.setCallBackListener(new CallbackListener() {
+                    @Override
+                    public void onCall(double latitude, double longtitude, String address) {
+                        RequestBody requestBody = new FormBody.Builder()
+                                .add("latitude",""+latitude)
+                                .add("longitude",""+longtitude)
+                                .add("pageNO",""+pageNo)
+                                .build();
+                        getArticalService().getArticalsOnType(articalType,requestBody)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(observer);
+                    }
+                });
+                binder.getLocation();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Log.d("finish get location ", "onServiceDisconnected: ");
+            }
+        }, Service.BIND_AUTO_CREATE);
+    }
+
+
+
+    public void getArticalsOnMap(final Observer<ArrayList<Artical>> observer,final int pageNo){
+        Context context = ApplicationDataManager.getInstance().getAppContext();
+        Intent intent = new Intent(context, LocationService.class);
+        context.bindService(intent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                LocationService.MyBinder binder = (LocationService.MyBinder) service;
+                binder.setCallBackListener(new CallbackListener() {
+                    @Override
+                    public void onCall(double latitude, double longtitude, String address) {
+                        RequestBody requestBody = new FormBody.Builder()
+                                .add("latitude",""+latitude)
+                                .add("longitude",""+longtitude)
+                                .add("pageNO",""+pageNo)
+                                .build();
+                        getArticalService().getArticalsOnMap(requestBody)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(observer);
+                    }
+                });
+                binder.getLocation();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Log.d("finish get location ", "onServiceDisconnected: ");
+            }
+        }, Service.BIND_AUTO_CREATE);
+    }
+
+
+
+
+
+    public void getArticals(final Observer<Map<String ,ArrayList<Artical>>> observer){
+        Context context = ApplicationDataManager.getInstance().getAppContext();
+        Intent intent = new Intent(context, LocationService.class);
+        context.bindService(intent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                LocationService.MyBinder binder = (LocationService.MyBinder) service;
+                binder.setCallBackListener(new CallbackListener() {
+                    @Override
+                    public void onCall(double latitude, double longtitude, String address) {
+                        RequestBody requestBody = new FormBody.Builder()
+                                .add("latitude",""+latitude)
+                                .add("longitude",""+longtitude)
+                                .build();
+                        getArticalService().getArticals(requestBody)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(observer);
+                    }
+                });
+                binder.getLocation();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Log.d("finish get location ", "onServiceDisconnected: ");
+            }
+        }, Service.BIND_AUTO_CREATE);
     }
 }

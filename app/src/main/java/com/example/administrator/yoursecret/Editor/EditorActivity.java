@@ -1,13 +1,11 @@
 package com.example.administrator.yoursecret.Editor;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,8 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.example.administrator.yoursecret.AppManager.AppDatabase;
-import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Editor.Adapter.InsertImageAdapter;
 import com.example.administrator.yoursecret.Editor.Adapter.WriteImagesAdapter;
@@ -25,12 +21,9 @@ import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
 import com.example.administrator.yoursecret.Editor.Manager.ArticalManager;
 import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.Editor.Manager.PhotoManager;
-import com.example.administrator.yoursecret.Entity.ArticalResponse;
-import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.Editor.Photo.PhotosActivity;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
-import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.View.MyImageButton;
 import com.example.administrator.yoursecret.utils.AppContants;
@@ -39,18 +32,7 @@ import com.example.administrator.yoursecret.utils.FunctionUtils;
 import com.example.administrator.yoursecret.utils.KV;
 import com.example.administrator.yoursecret.utils.SpaceItemDecoration;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import jp.wasabeef.richeditor.RichEditor;
-import okhttp3.ResponseBody;
 
 public class EditorActivity extends AppCompatActivity {
 
@@ -135,7 +117,7 @@ public class EditorActivity extends AppCompatActivity {
         EditorDataManager editorDataManager = EditorDataManager.getInstance();
 
         articalManager = new ArticalManager();
-        articalManager.setArticalType(AppContants.ARTICAL_TYPE_THING);
+        articalManager.setArticalType(AppContants.ARTICLE_TYPE_ARTICLE);
 
         photoManager = new PhotoManager();
         networkManager = new NetworkManager();
@@ -325,28 +307,28 @@ public class EditorActivity extends AppCompatActivity {
     //类型选择按钮
 
     public void onSceneryClick(View view){
-        articalManager.setArticalType(AppContants.ARTICAL_TYPE_SCENERY);
+        articalManager.setArticalType(AppContants.ARTICLE_TYPE_HOT);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }
 
     public void onPersonClick(View view){
-        articalManager.setArticalType(AppContants.ARTICAL_TYPE_PERSON);
+        articalManager.setArticalType(AppContants.ARTICLE_TYPE_NOTICE);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }
 
     public void onThingClick(View view){
-        articalManager.setArticalType(AppContants.ARTICAL_TYPE_THING);
+        articalManager.setArticalType(AppContants.ARTICLE_TYPE_ARTICLE);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }
 
-    public void onInterest(View view){
-        articalManager.setArticalType(AppContants.ARTICAL_TYPE_INTEREST);
-        curTypeDialog.clearSelected();
-        view.setSelected(true);
-    }
+//    public void onInterest(View view){
+//        articalManager.setArticalType(AppContants.ARTICAL_TYPE_INTEREST);
+//        curTypeDialog.clearSelected();
+//        view.setSelected(true);
+//    }
 
     //插入链接按钮
 

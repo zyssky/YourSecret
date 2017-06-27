@@ -18,6 +18,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
+import retrofit2.http.Path;
 
 /**
  * Created by Administrator on 2017/6/12.
@@ -35,6 +36,15 @@ public interface ArticalService {
 
     @GET("Rest/artical")
     Observable<Map<String,ArrayList<Artical>>> getArticals();//String: 类别
+
+    @POST("Rest/artical/near")
+    Observable<Map<String,ArrayList<Artical>>> getArticals(@Body RequestBody body);
+
+    @POST("Rest/artical/near/{type}")
+    Observable<ArrayList<Artical>> getArticalsOnType(@Path("type") String articalType,@Body RequestBody body);
+
+    @POST("Rest/artical/map")
+    Observable<ArrayList<Artical>> getArticalsOnMap(@Body RequestBody body);
 
     @POST("Rest/artical")
     Observable<List<Artical>> getUserArticals(@Body RequestBody body);

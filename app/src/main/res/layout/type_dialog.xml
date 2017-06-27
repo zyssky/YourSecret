@@ -6,41 +6,41 @@
     <Button
         android:textColor="@color/type_btn_color"
         android:onClick="onSceneryClick"
-        android:id="@+id/scenery"
+        android:id="@+id/hot_type"
         android:layout_margin="2dp"
         android:background="@drawable/type_choice_bg"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:text="风景"/>
+        android:text="@string/hot"/>
 
     <Button
         android:textColor="@color/type_btn_color"
         android:onClick="onPersonClick"
-        android:id="@+id/person"
+        android:id="@+id/notice_type"
         android:layout_margin="2dp"
         android:background="@drawable/type_choice_bg"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:text="人物"/>
+        android:text="@string/notice"/>
 
     <Button
         android:textColor="@color/type_btn_color"
         android:onClick="onThingClick"
-        android:id="@+id/thing"
+        android:id="@+id/article_type"
         android:layout_margin="2dp"
         android:background="@drawable/type_choice_bg"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:text="事物"/>
+        android:text="@string/article"/>
 
-    <Button
-        android:textColor="@color/type_btn_color"
-        android:onClick="onInterest"
-        android:id="@+id/interest"
-        android:layout_margin="2dp"
-        android:background="@drawable/type_choice_bg"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="有趣"/>
+    <!--<Button-->
+        <!--android:textColor="@color/type_btn_color"-->
+        <!--android:onClick="onInterest"-->
+        <!--android:id="@+id/interest"-->
+        <!--android:layout_margin="2dp"-->
+        <!--android:background="@drawable/type_choice_bg"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:text="有趣"/>-->
 
 </LinearLayout>

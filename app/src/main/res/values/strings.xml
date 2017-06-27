@@ -47,4 +47,8 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
+    <string name="hot">热点</string>
+    <string name="notice">推荐</string>
+    <string name="article">简书</string>
+
 </resources>
