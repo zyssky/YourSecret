@@ -47,9 +47,9 @@ public class PhotoManager {
         images.get(images.size()-1).latitude = image.latitude;
         images.get(images.size()-1).longtitude = image.longtitude;
 
-        if(!EditorDataManager.getInstance().getArticalManager().hasLocation()){
-            EditorDataManager.getInstance().getArticalManager().setLocation(image);
-        }
+//        if(!EditorDataManager.getInstance().getArticalManager().hasLocation()){
+//            EditorDataManager.getInstance().getArticalManager().setLocation(image);
+//        }
 
     }
 
@@ -78,22 +78,5 @@ public class PhotoManager {
         };
         return observer;
     }
-
-
-
-//
-//    public String getBase64String(String path){
-//        Bitmap bitmap = BitmapFactory.decodeFile(path);
-//        //convert to byte array
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//        byte[] bytes = baos.toByteArray();
-//
-//        //base64 encode
-//        byte[] encode = Base64.encode(bytes, Base64.DEFAULT);
-//        String encodeString = new String(encode);
-//
-//        return encodeString;
-//    }
 
 }

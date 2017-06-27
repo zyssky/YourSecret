@@ -45,6 +45,8 @@ public class DetailDataManager {
 
     public Artical artical;
 
+    private int commentPage = 1;
+
     public CommentRecyclerAdapter getAdapter(){
         if(adapter == null){
             adapter = new CommentRecyclerAdapter();
@@ -64,6 +66,8 @@ public class DetailDataManager {
         list.add(new Comment());
         adapter.notifyItemInserted(list.size()-1);
     }
+
+
 
     public void getComments() {
         Observer<List<Comment>> observer = new Observer<List<Comment>>() {
@@ -90,7 +94,7 @@ public class DetailDataManager {
             }
         };
 
-        ApplicationDataManager.getInstance().getNetworkManager().getComments(artical.articalHref)
+        ApplicationDataManager.getInstance().getNetworkManager().getComments(0,artical.articalHref)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
@@ -141,5 +145,14 @@ public class DetailDataManager {
                         Log.d(TAG, "onComplete: ");
                     }
                 });
+    }
+
+    public Observable<List<Comment>> loadMoreComment() {
+        return ApplicationDataManager.getInstance().getNetworkManager().getComments(commentPage++,artical.articalHref);
+    }
+
+    public void addDataList(List<Comment> list){
+        this.list.addAll(list);
+        adapter.notifyDataSetChanged();
     }
 }

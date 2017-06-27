@@ -1,6 +1,7 @@
 package com.example.administrator.yoursecret.DAO;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
@@ -21,4 +22,7 @@ public interface ImageDao {
 
     @Query("DELETE FROM image WHERE uuid = :key")
     void deleteImages(String key);
+
+    @Delete
+    void deleteImage(Image image);
 }

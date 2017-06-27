@@ -191,8 +191,9 @@ public class NetworkManager {
     }
 
 
-    public Observable<List<Comment>> getComments(String articalHref){
+    public Observable<List<Comment>> getComments(int commentPage,String articalHref){
         RequestBody requestBody = new FormBody.Builder()
+                .add("commentPage",""+commentPage)
                 .add("articalHref",articalHref).build();
         return getCommentService().getComments(requestBody);
     }

@@ -253,8 +253,8 @@ public class EditorActivity extends AppCompatActivity {
 
     public void insertImageIntoEditor(int position){
         String path = adapter.getmDatas().get(position).path;
-        if(!articalManager.hasImageUri())
-            articalManager.setImageUri(path);
+//        if(!articalManager.hasImageUri())
+//            articalManager.setImageUri(path);
         editor.insertImage(path,"image");
     }
 

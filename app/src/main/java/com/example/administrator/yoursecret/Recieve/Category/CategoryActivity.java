@@ -5,19 +5,24 @@ import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.example.administrator.yoursecret.Detail.DetailActivity;
 import com.example.administrator.yoursecret.Detail.DetailDataManager;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.Recieve.OnRefreshChangeListener;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 import com.example.administrator.yoursecret.utils.DividerItemDecoration;
 import com.example.administrator.yoursecret.utils.EndlessOnScrollListener;
 import com.example.administrator.yoursecret.utils.KV;
+
+import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
 
 public class CategoryActivity extends AppCompatActivity {
 
@@ -25,6 +30,9 @@ public class CategoryActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout refreshLayout;
 
+    private View footerView;
+
+    private LinearLayoutManager linearLayoutManager;
 
 
     @Override
@@ -36,20 +44,25 @@ public class CategoryActivity extends AppCompatActivity {
         final Activity activity = this;
 
 
-
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.category_refresh);
         recyclerView = (RecyclerView) findViewById(R.id.category_recyclerview);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST,0,0,0,0));
+
         recyclerView.addOnScrollListener(new EndlessOnScrollListener(linearLayoutManager) {
             @Override
-            public void onLoadMore(int currentPage) {
+            public void onLoadMore() {
                 Log.d("RecieveFragment", "onLoadMore: ");
-                CategoryDataManager.getInstance().loadMore();
-
+                if(!CategoryDataManager.getInstance().isLoading()) {
+                    CategoryDataManager.getInstance().setLoading(true);
+                    CategoryDataManager.getInstance().loadMore();
+                }
             }
+
+
         });
+
 
         CategoryAdapter adapter = CategoryDataManager.getInstance().getAdapter();
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -62,7 +75,17 @@ public class CategoryActivity extends AppCompatActivity {
                 activity.startActivity(intent);
             }
         });
+
+        footerView = getLayoutInflater().inflate(R.layout.footer_loading,recyclerView,false);
+        adapter.addFooter(footerView);
         recyclerView.setAdapter(adapter);
+
+        CategoryDataManager.getInstance().setListener(new OnRefreshChangeListener() {
+            @Override
+            public void changeRefreshStatus(boolean[] status) {
+                refreshLayout.setRefreshing(status[0]);
+            }
+        });
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -71,6 +94,9 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
 
+
+
+
         Bundle bundle = getIntent().getExtras();
         if(null!=bundle) {
             KV kv = bundle.getParcelable(AppContants.KEY);
@@ -78,6 +104,7 @@ public class CategoryActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(kv.key);
 
             CategoryDataManager.getInstance().setCategoryType(kv.key);
+            CategoryDataManager.getInstance().loadMore();
         }
     }
 

@@ -19,20 +19,21 @@ import com.example.administrator.yoursecret.utils.MultiRecyclerAdapter;
  */
 
 public class CategoryAdapter extends MultiRecyclerAdapter<Artical> {
-    @Override
-    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-        return null;
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {
-        return null;
-    }
+//    @Override
+//    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+//        return null;
+//    }
+//
+//    @Override
+//    public RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {
+//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.footer_loading,parent,false);
+//        return new TitleViewHolder(view);
+//    }
 
     @Override
     public RecyclerView.ViewHolder onCreateTitleViewHolder(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.date_divider,parent,false);
-        return new CategoryAdapter.ItemViewHolder(view);
+        return new CategoryAdapter.TitleViewHolder(view);
     }
 
     @Override
@@ -41,15 +42,15 @@ public class CategoryAdapter extends MultiRecyclerAdapter<Artical> {
         return new CategoryAdapter.ItemViewHolder(view);
     }
 
-    @Override
-    public void onBindHeader(RecyclerView.ViewHolder holder) {
-
-    }
-
-    @Override
-    public void onBindFooter(RecyclerView.ViewHolder holder) {
-
-    }
+//    @Override
+//    public void onBindHeader(RecyclerView.ViewHolder holder) {
+//
+//    }
+//
+//    @Override
+//    public void onBindFooter(RecyclerView.ViewHolder holder) {
+//
+//    }
 
     @Override
     public void onBindTitle(RecyclerView.ViewHolder holder, String title) {
@@ -73,6 +74,7 @@ public class CategoryAdapter extends MultiRecyclerAdapter<Artical> {
             GlideImageLoader.loadImageNail(itemViewHolder.itemView.getContext(),data.imageUri,itemViewHolder.imageView);
         }
     }
+
 
     class TitleViewHolder extends RecyclerView.ViewHolder{
         public TextView day ;
@@ -98,4 +100,6 @@ public class CategoryAdapter extends MultiRecyclerAdapter<Artical> {
             locationDesc = (TextView) itemView.findViewById(R.id.location_msg);
         }
     }
+
+
 }
