@@ -115,6 +115,7 @@ public class NetworkManager {
     }
 
     public Observable<Map<String,ArrayList<Artical>>> getArticals(){
+        //Temporarily acquire articles from here.
         return getArticalService().getArticals();
     }
 
