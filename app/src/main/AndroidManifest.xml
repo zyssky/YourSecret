@@ -104,21 +104,16 @@
         <activity
             android:name=".Account.activity_register"
             android:windowSoftInputMode="stateAlwaysHidden" />
-<<<<<<< HEAD
         <activity android:name=".Account.activity_setBasic"
             android:launchMode="singleTask"/>
         <activity android:name=".Account.activity_setItem"
             android:launchMode="singleTask"/>
-        <activity android:name=".Comment.CommentActivity"></activity>
-        <activity android:name=".Account.activity_set_pas"
-            android:launchMode="singleTask"/>
-=======
-        <activity android:name=".Account.activity_setBasic" />
-        <activity android:name=".Account.activity_setItem" />
         <activity android:name=".Comment.CommentActivity"
             android:label="我的评论"></activity>
-        <activity android:name=".Account.activity_set_pas" />
->>>>>>> 792dd5c52f395fae52c1a958f5b4acae1c6bc2d3
+        <activity android:name=".Account.activity_set_pas"
+            android:launchMode="singleTask"/>
+
+
     </application>
 
 </manifest>
