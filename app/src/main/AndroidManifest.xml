@@ -103,7 +103,8 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".Account.activity_setBasic" />
         <activity android:name=".Account.activity_setItem" />
-        <activity android:name=".Comment.CommentActivity"></activity>
+        <activity android:name=".Comment.CommentActivity"
+            android:label="我的评论"></activity>
         <activity android:name=".Account.activity_set_pas" />
     </application>
 

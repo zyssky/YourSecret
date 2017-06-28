@@ -1,6 +1,7 @@
 package com.example.administrator.yoursecret.Home;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -19,18 +20,21 @@ import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.Recieve.RecieveDataManager;
 import com.example.administrator.yoursecret.Record.RecordDataManager;
 import com.example.administrator.yoursecret.AppManager.UserManager;
+import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FunctionUtils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class HomeActivity extends AppCompatActivity implements HomeContract.View{
+public class HomeActivity extends AppCompatActivity{
 
     private BottomNavigationView navigationView;
 
     private Fragment currentFragment;
 
-    private HomeContract.Presenter presenter;
+    private int curFragmentPos = FragmentsHouse.RECIEVE_FRAGMENT;
+
+    private FragmentsHouse fragments;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,14 +60,18 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         initManager();
 
+        fragments = FragmentsHouse.getInstance();
 
+        if(savedInstanceState!=null) {
+            int resId = savedInstanceState.getInt(AppContants.KEY, FragmentsHouse.RECIEVE_FRAGMENT);
+            curFragmentPos = resId;
+        }
 
-        presenter = new HomePresenter(this);
+        currentFragment = fragments.getFragment(curFragmentPos);
 
-        presenter.switchContent(HomePresenter.RECIEVE_FRAGMENT);
+        switchContent(currentFragment);
 
         navigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         FunctionUtils.disableShiftMode(navigationView);
@@ -72,23 +80,30 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_recieve:
-                        presenter.switchContent(HomePresenter.RECIEVE_FRAGMENT);
+                        curFragmentPos = FragmentsHouse.RECIEVE_FRAGMENT;
                         break;
                     case R.id.nav_discover:
-                        presenter.switchContent(HomePresenter.DISCOVER_FRAGMENT);
+                        curFragmentPos = FragmentsHouse.DISCOVER_FRAGMENT;
                         break;
                     case R.id.nav_record:
-                        presenter.switchContent(HomePresenter.RECORD_FRAGMENT);
+                        curFragmentPos = FragmentsHouse.RECORD_FRAGMENT;
                         break;
                     case R.id.nav_account:
-                        presenter.switchContent(HomePresenter.ACCOUNT_FRAGMENT);
+                        curFragmentPos = FragmentsHouse.ACCOUNT_FRAGMENT;
                         break;
                     default:
                         return true;
                 }
+                switchContent(fragments.getFragment(curFragmentPos));
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(AppContants.KEY,curFragmentPos);
     }
 
     private void initManager(){
@@ -100,19 +115,17 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         ApplicationDataManager.getInstance().setNetworkMonitor(new NetworkMonitor());
     }
 
-    @Override
     public void switchContent(Fragment targetFragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if(currentFragment==null){
-            transaction.add(R.id.container, targetFragment).commit();
+        if(!currentFragment.isAdded()){
+            transaction.add(R.id.container, currentFragment);
         }
-        else if (currentFragment != targetFragment) {
-            if (!targetFragment.isAdded()) {	// 先判断是否被add过
-                transaction.hide(currentFragment).add(R.id.container, targetFragment).commit(); // 隐藏当前的fragment，add下一个到Activity中
-            } else {
-                transaction.hide(currentFragment).show(targetFragment).commit(); // 隐藏当前的fragment，显示下一个
-            }
+        if(currentFragment != targetFragment && !targetFragment.isAdded() ){
+            transaction.add(R.id.container, targetFragment);
         }
+
+        transaction.hide(currentFragment).show(targetFragment).commit();
+
         currentFragment = targetFragment;
     }
 

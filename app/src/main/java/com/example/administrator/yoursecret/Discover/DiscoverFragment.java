@@ -32,6 +32,7 @@ public class DiscoverFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
 
@@ -57,6 +58,8 @@ public class DiscoverFragment extends Fragment {
 
 //        MyLocationStyle myLocationIcon(BitmapDescriptor myLocationIcon);//设置定位蓝点的icon图标方法，需要用到BitmapDescriptor类对象作为参数。
     }
+
+
 
     @Override
     public void onAttach(Context context) {
