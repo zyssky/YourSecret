@@ -7,10 +7,12 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.administrator.yoursecret.R;
@@ -25,6 +27,8 @@ public class activity_register extends AppCompatActivity implements View.OnClick
     private ImageView r_iv_show_pwd,r_iv_show_pwd_confirm,r_clean_password,r_clean_password_confirm,r_clean_id,r_clean_phone;
     private Button r_register;
     handler_login RegisterHandler;
+    private KeyboardLayout bindingView;
+    private ScrollView scrollView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.register);
@@ -49,8 +53,11 @@ public class activity_register extends AppCompatActivity implements View.OnClick
         r_clean_password_confirm = (ImageView) findViewById(R.id.register_clean_confirm_password);
         r_iv_show_pwd_confirm = (ImageView) findViewById(R.id.register_iv_show_confirm_pwd);
         r_et_id=(EditText)findViewById(R.id.register_et_id);
+        scrollView =(ScrollView) findViewById(R.id.r_scrollview);
+        bindingView = (KeyboardLayout) findViewById(R.id.main_Rl);
     }
     private void initListener() {
+        addLayoutListener();
         r_clean_phone.setOnClickListener(this);
         r_clean_id.setOnClickListener(this);
         r_et_id.setOnClickListener(this);
@@ -189,6 +196,36 @@ public class activity_register extends AppCompatActivity implements View.OnClick
         });
 
 
+
+    }
+    /**
+     * 监听键盘状态，布局有变化时，靠scrollView去滚动界面
+     */
+    public void addLayoutListener() {
+        bindingView.setKeyboardListener(new KeyboardLayout.KeyboardLayoutListener() {
+            @Override
+            public void onKeyboardStateChanged(boolean isActive, int keyboardHeight) {
+                Log.e("onKeyboardStateChanged", "isActive:" + isActive + " keyboardHeight:" + keyboardHeight);
+                if (isActive) {
+                    scrollToBottom();
+                }
+            }
+        });
+    }
+
+    /**
+     * 弹出软键盘时将SVContainer滑到底
+     */
+    private void scrollToBottom() {
+
+
+        scrollView.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                scrollView.smoothScrollTo(0, scrollView.getBottom());
+            }
+        }, 100);
 
     }
     @Override
