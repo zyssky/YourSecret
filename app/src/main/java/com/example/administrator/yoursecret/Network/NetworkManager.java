@@ -5,11 +5,21 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeQuery;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
@@ -232,67 +242,33 @@ public class NetworkManager {
 
 
     public void getArticalsOnType(final String articalType,final int pageNo, final Observer<ArrayList<Artical>> observer){
-        Context context = ApplicationDataManager.getInstance().getAppContext();
-        Intent intent = new Intent(context, LocationService.class);
-        context.bindService(intent, new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                LocationService.MyBinder binder = (LocationService.MyBinder) service;
-                binder.setCallBackListener(new CallbackListener() {
-                    @Override
-                    public void onCall(double latitude, double longtitude, String address) {
-                        RequestBody requestBody = new FormBody.Builder()
-                                .add("latitude",""+latitude)
-                                .add("longitude",""+longtitude)
-                                .add("pageNO",""+pageNo)
-                                .build();
-                        getArticalService().getArticalsOnType(articalType,requestBody)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(observer);
-                    }
-                });
-                binder.getLocation();
-            }
+        Location location = getLocation();
 
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                Log.d("finish get location ", "onServiceDisconnected: ");
-            }
-        }, Service.BIND_AUTO_CREATE);
+        RequestBody requestBody = new FormBody.Builder()
+                .add("latitude",""+location.getLatitude())
+                .add("longitude",""+location.getLongitude())
+                .add("pageNO",""+pageNo)
+                .build();
+        getArticalService().getArticalsOnType(articalType,requestBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 
 
 
     public void getArticalsOnMap(final Observer<ArrayList<Artical>> observer,final int pageNo){
-        Context context = ApplicationDataManager.getInstance().getAppContext();
-        Intent intent = new Intent(context, LocationService.class);
-        context.bindService(intent, new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                LocationService.MyBinder binder = (LocationService.MyBinder) service;
-                binder.setCallBackListener(new CallbackListener() {
-                    @Override
-                    public void onCall(double latitude, double longtitude, String address) {
-                        RequestBody requestBody = new FormBody.Builder()
-                                .add("latitude",""+latitude)
-                                .add("longitude",""+longtitude)
-                                .add("pageNO",""+pageNo)
-                                .build();
-                        getArticalService().getArticalsOnMap(requestBody)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(observer);
-                    }
-                });
-                binder.getLocation();
-            }
+        Location location = getLocation();
 
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                Log.d("finish get location ", "onServiceDisconnected: ");
-            }
-        }, Service.BIND_AUTO_CREATE);
+        RequestBody requestBody = new FormBody.Builder()
+                .add("latitude",""+location.getLatitude())
+                .add("longitude",""+location.getLongitude())
+                .add("pageNO",""+pageNo)
+                .build();
+        getArticalService().getArticalsOnMap(requestBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 
 
@@ -300,32 +276,44 @@ public class NetworkManager {
 
 
     public void getArticals(final Observer<Map<String ,ArrayList<Artical>>> observer){
-        Context context = ApplicationDataManager.getInstance().getAppContext();
-        Intent intent = new Intent(context, LocationService.class);
-        context.bindService(intent, new ServiceConnection() {
+
+        Location location = getLocation();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("latitude",""+location.getLatitude())
+                .add("longitude",""+location.getLongitude())
+                .build();
+        getArticalService().getArticals(requestBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public Location getLocation(){
+        LocationManager locationManager = (LocationManager) ApplicationDataManager.getInstance().getAppContext()
+                .getSystemService(Context.LOCATION_SERVICE);
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+
+        Log.d("test 经度纬度", "getLocation: "+lastKnownLocation.getLatitude()+"    "+lastKnownLocation.getLongitude());
+
+        return lastKnownLocation;
+    }
+
+    public void getLocationDesc(double latitude,double longitude){
+        GeocodeSearch geo = new GeocodeSearch(ApplicationDataManager.getInstance().getAppContext());
+        geo.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
             @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                LocationService.MyBinder binder = (LocationService.MyBinder) service;
-                binder.setCallBackListener(new CallbackListener() {
-                    @Override
-                    public void onCall(double latitude, double longtitude, String address) {
-                        RequestBody requestBody = new FormBody.Builder()
-                                .add("latitude",""+latitude)
-                                .add("longitude",""+longtitude)
-                                .build();
-                        getArticalService().getArticals(requestBody)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(observer);
-                    }
-                });
-                binder.getLocation();
+            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+                if(i == 1000)
+                Log.d("地理位置描述：", "onRegeocodeSearched: "+regeocodeResult.getRegeocodeAddress().getFormatAddress());
             }
 
             @Override
-            public void onServiceDisconnected(ComponentName name) {
-                Log.d("finish get location ", "onServiceDisconnected: ");
+            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
             }
-        }, Service.BIND_AUTO_CREATE);
+        });
+        RegeocodeQuery query = new RegeocodeQuery(new LatLonPoint(latitude,longitude),100,GeocodeSearch.AMAP);
+        geo.getFromLocationAsyn(query);
     }
 }
