@@ -14,8 +14,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
+import com.example.administrator.yoursecret.utils.GlideImageLoader;
 
 /**
  * Created by j on 2017/6/19.
@@ -155,5 +158,16 @@ public class activity_login extends AppCompatActivity implements View.OnClickLis
 
             }
         }
+        @Override
+    public void onResume()
+        {
+            super.onResume();
+            UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
+            if(usermanager.hasLogin()){
+                String iconPath = usermanager.getIconPath();
+                GlideImageLoader.loadImageNail(this,iconPath,touxiang);
+            }
+        }
+
     }
 

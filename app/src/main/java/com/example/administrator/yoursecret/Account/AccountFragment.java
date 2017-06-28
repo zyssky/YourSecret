@@ -93,7 +93,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
         UserManager user = ApplicationDataManager.getInstance().getUserManager();
         String nic = user.getNickName();
         String acc = user.getPhoneNum();
-        m_account.setText(acc);
+        m_account.setText("账号:"+acc);
         m_nickname.setText(nic);
     }
 
@@ -208,4 +208,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
             Toast.makeText(getContext(),FoundationManager.ISUNDER_WIFI,Toast.LENGTH_LONG).show();
         }
     }
+
+
 }
