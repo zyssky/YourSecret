@@ -93,10 +93,12 @@ public class activity_set_pas extends Activity  implements View.OnClickListener{
                                 public void onNext(@NonNull UserResponse userResponse) {
                                     if (userResponse.code == 200) {
 
-                                        Toast.makeText(activity_set_pas.this, "successful", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(activity_set_pas.this, "修改成功", Toast.LENGTH_LONG).show();
+                                        finish();
                                     } else {
-                                        Toast.makeText(activity_set_pas.this, "fail", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(activity_set_pas.this, "修改失败", Toast.LENGTH_LONG).show();
                                     }
+
 
                                 }
 
