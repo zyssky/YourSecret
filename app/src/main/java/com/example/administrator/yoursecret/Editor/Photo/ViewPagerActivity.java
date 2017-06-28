@@ -27,6 +27,8 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
+import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
 import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.Entity.Image;
@@ -80,6 +82,7 @@ public class ViewPagerActivity extends AppCompatActivity{
             finish();
         }
         FileUtils.fileDelete(image.path);
+        AppDatabaseManager.deleteImage(image);
     }
 
     static class SamplePagerAdapter extends PagerAdapter {

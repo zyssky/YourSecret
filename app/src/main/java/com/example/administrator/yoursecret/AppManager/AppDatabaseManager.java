@@ -153,6 +153,16 @@ public class AppDatabaseManager {
         thread.start();
     }
 
+    public static void deleteImage(final Image image){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ApplicationDataManager.getInstance().getAppDatabase().imageDao().deleteImage(image);
+            }
+        });
+        thread.start();
+    }
+
 
     public static void addFinishedArticals(final List<Artical> articals) {
         Thread thread = new Thread(new Runnable() {

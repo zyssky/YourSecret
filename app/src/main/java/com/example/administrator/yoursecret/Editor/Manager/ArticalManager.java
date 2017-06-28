@@ -138,7 +138,12 @@ public class ArticalManager {
         artical.images = EditorDataManager.getInstance().getPhotoManager().getImages();
         artical.html = html;
         artical.date = new Date().getTime();
+
+        if(artical.images.size()>0){
+            setLocation(artical.images.get(0));
+        }
     }
+
 
     private void saveToDatabase(){
         //Database operation
@@ -273,24 +278,25 @@ public class ArticalManager {
         artical.latitude = image.latitude;
         artical.longtitude = image.longtitude;
         artical.locationDesc = image.description;
+        artical.imageUri = image.path;
     }
 
-    public void setImageUri(String path){
-        artical.imageUri = path;
-    }
+//    public void setImageUri(String path){
+//        artical.imageUri = path;
+//    }
 
-    public boolean hasLocation(){
-        if(!artical.locationDesc.isEmpty())
-            return true;
-        return false;
-    }
-
-    public boolean hasImageUri(){
-        if(!artical.imageUri.isEmpty()){
-            return true;
-        }
-        return false;
-    }
+//    public boolean hasLocation(){
+//        if(!artical.locationDesc.isEmpty())
+//            return true;
+//        return false;
+//    }
+//
+//    public boolean hasImageUri(){
+//        if(!artical.imageUri.isEmpty()){
+//            return true;
+//        }
+//        return false;
+//    }
 
 
 

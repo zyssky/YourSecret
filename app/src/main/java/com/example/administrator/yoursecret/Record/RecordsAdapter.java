@@ -22,15 +22,15 @@ import com.example.administrator.yoursecret.utils.MultiRecyclerAdapter;
 
 public class RecordsAdapter extends MultiRecyclerAdapter<Artical>{
 
-    @Override
-    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-        return null;
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {
-        return null;
-    }
+//    @Override
+//    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+//        return null;
+//    }
+//
+//    @Override
+//    public RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {
+//        return null;
+//    }
 
     @Override
     public RecyclerView.ViewHolder onCreateTitleViewHolder(ViewGroup parent) {
@@ -44,15 +44,15 @@ public class RecordsAdapter extends MultiRecyclerAdapter<Artical>{
         return new ItemViewHolder(view);
     }
 
-    @Override
-    public void onBindHeader(RecyclerView.ViewHolder holder) {
-
-    }
-
-    @Override
-    public void onBindFooter(RecyclerView.ViewHolder holder) {
-
-    }
+//    @Override
+//    public void onBindHeader(RecyclerView.ViewHolder holder) {
+//
+//    }
+//
+//    @Override
+//    public void onBindFooter(RecyclerView.ViewHolder holder) {
+//
+//    }
 
     @Override
     public void onBindTitle(RecyclerView.ViewHolder holder, String title) {

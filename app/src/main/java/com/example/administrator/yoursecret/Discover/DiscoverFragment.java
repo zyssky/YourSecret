@@ -61,6 +61,7 @@ public class DiscoverFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
@@ -207,6 +208,8 @@ public class DiscoverFragment extends Fragment {
             aMap.addMarker(new MarkerOptions().position(poi).title("广州大学城").snippet("DefaultMarker")).showInfoWindow();
         }
     }
+
+
 
     @Override
     public void onAttach(Context context) {

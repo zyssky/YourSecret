@@ -15,9 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
-import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.Entity.UserResponse;
-import com.example.administrator.yoursecret.Home.HomeContract;
 import com.example.administrator.yoursecret.R;
 
 import io.reactivex.Observer;

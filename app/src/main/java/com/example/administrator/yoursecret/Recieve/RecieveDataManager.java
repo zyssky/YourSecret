@@ -103,7 +103,8 @@ public class RecieveDataManager {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 Log.d("subscribe ", "onSubscribe: ");
-                listener.changeRefreshStatus(true);
+                boolean[] status = {true};
+                listener.changeRefreshStatus(status);
             }
 
             @Override
@@ -114,13 +115,15 @@ public class RecieveDataManager {
             @Override
             public void onError(@NonNull Throwable e) {
                 e.printStackTrace();
-                listener.changeRefreshStatus(false);
+                boolean[] status = {false};
+                listener.changeRefreshStatus(status);
             }
 
             @Override
             public void onComplete() {
                 Log.d("success recieve ", "onComplete: ");
-                listener.changeRefreshStatus(false);
+                boolean[] status = {false};
+                listener.changeRefreshStatus(status);
 
             }
         };

@@ -1,9 +1,11 @@
 package com.example.administrator.yoursecret.Recieve.Category;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Entity.Artical;
+import com.example.administrator.yoursecret.Recieve.OnRefreshChangeListener;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.KV;
 
@@ -49,11 +51,17 @@ public class CategoryDataManager {
 
     private String categoryType;
 
+    private OnRefreshChangeListener listener;
+
+    public void setListener(OnRefreshChangeListener listener){
+        this.listener = listener;
+    }
+
     public void setCategoryType(String categoryType){
         this.categoryType = categoryType;
         List<Artical> list = ApplicationDataManager.getInstance().getRecieveDataManager().getDatas().get(categoryType);
         addArticalList(list);
-        loadMore();
+
     }
 
     public CategoryAdapter getAdapter() {
@@ -74,24 +82,33 @@ public class CategoryDataManager {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 Log.d(TAG, "onSubscribe: ");
+                loading = true;
             }
 
             @Override
             public void onNext(@NonNull ArrayList<Artical> articals) {
                 addArticalList(articals);
+                if(articals.isEmpty()){
+                    adapter.hideFooter();
+                    Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"没有更多内容了^.^",Toast.LENGTH_SHORT).show();
+                }else{
+                    pageNo++;
+                }
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
                 e.printStackTrace();
                 Log.d(TAG, "onError: ");
+                loading = false;
             }
 
             @Override
             public void onComplete() {
                 Log.d(TAG, "onComplete: ");
                 adapter.notifyDataSetChanged();
-                pageNo++;
+                loading = false;
+
             }
         });
     }
@@ -125,5 +142,15 @@ public class CategoryDataManager {
 			}
 			datas.get(date).add(artical);
 		}
+    }
+
+    private boolean loading = false;
+
+    public boolean isLoading() {
+        return loading;
+    }
+
+    public void setLoading(boolean status){
+        loading = status;
     }
 }
