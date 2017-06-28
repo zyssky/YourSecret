@@ -17,8 +17,30 @@ android {
             }
         }
     }
-    buildTypes {
+
+    signingConfigs {
         release {
+            storeFile file("./yoursecret.jks")
+            storePassword "123456"
+            keyAlias "yoursecret_key1"
+            keyPassword "123456"
+        }
+        debug {
+            storeFile file("./yoursecret.jks")
+            storePassword "123456"
+            keyAlias "yoursecret_key1"
+            keyPassword "123456"
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

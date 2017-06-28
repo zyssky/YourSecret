@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent">-->
+<com.example.administrator.yoursecret.Account.KeyboardLayout
+    android:id="@+id/main_Rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="true"
+    android:background="@color/color_ffffff"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ScrollView
+        android:id="@+id/r_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
@@ -30,7 +40,7 @@
                 android:textSize="25dp" />
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="50dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -65,10 +75,13 @@
                     android:src="@drawable/ic_clear"
                     android:visibility="gone" />
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/color_eeeeee" />
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="0dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -111,7 +124,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="13dp">
@@ -152,10 +165,13 @@
                     android:scaleType="centerInside"
                     android:src="@drawable/pass_gone" />
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/color_eeeeee" />
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="13dp">
@@ -208,7 +224,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="21dp"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/bg_btn_login_selected"
                 android:text="注册"
                 android:textColor="@color/color_ffffff"
@@ -219,4 +235,4 @@
 
     </ScrollView>
 
-</LinearLayout>
+</com.example.administrator.yoursecret.Account.KeyboardLayout>

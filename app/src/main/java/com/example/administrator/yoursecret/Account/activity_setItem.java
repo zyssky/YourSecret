@@ -91,12 +91,12 @@ public class activity_setItem extends Activity {
                                     if (userResponse.code == 200) {
                                         UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
                                         usermanager.setNickName(nic);
-                                        Toast.makeText(activity_setItem.this, "successful", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(activity_setItem.this, "修改成功", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent();
                                         finish();
 
                                     } else {
-                                        Toast.makeText(activity_setItem.this, "fail", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(activity_setItem.this, "修改失败", Toast.LENGTH_SHORT).show();
                                     }
 
                                 }

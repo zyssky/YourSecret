@@ -1,5 +1,6 @@
 package com.example.administrator.yoursecret.Account;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -69,10 +70,13 @@ public class handler_login {
                                 usermanager.setIconPath(userResponse.userIconPath);
                                 usermanager.setToken(userResponse.token);
                                 Intent intent = new Intent(context, HomeActivity.class);
+                                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"登录成功",Toast.LENGTH_SHORT).show();
                                 context.startActivity(intent);
 
                             }
-                          
+                          else {
+                                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"账号不存在或者密码错误",Toast.LENGTH_SHORT).show();
+                            }
 
                           /*  Intent intent = new Intent(context, WaitingActivity.class);*/
                           /*  intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));
@@ -117,9 +121,8 @@ public class handler_login {
             Toast.makeText(context, R.string.wrong_confirm_pwd, Toast.LENGTH_SHORT).show();
             return;
         } else {
-            final String account = bundle.getString(AppContants.ACCOUNT);
+            String account = bundle.getString(AppContants.ACCOUNT);
             String password = bundle.getString(AppContants.PASSWORD);
-
             String identifier = FunctionUtils.getSHA256String(account+password);
             final String nickname = bundle.getString(AppContants.NICKNAME);
             Log.d(TAG, "onLogin: "+account+","+password+","+identifier);
@@ -139,16 +142,17 @@ public class handler_login {
                             {
                                /* ApplicationDataManager.getInstance().getUserManager().setNickName(nickname);
                                 ApplicationDataManager.getInstance().getUserManager().setPhoneNum(account);*/
-
-
-                            Intent intent = new Intent(context, HomeActivity.class);
-
-                           /* intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));
-                            intent.putExtra(AppContants.NICKNAME,nic );
+                            Intent intent = new Intent(context, activity_login.class);
+                            intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));
                             intent.putExtra(AppContants.TYPE, AppContants.LOGIN);
-                            intent.putExtra("code",s);*/
+                            intent.putExtra(AppContants.PASSWORD, bundle.getString(AppContants.PASSWORD));
+                                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"注册成功",Toast.LENGTH_SHORT).show();
                             context.startActivity(intent);
 
+
+                            }
+                            else{
+                                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"账号已存在",Toast.LENGTH_SHORT).show();
                             }
 
                         }

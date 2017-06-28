@@ -116,10 +116,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                                 MediaStore.ACTION_IMAGE_CAPTURE);
 // 下面这句指定调用相机拍照后的照片存储的路径
 
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri
-                                .fromFile(new File(parent,
-                                        "icon.jpg")));
-                        ApplicationDataManager.getInstance().getUserManager().setIconLocalPath(parent+"/icon.jpg");
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri());
                         startActivityForResult(intent, 2);
                     }
                 }).show();
@@ -136,8 +133,10 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                     break;
 // 如果是调用相机拍照时
                 case 2:
-                    File temp = new File(ApplicationDataManager.getInstance().getUserManager().getIconLocalTempPath());
-                    startPhotoZoom(Uri.fromFile(temp));
+
+
+                        startPhotoZoom(getImageUri());
+
                     break;
 // 取得裁剪后的图片
                 case 3:
@@ -200,12 +199,12 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                                 UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
                                 usermanager.setIconLocalPath(savepath);
                                 usermanager.setIconPath(userResponse.userIconPath);
-                                Toast.makeText(activity_setBasic.this,"successful",Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity_setBasic.this,"修改成功",Toast.LENGTH_LONG).show();
                                 onResume();
                             }
                             else
                             {
-                                Toast.makeText(activity_setBasic.this,"fail",Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity_setBasic.this,"修改失败",Toast.LENGTH_LONG).show();
                             }
 
                         }
@@ -224,6 +223,13 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
 
 
         }
+    }
+    private Uri getImageUri()
+    {
+      UserManager userManager = ApplicationDataManager.getInstance().getUserManager();
+        userManager.setIconLocalTempPath(parent+File.separator+"icon.jpg");
+        String IconLocalTempath =userManager.getIconLocalTempPath();
+        return Uri.fromFile(new File(IconLocalTempath));
     }
     /*private void saveImage(Bitmap bitmap) {
         File filesDir;

@@ -34,6 +34,9 @@ public interface ArticalService {
     @POST("Rest/artical")
     Call<ResponseBody> test(@Part("data") String data);
 
+    @GET("Rest/artical")
+    Observable<Map<String,ArrayList<Artical>>> getArticals();//String: 类别
+
     @POST("Rest/artical/near")
     Observable<Map<String,ArrayList<Artical>>> getArticals(@Body RequestBody body);
 

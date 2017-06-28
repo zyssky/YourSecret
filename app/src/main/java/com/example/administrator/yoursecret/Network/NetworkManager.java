@@ -135,7 +135,6 @@ public class NetworkManager {
     }
 
 
-
     public RequestBody getFileRequestBody(String path){
         if(path == null)
             return null;
