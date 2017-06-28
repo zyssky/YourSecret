@@ -47,7 +47,6 @@ public class RecordFragment extends Fragment{
 
     private MenuItem commentMsg;
 
-    private boolean oldStatus;
 
     public RecordFragment() {
         // Required empty public constructor
@@ -64,13 +63,12 @@ public class RecordFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         setRetainInstance(true);
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void checkNewComment(){
         if(!ApplicationDataManager.getInstance().getUserManager().hasUnReadMessage()) {
             String lastDate = ApplicationDataManager.getInstance().getUserManager().getLastCommentDate();
             ApplicationDataManager.getInstance().getNetworkManager().getUserComments(lastDate)
@@ -113,16 +111,14 @@ public class RecordFragment extends Fragment{
         }
     }
 
+
+
     private void changeCommentLogo(boolean status){
-        if(status == oldStatus){
-            return;
-        }
         if(status)
             commentMsg.setIcon(R.drawable.ic_new_comment_1);
         else {
             commentMsg.setIcon(R.drawable.ic_comment_1);
         }
-        oldStatus = status;
     }
 
     @Override
@@ -137,13 +133,14 @@ public class RecordFragment extends Fragment{
         rootView = inflater.inflate(R.layout.fragment_record, container, false);
         recordsView = (RecyclerView) rootView.findViewById(R.id.records_recyclerview);
 
+
         return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
 
         recordsView.setLayoutManager(new LinearLayoutManager(getContext()));
         final RecordsAdapter adapter = ApplicationDataManager.getInstance().getRecordDataManager().getAdapter();
@@ -186,8 +183,11 @@ public class RecordFragment extends Fragment{
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.record_menu,menu);
 
-        commentMsg = menu.findItem(R.id.comments);
         super.onCreateOptionsMenu(menu, inflater);
+
+        commentMsg = menu.findItem(R.id.comments);
+
+        checkNewComment();
     }
 
     @Override

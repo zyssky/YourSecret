@@ -196,10 +196,11 @@ public class RecordDataManager {
     public void updateArtical(String imageUri, String articalHref, String articalClientUuid) {
         List<Artical> articals = datas.get(AppContants.RECORD_CATOGORY_HISTORY);
         for (int i = 0; i < articals.size(); i++) {
-            if(articals.get(i).uuid.equals(articalClientUuid)) {
+            if(articals.get(i).uuid != null && articals.get(i).uuid.equals(articalClientUuid)) {
                 Artical artical = articals.get(i);
                 artical.articalHref = articalHref;
                 artical.imageUri = imageUri;
+                return;
             }
         }
     }

@@ -112,7 +112,7 @@ public class DetailActivity extends AppCompatActivity {
                 DetailDataManager.getInstance().artical = artical;
                 webView.loadUrl(artical.articalHref);
                 DetailDataManager.getInstance().getComments();
-                countComment.setText("评论："+artical.commentNum);
+//                countComment.setText("评论："+artical.commentNum);
             }
 
         }
