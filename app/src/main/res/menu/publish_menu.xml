@@ -6,5 +6,6 @@
         android:id="@+id/publish"
         android:title="publish"
         android:icon="@drawable/ic_publish"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:orderInCategory="1"/>
 </menu>

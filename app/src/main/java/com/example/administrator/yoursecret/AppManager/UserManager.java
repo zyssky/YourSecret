@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
+import com.example.administrator.yoursecret.Entity.User;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FileUtils;
 import com.example.administrator.yoursecret.utils.FunctionUtils;
@@ -16,6 +17,10 @@ import java.io.File;
  */
 
 public class UserManager {
+
+    private boolean hasUnReadMessage;
+
+    private String lastCommentDate;
 
     private String phoneNum;
 
@@ -48,6 +53,9 @@ public class UserManager {
         nickName = sharedPreferences.getString(AppContants.NICKNAME,"");
         token = sharedPreferences.getString(AppContants.TOKEN,"");
         iconPath = sharedPreferences.getString(AppContants.ICONPATH,"");
+        lastCommentDate = sharedPreferences.getString(AppContants.LASTCOMMENTDATE,"0");
+        hasUnReadMessage = sharedPreferences.getBoolean(AppContants.UNREAD,false);
+
     }
 
 
@@ -131,4 +139,31 @@ public class UserManager {
         this.iconPath = iconPath;
         editor.commit();
     }
+
+    public String getLastCommentDate() {
+        return lastCommentDate;
+    }
+
+    public void setLastCommentDate(String str){
+        SharedPreferences sharedPreferences = ApplicationDataManager.getInstance().
+                getAppContext().getSharedPreferences(AppContants.packageName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(AppContants.LASTCOMMENTDATE,str);
+        lastCommentDate = str;
+        editor.commit();
+    }
+
+    public boolean hasUnReadMessage() {
+        return hasUnReadMessage;
+    }
+
+    public void sethasUnReadMessage(boolean b) {
+        SharedPreferences sharedPreferences = ApplicationDataManager.getInstance().
+                getAppContext().getSharedPreferences(AppContants.packageName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(AppContants.UNREAD,b);
+        this.hasUnReadMessage = b;
+        editor.commit();
+    }
+
 }

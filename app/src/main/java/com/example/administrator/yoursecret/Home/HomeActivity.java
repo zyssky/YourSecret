@@ -50,8 +50,7 @@ public class HomeActivity extends AppCompatActivity{
                 startActivity(intent);
                 break;
             case R.id.comments:
-                startActivity(new Intent(this, CommentActivity.class));
-                break;
+                return false;
         }
         return true;
     }

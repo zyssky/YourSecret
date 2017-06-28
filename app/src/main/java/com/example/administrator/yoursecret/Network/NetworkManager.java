@@ -241,7 +241,7 @@ public class NetworkManager {
 
 
 
-    public void getArticalsOnType(final String articalType,final int pageNo, final Observer<ArrayList<Artical>> observer){
+    public Observable<ArrayList<Artical>> getArticalsOnType(final String articalType,final int pageNo){
         Location location = getLocation();
 
         RequestBody requestBody = new FormBody.Builder()
@@ -249,10 +249,7 @@ public class NetworkManager {
                 .add("longitude",""+location.getLongitude())
                 .add("pageNO",""+pageNo)
                 .build();
-        getArticalService().getArticalsOnType(articalType,requestBody)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+        return getArticalService().getArticalsOnType(articalType,requestBody);
     }
 
 

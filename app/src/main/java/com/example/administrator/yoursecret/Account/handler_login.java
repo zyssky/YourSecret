@@ -70,6 +70,7 @@ public class handler_login {
                                 usermanager.setToken(userResponse.token);
                                 Intent intent = new Intent(context, HomeActivity.class);
                                 context.startActivity(intent);
+
                             }
                           
 

@@ -45,6 +45,8 @@ public class Artical implements Parcelable{
 
     public String introduction = "";
 
+    public int commentNum;
+
     public int saveType = AppContants.PRIVATE;
 
     public int finished = 0;
@@ -70,6 +72,7 @@ public class Artical implements Parcelable{
         saveType = in.readInt();
         finished = in.readInt();
         html = in.readString();
+        commentNum = in.readInt();
     }
 
     public static final Creator<Artical> CREATOR = new Creator<Artical>() {
@@ -106,5 +109,6 @@ public class Artical implements Parcelable{
         dest.writeInt(saveType);
         dest.writeInt(finished);
         dest.writeString(html);
+        dest.writeInt(commentNum);
     }
 }
