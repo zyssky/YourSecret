@@ -9,6 +9,8 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,9 @@ import com.example.administrator.yoursecret.Detail.DetailActivity;
 import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.Entity.Artical;
+import com.example.administrator.yoursecret.utils.AppContants;
+import com.example.administrator.yoursecret.utils.GlideImageLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,10 +45,12 @@ public class DiscoverFragment extends Fragment {
     private MapView mapView;
     public ArrayList<Artical> Articals;
     private int pivot = 0;
+    private int LoadPageCounter = 0;
     private List<LatLng> PositionList = new ArrayList<>();
     private AMap aMap;
     private Map<Marker, Artical> Marker_Mapper = new ArrayMap<>();
     private boolean switcher = true;
+    private boolean switcher2 = true;
 
     NetworkManager networkManager = ApplicationDataManager.getInstance().getNetworkManager();
     MapCalculator mapCalculator = new MapCalculator();
@@ -67,17 +74,8 @@ public class DiscoverFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_discover, container, false);
-        mapView = (MapView) rootView.findViewById(R.id.map);
-        mapView.onCreate(savedInstanceState);
-        aMap = mapView.getMap();
-        setLoactionProperties();
-//        Double distanceTest = mapCalculator.GetDistance(113.4062218666,23.0484004090,113.4073430300,23.0466184288);
-//        System.out.println("[*]Distance-Test:" );
-//        System.out.println(distanceTest);
 
-        Observer<ArrayList<Artical>> article_observer = new Observer<ArrayList<Artical>>() {
+        final Observer<ArrayList<Artical>> article_observer = new Observer<ArrayList<Artical>>() {
             //Implement an Observer to get data.
             @Override
             public void onSubscribe(@NonNull Disposable d) {
@@ -87,6 +85,10 @@ public class DiscoverFragment extends Fragment {
             @Override
             public void onNext(@NonNull ArrayList<Artical> articals) {
                 Articals = articals;
+                if(articals.size() == 0){
+                    //Reach the End Currently.
+                    LoadPageCounter = 0;
+                }
             }
 
             @Override
@@ -101,23 +103,53 @@ public class DiscoverFragment extends Fragment {
                     System.out.println(artical.articalHref);
                 }
                 showCenter();
-                setLoactionProperties();
+                createMarker();
                 setInfoWindow();
                 setInfoWindowClickListener();
                 setCameraChangeListener();
                 //self-crafted marker.
-                createMarker();
+                setLoactionProperties();
                 pivot = 1;
                 mapView.onResume();
+                LoadPageCounter += 1;
             }
         };
-        networkManager.getArticalsOnMap(article_observer,0);
+
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_discover, container, false);
+        Button Changer = (Button)rootView.findViewById(R.id.traffic);
+        Changer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("ChangeGroup Clicked!");
+                networkManager.getArticalsOnMap(article_observer,LoadPageCounter);
+            }
+        });
+        mapView = (MapView) rootView.findViewById(R.id.map);
+        mapView.onCreate(savedInstanceState);
+        aMap = mapView.getMap();
+        setInitCameraChangeListener();
+        initLocation();
+//        Double distanceTest = mapCalculator.GetDistance(113.4062218666,23.0484004090,113.4073430300,23.0466184288);
+//        System.out.println("[*]Distance-Test:" );
+//        System.out.println(distanceTest);
+
+        networkManager.getArticalsOnMap(article_observer,LoadPageCounter);
         return rootView;
     }
 
     private void showCenter(){
 
     }
+
+    private void initLocation(){
+
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(16.5f)); //properly set to 15-17.
+        MyLocationStyle myLocationStyle;
+        myLocationStyle = new MyLocationStyle();
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
+    }
+
 
     private void setLoactionProperties(){
 
@@ -152,7 +184,7 @@ public class DiscoverFragment extends Fragment {
         });
     }
 
-    private void setCameraChangeListener() {
+    private void setInitCameraChangeListener() {
         aMap.setOnCameraChangeListener(new AMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
@@ -172,6 +204,26 @@ public class DiscoverFragment extends Fragment {
         });
     }
 
+    private void setCameraChangeListener() {
+        aMap.setOnCameraChangeListener(new AMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+
+            }
+
+            @Override
+            public void onCameraChangeFinish(CameraPosition cameraPosition) {
+                if (switcher2) {
+                    LatLng currpoi = cameraPosition.target;
+                    CameraPosition position = new CameraPosition(currpoi, 17.5f, 40, 0);
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(position);
+                    aMap.moveCamera(cameraUpdate);
+                }
+                switcher2 = false;
+            }
+        });
+    }
+
     private void setInfoWindowClickListener(){
 
         aMap.setOnInfoWindowClickListener(new AMap.OnInfoWindowClickListener() {
@@ -179,7 +231,13 @@ public class DiscoverFragment extends Fragment {
             public void onInfoWindowClick(Marker marker) {
 
                 //Set a jump to information detail here:
+                Artical artical = Marker_Mapper.get(marker);
+//                System.out.println("Am i really here?");debuggable;
+//                System.out.println(artical.articalHref);
                 Intent intent = new Intent(getContext(), DetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(AppContants.KEY,artical);
+                intent.putExtras(bundle);
                 getContext().startActivity(intent);
             }
         });
@@ -187,29 +245,43 @@ public class DiscoverFragment extends Fragment {
 
     public void render(Marker marker, View infoContent){
 
-        String title = marker.getTitle();
+        Artical artical = Marker_Mapper.get(marker);
+        String title = artical.title;
+        String ImageLink = artical.imageUri;
         TextView TitleUi = ((TextView)infoContent.findViewById(R.id.inforwindow_text));
+        ImageView ImageUi = ((ImageView)infoContent.findViewById(R.id.info_image));
+        //Set Title
         if (title != null){
-            System.out.print("Set Info here.");
+            TitleUi.setText(title);
         }else{
             TitleUi.setText("");
+        }
+        //Set Image
+        if(ImageLink != null){
+            GlideImageLoader.loadImage(getContext(), ImageLink, ImageUi);
+        }else{
+
         }
     }
 
     private void createMarker(){
 
-        PositionList.add(new LatLng(23.0484004090,113.4062218666));
-        PositionList.add(new LatLng(23.0466184288,113.4073430300));
-        PositionList.add(new LatLng(23.0486184288,113.4073430300));
-        PositionList.add(new LatLng(23.0496184288,113.4053430300));
-        PositionList.add(new LatLng(23.0486184288,113.4053430300));
-        PositionList.add(new LatLng(23.0460853111,113.4060984850));
-        for (LatLng poi : PositionList) {
-            aMap.addMarker(new MarkerOptions().position(poi).title("广州大学城").snippet("DefaultMarker")).showInfoWindow();
+        for(Artical artical : Articals){
+            MarkerOptions temp_marker = new MarkerOptions().
+                    position(new LatLng(artical.latitude,artical.longtitude)).
+                    title(artical.title).
+                    snippet("temp");
+            Marker optmarker = aMap.addMarker(temp_marker);
+            Marker_Mapper.put(optmarker,artical);
+            optmarker.showInfoWindow();
         }
+
     }
 
+    private void setDataChangeListener(){
 
+
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -220,5 +292,4 @@ public class DiscoverFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
 }

@@ -3,21 +3,24 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:alpha="0.7">
+    android:alpha="0.87">
 
     <TextView
         android:id="@+id/inforwindow_text"
         android:text="那些年，我们的足迹"
+        android:gravity="center"
         android:textSize="11sp"
         android:layout_width="100dp"
         android:layout_height="20dp"></TextView>
 
     <ImageView
         android:id="@+id/info_image"
-        android:layout_width="100dp"
+        android:scaleType="fitXY"
+        android:layout_width="90dp"
         android:layout_height="65dp"
         android:alpha="0.83"
         android:src="@drawable/footprint"
+        android:layout_marginLeft="5dp"
         android:layout_below="@+id/inforwindow_text" />
 
 </RelativeLayout>
