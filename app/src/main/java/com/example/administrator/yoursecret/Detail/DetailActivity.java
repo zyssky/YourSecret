@@ -20,13 +20,19 @@ import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Entity.Artical;
+import com.example.administrator.yoursecret.Entity.Comment;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.DividerItemDecoration;
 import com.example.administrator.yoursecret.utils.EndlessOnScrollListener;
 import com.example.administrator.yoursecret.utils.KV;
 
+import java.util.List;
+
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class DetailActivity extends AppCompatActivity {
@@ -35,6 +41,7 @@ public class DetailActivity extends AppCompatActivity {
     private WebView webView;
     private EditText editText;
     private View inputLayout;
+    private View footerView;
 
     @Override
     protected void onDestroy() {
@@ -116,16 +123,60 @@ public class DetailActivity extends AppCompatActivity {
 
         CommentRecyclerAdapter adapter = DetailDataManager.getInstance().getAdapter();
         adapter.setContext(this);
+        adapter.setFooterView(getFooterView());
         recyclerView.setAdapter(adapter);
 
-        recyclerView.addOnScrollListener(new EndlessOnScrollListener(linearLayoutManager) {
+
+    }
+
+    public View getFooterView(){
+        footerView = getLayoutInflater().inflate(R.layout.footer_more_comment,recyclerView,false);
+        footerView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onLoadMore(int currentPage) {
-                Log.d("DetailActivity", "onLoadMore: ");
-//                DetailDataManager.getInstance().test();
+            public void onClick(View v) {
+                DetailDataManager.getInstance().loadMoreComment()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<List<Comment>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                setFooter(LOADING);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull List<Comment> list) {
+                                DetailDataManager.getInstance().addDataList(list);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                e.printStackTrace();
+                                setFooter(NORMAL);
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                setFooter(NORMAL);
+                            }
+                        });
             }
         });
+        return footerView;
+    }
+    public final static int NORMAL = 0;
+    public final static int LOADING = 1;
+    public void setFooter(int status){
+        switch (status){
+            case NORMAL:
+                footerView.findViewById(R.id.normal).setVisibility(View.VISIBLE);
+                footerView.findViewById(R.id.loading).setVisibility(View.GONE);
+                break;
+            case LOADING:
+                footerView.findViewById(R.id.normal).setVisibility(View.GONE);
+                footerView.findViewById(R.id.loading).setVisibility(View.VISIBLE);
+                break;
 
+        }
     }
 
     public void sendComment(View view){

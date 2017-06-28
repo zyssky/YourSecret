@@ -134,9 +134,13 @@ public abstract class MultiRecyclerAdapter<T> extends RecyclerView.Adapter<Recyc
             case TITLE_TYPE:
                 return onCreateTitleViewHolder(parent);
             case HEADER_TYPE:
-                return onCreateHeaderViewHolder(parent);
+                if(hasHeader>0)
+                    return new mViewHolder(headerView);
+                break;
             case FOOTER_TYPE:
-                return onCreateFooterViewHolder(parent);
+                if(hasFooter>0)
+                    return new mViewHolder(footerView);
+                break;
         }
         return null;
     }
@@ -173,10 +177,10 @@ public abstract class MultiRecyclerAdapter<T> extends RecyclerView.Adapter<Recyc
                 onBindTitle(holder,titleAfterGetItemType);
                 break;
             case HEADER_TYPE:
-                onBindHeader(holder);
+//                onBindHeader(holder);
                 break;
             case FOOTER_TYPE:
-                onBindFooter(holder);
+//                onBindFooter(holder);
                 break;
         }
     }
@@ -191,15 +195,39 @@ public abstract class MultiRecyclerAdapter<T> extends RecyclerView.Adapter<Recyc
         return count;
     }
 
+    private View headerView;
+    private View footerView;
 
-    public abstract RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent);
-    public abstract RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent);
+    public void addHeader(View view){
+//        hasHeader = 1;
+        headerView = view;
+    }
+
+    public void addFooter(View view){
+        hasFooter = 1;
+        footerView = view;
+    }
+
+    public void hideFooter(){
+        hasFooter = 0;
+        notifyItemRemoved(getItemCount()-1);
+    }
+
+//    public abstract RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent);
+//    public abstract RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent);
     public abstract RecyclerView.ViewHolder onCreateTitleViewHolder(ViewGroup parent);
     public abstract RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent);
 
-    public abstract void onBindHeader(RecyclerView.ViewHolder holder);
-    public abstract void onBindFooter(RecyclerView.ViewHolder holder);
+//    public abstract void onBindHeader(RecyclerView.ViewHolder holder);
+//    public abstract void onBindFooter(RecyclerView.ViewHolder holder);
     public abstract void onBindTitle(RecyclerView.ViewHolder holder,String title);
     public abstract void onBindItem(RecyclerView.ViewHolder holder,T data );
+
+    class mViewHolder extends RecyclerView.ViewHolder{
+
+        public mViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
 
 }

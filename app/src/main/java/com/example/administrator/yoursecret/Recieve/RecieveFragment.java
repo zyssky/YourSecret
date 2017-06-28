@@ -47,6 +47,8 @@ public class RecieveFragment extends Fragment {
 
     private Context context;
 
+    private LinearLayoutManager linearLayoutManager;
+
 
 
     public RecieveFragment() {
@@ -91,17 +93,19 @@ public class RecieveFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        setRetainInstance(true);
+        linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST,0,0,0,0));
 
-        recyclerView.addOnScrollListener(new EndlessOnScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int currentPage) {
-                Log.d("RecieveFragment", "onLoadMore: ");
-
-            }
-        });
+//        recyclerView.addOnScrollListener(new EndlessOnScrollListener(linearLayoutManager) {
+//            @Override
+//            public void onLoadMore() {
+//                Log.d("RecieveFragment", "onLoadMore: ");
+//
+//            }
+//
+//        });
 
         RecieveRecyclerAdapter adapter = ApplicationDataManager.getInstance().getRecieveDataManager().getAdapter();
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -127,8 +131,8 @@ public class RecieveFragment extends Fragment {
 
         ApplicationDataManager.getInstance().getRecieveDataManager().setListener(new OnRefreshChangeListener() {
             @Override
-            public void changeRefreshStatus(boolean status) {
-                refreshLayout.setRefreshing(status);
+            public void changeRefreshStatus(boolean[] status) {
+                refreshLayout.setRefreshing(status[0]);
             }
 
         });
@@ -141,6 +145,3 @@ public class RecieveFragment extends Fragment {
 
 }
 
-interface OnRefreshChangeListener{
-    void changeRefreshStatus(boolean status);
-}
