@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.ArrayMap;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,20 +22,32 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Detail.DetailActivity;
+import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.R;
-
+import com.example.administrator.yoursecret.Entity.Artical;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+
 public class DiscoverFragment extends Fragment {
 
     private MapView mapView;
+    public ArrayList<Artical> Articals;
+    private int pivot = 0;
     private List<LatLng> PositionList = new ArrayList<>();
     private AMap aMap;
-    //private Map<Marker, Infos>
+    private Map<Marker, Artical> Marker_Mapper = new ArrayMap<>();
     private boolean switcher = true;
+
+    NetworkManager networkManager = ApplicationDataManager.getInstance().getNetworkManager();
+    MapCalculator mapCalculator = new MapCalculator();
+
     public DiscoverFragment() {
         // Required empty public constructor
     }
@@ -58,17 +71,46 @@ public class DiscoverFragment extends Fragment {
         mapView = (MapView) rootView.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         aMap = mapView.getMap();
-        MapCalculator mapCalculator = new MapCalculator();
-        Double distanceTest = mapCalculator.GetDistance(113.4062218666,23.0484004090,113.4073430300,23.0466184288);
-        System.out.println("[*]Distance-Test:" );
-        System.out.println(distanceTest);
-        showCenter();
         setLoactionProperties();
-        setInfoWindow();
-        setInfoWindowClickListener();
-        setCameraChangeListener();
-        //self-crafted marker.
-        createMarker();
+//        Double distanceTest = mapCalculator.GetDistance(113.4062218666,23.0484004090,113.4073430300,23.0466184288);
+//        System.out.println("[*]Distance-Test:" );
+//        System.out.println(distanceTest);
+
+        Observer<ArrayList<Artical>> article_observer = new Observer<ArrayList<Artical>>() {
+            //Implement an Observer to get data.
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull ArrayList<Artical> articals) {
+                Articals = articals;
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                System.out.print(e);
+            }
+
+            @Override
+            public void onComplete() {
+                System.out.println("Transmit complete.");
+                for(Artical artical : Articals){
+                    System.out.println(artical.articalHref);
+                }
+                showCenter();
+                setLoactionProperties();
+                setInfoWindow();
+                setInfoWindowClickListener();
+                setCameraChangeListener();
+                //self-crafted marker.
+                createMarker();
+                pivot = 1;
+                mapView.onResume();
+            }
+        };
+        networkManager.getArticalsOnMap(article_observer,0);
         return rootView;
     }
 
