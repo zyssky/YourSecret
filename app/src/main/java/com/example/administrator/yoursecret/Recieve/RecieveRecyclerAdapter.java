@@ -23,16 +23,6 @@ public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<Artical> {
 
     public RecieveRecyclerAdapter(){};
 
-//    @Override
-//    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-//        return null;
-//    }
-//
-//    @Override
-//    public RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {
-//        return null;
-//    }
-
     @Override
     public RecyclerView.ViewHolder onCreateTitleViewHolder(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_record_title,parent,false);
@@ -45,27 +35,29 @@ public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<Artical> {
         return new RecieveRecyclerAdapter.ItemViewHolder(view);
     }
 
-//    @Override
-//    public void onBindHeader(RecyclerView.ViewHolder holder) {
-//
-//    }
-//
-//    @Override
-//    public void onBindFooter(RecyclerView.ViewHolder holder) {
-//
-//    }
-
     @Override
     public void onBindTitle(RecyclerView.ViewHolder holder, String title) {
         if(holder instanceof RecieveRecyclerAdapter.TitleViewHolder){
             RecieveRecyclerAdapter.TitleViewHolder titleViewHolder = (RecieveRecyclerAdapter.TitleViewHolder) holder;
-            if(title.equals(AppContants.RECIEVE_FIRST_CATOGORY)){
-                titleViewHolder.title_divider.setVisibility(View.GONE);
-            }
-            else {
-                titleViewHolder.title_divider.setVisibility(View.VISIBLE);
-            }
+//            if(title.equals(AppContants.RECIEVE_FIRST_CATOGORY)){
+//                titleViewHolder.title_divider.setVisibility(View.GONE);
+//            }
+//            else {
+//                titleViewHolder.title_divider.setVisibility(View.VISIBLE);
+//            }
             titleViewHolder.textView.setText(title);
+            if(title.equals(AppContants.ARTICAL_CATOGORY_HOT)){
+                titleViewHolder.itemView.setBackgroundColor(titleViewHolder.itemView.getContext().getResources().getColor(R.color.HOT));
+            }
+            if(title.equals(AppContants.ARTICAL_CATOGORY_PUSH)){
+                titleViewHolder.itemView.setBackgroundColor(titleViewHolder.itemView.getContext().getResources().getColor(R.color.PUSH));
+            }
+            if(title.equals(AppContants.ARTICAL_CATOGORY_GOOD)){
+                titleViewHolder.itemView.setBackgroundColor(titleViewHolder.itemView.getContext().getResources().getColor(R.color.ARTICLE));
+            }
+            if(title.equals(AppContants.ARTICAL_CATOGORY_OUTSIDE)){
+                titleViewHolder.itemView.setBackgroundColor(titleViewHolder.itemView.getContext().getResources().getColor(R.color.OUTSIDE));
+            }
         }
     }
 

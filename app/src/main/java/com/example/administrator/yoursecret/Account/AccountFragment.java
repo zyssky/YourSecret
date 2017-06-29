@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.AppManager.UserManager;
+import com.example.administrator.yoursecret.Home.FragmentsHouse;
 import com.example.administrator.yoursecret.Login.LoginActivity;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
@@ -58,7 +59,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
 
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
+        FragmentsHouse.getInstance().putFragment(AccountFragment.class.getSimpleName(),this);
 
     }
 

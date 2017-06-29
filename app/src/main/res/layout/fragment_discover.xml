@@ -11,17 +11,20 @@
         android:clickable="true">
     </com.amap.api.maps.MapView>
 
-    <Button
+    <ImageButton
         android:id="@+id/traffic"
         android:text="换一批"
-        android:layout_width="70dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_swap"
+        android:layout_width="40dp"
         android:alpha="0.70"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="1dp"
+        android:layout_marginRight="12dp"
         android:layout_marginTop="60dp"
-        ></Button>
+        ></ImageButton>
 
 
 </RelativeLayout>

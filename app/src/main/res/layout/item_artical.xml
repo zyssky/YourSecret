@@ -23,6 +23,7 @@
         <TextView
             android:id="@+id/title_msg"
             android:layout_width="0dp"
+            android:textColor="@color/articleTitleColor"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="17dp"
@@ -40,6 +41,7 @@
             android:id="@+id/content_msg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@color/articalContentColor"
             android:ellipsize="end"
             android:lines="2"
             android:layout_marginTop="12dp"

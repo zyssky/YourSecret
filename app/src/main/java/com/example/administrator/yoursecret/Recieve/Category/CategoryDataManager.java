@@ -54,6 +54,8 @@ public class CategoryDataManager {
 
     private OnRefreshChangeListener listener;
 
+    private String newestArticalHref;
+
     public void setListener(OnRefreshChangeListener listener){
         this.listener = listener;
     }
@@ -74,12 +76,20 @@ public class CategoryDataManager {
         return adapter;
     }
 
+    public void setDateBackgroungColor(int color){
+        getAdapter().setDividerColor(color);
+    }
+
     public Artical getArtical(KV kv){
         return datas.get(kv.key).get(kv.value);
     }
 
-    public Observable<ArrayList<Artical>> loadMore(){
-        return ApplicationDataManager.getInstance().getNetworkManager().getArticalsOnType(categoryType, pageNo++);
+    public void loadMore(Observer<ArrayList<Artical>> observer){
+        ApplicationDataManager.getInstance().getNetworkManager().getArticalsOnType(observer,categoryType, pageNo++);
+    }
+
+    public void refresh(Observer<ArrayList<Artical>> observer){
+        ApplicationDataManager.getInstance().getNetworkManager().getArticalsOnType(observer,categoryType, 0);
     }
 
     private List<String> getTitles() {
@@ -105,6 +115,9 @@ public class CategoryDataManager {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM月dd日");
 
 		for (Artical artical : list) {
+            if(newestArticalHref == null){
+                newestArticalHref = artical.articalHref;
+            }
 			String date = dateFormat.format(new Date(artical.date));
 			if(!datas.containsKey(date)){
 				addCatogory(date);
@@ -121,5 +134,16 @@ public class CategoryDataManager {
 
     public void setLoading(boolean status){
         loading = status;
+    }
+
+    public void addNewArticals(ArrayList<Artical> articals) {
+
+        for (int i = 0; i < articals.size(); i++) {
+            if(articals.get(i).articalHref.equals(newestArticalHref)){
+                addArticalList(articals.subList(0,i));
+                break;
+            }
+        }
+        newestArticalHref = articals.get(0).articalHref;
     }
 }

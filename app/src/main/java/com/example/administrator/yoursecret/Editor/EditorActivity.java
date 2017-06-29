@@ -83,7 +83,6 @@ public class EditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         editor = (RichEditor) findViewById(R.id.editor);
         recyclerView = (RecyclerView) findViewById(R.id.insert_gallery);
@@ -193,7 +192,7 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     public void setLink(View view){
-        click(view);
+//        click(view);
         curLinkDialog = new LinkDialog(this,R.style.MyDialog);
         curLinkDialog.show();
     }
@@ -212,7 +211,7 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     public void setSave(View view){
-        click(view);
+//        click(view);
         final SaveDialog dialog = new SaveDialog(this,R.style.MyDialog);
         setDialogPosition(dialog,Gravity.END,10,Gravity.BOTTOM,50);
         dialog.setOnClickListener(new View.OnClickListener() {

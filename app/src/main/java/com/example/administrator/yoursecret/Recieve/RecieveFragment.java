@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Detail.DetailActivity;
 import com.example.administrator.yoursecret.Entity.Artical;
+import com.example.administrator.yoursecret.Home.FragmentsHouse;
 import com.example.administrator.yoursecret.Recieve.Category.CategoryActivity;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
@@ -64,6 +65,7 @@ public class RecieveFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FragmentsHouse.getInstance().putFragment(RecieveFragment.class.getSimpleName(),this);
     }
 
     @Override
@@ -74,6 +76,7 @@ public class RecieveFragment extends Fragment {
         refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recieve_recyclerview);
 
+        refreshLayout.setColorSchemeColors(context.getResources().getColor(R.color.colorAccent));
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -97,15 +100,6 @@ public class RecieveFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST,0,0,0,0));
-
-//        recyclerView.addOnScrollListener(new EndlessOnScrollListener(linearLayoutManager) {
-//            @Override
-//            public void onLoadMore() {
-//                Log.d("RecieveFragment", "onLoadMore: ");
-//
-//            }
-//
-//        });
 
         RecieveRecyclerAdapter adapter = ApplicationDataManager.getInstance().getRecieveDataManager().getAdapter();
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -138,8 +132,6 @@ public class RecieveFragment extends Fragment {
         });
 
         ApplicationDataManager.getInstance().getRecieveDataManager().refresh();
-
-
 
     }
 

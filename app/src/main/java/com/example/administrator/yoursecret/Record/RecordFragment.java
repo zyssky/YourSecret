@@ -22,6 +22,7 @@ import com.example.administrator.yoursecret.Detail.DetailActivity;
 import com.example.administrator.yoursecret.Editor.EditorActivity;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Entity.Comment;
+import com.example.administrator.yoursecret.Home.FragmentsHouse;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
@@ -65,6 +66,7 @@ public class RecordFragment extends Fragment{
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         setRetainInstance(true);
+        FragmentsHouse.getInstance().putFragment(RecordFragment.class.getSimpleName(),this);
 
     }
 

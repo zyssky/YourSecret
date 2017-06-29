@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#f57c00</color>
-    <color name="colorPrimaryDark">#e97600</color>
-    <color name="colorAccent">#689f38</color>
+    <color name="colorPrimary">#868686</color>
+    <color name="colorPrimaryDark">#868686</color>
+    <color name="colorAccent">#f57c00</color>
     <color name="layout_background">#fafafa</color>
     <color name="colorNavItemUnselected">#757575</color>
 
@@ -25,8 +25,29 @@
     <color name="color_private">#5e35b1</color>
 
     <color name="black_overlay">#66000000</color>
+
+    <color name="HOT">#ef9a9a</color>
+    <color name="PUSH">#75c9cd</color>
+    <color name="OUTSIDE">#dce775</color>
+    <color name="ARTICLE">#aed581</color>
+
+
+    <color name="titleColor">#fff</color>
+    <color name="articleTitleColor">#525151</color>
+    <color name="bottomNav">#9cb356</color>
+    <color name="bottomNavUn">#868686</color>
+    <color name="articalContentColor">#686868</color>
+    <color name="HISTORY">#9ccc65</color>
+    <color name="TEMP">#8dcdd4</color>
+    <color name="white">#fafafa</color>
+    <color name="dark_gray">#aaa</color>
+    <color name="light_gray">#e8e8e8</color>
+    <color name="logo">#eb8211</color>
+
     <drawable name="white">#fff</drawable>
 
     <drawable name="gray">#aaa</drawable>
+
+
 
 </resources>

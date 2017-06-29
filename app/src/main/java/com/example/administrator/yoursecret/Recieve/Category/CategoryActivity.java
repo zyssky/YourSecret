@@ -25,6 +25,7 @@ import com.example.administrator.yoursecret.utils.DividerItemDecoration;
 import com.example.administrator.yoursecret.utils.EndlessOnScrollListener;
 import com.example.administrator.yoursecret.utils.KV;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -88,10 +89,34 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
 
+        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshLayout.setRefreshing(false);
+                Observer<ArrayList<Artical>> observer = new Observer<ArrayList<Artical>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<Artical> articals) {
+                        CategoryDataManager.getInstance().addNewArticals(articals);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        refreshLayout.setRefreshing(false);
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        refreshLayout.setRefreshing(false);
+                    }
+                };
+
+                CategoryDataManager.getInstance().refresh(observer);
             }
         });
 
@@ -105,8 +130,55 @@ public class CategoryActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(kv.key);
 
             CategoryDataManager.getInstance().setCategoryType(kv.key);
-            CategoryDataManager.getInstance().loadMore();
+
+            setDateColor(kv.key);
+
+            CategoryDataManager.getInstance().loadMore(getArticalObserver());
         }
+    }
+
+    private void setDateColor(String title){
+        if(title.equals(AppContants.ARTICAL_CATOGORY_HOT)){
+            CategoryDataManager.getInstance().setDateBackgroungColor(getResources().getColor(R.color.HOT));
+        }
+        if(title.equals(AppContants.ARTICAL_CATOGORY_PUSH)){
+            CategoryDataManager.getInstance().setDateBackgroungColor(getResources().getColor(R.color.PUSH));
+        }
+        if(title.equals(AppContants.ARTICAL_CATOGORY_GOOD)){
+            CategoryDataManager.getInstance().setDateBackgroungColor(getResources().getColor(R.color.ARTICLE));
+        }
+        if(title.equals(AppContants.ARTICAL_CATOGORY_OUTSIDE)){
+            CategoryDataManager.getInstance().setDateBackgroungColor(getResources().getColor(R.color.OUTSIDE));
+        }
+    }
+
+    public Observer<ArrayList<Artical>> getArticalObserver(){
+        Observer<ArrayList<Artical>> observer = new Observer<ArrayList<Artical>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                setFooter(LOADING);
+            }
+
+            @Override
+            public void onNext(@NonNull ArrayList<Artical> list) {
+                CategoryDataManager.getInstance().addArticalList(list);
+                if(list.isEmpty()){
+                    Toast.makeText(activity,"没有更多内容了^.^",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                e.printStackTrace();
+                setFooter(NORMAL);
+            }
+
+            @Override
+            public void onComplete() {
+                setFooter(NORMAL);
+            }
+        };
+        return observer;
     }
 
     public View getFooterView(){
@@ -114,34 +186,7 @@ public class CategoryActivity extends AppCompatActivity {
         footerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CategoryDataManager.getInstance().loadMore()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<List<Artical>>() {
-                            @Override
-                            public void onSubscribe(@NonNull Disposable d) {
-                                setFooter(LOADING);
-                            }
-
-                            @Override
-                            public void onNext(@NonNull List<Artical> list) {
-                                CategoryDataManager.getInstance().addArticalList(list);
-                                if(list.isEmpty()){
-                                    Toast.makeText(activity,"没有更多内容了^.^",Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onError(@NonNull Throwable e) {
-                                e.printStackTrace();
-                                setFooter(NORMAL);
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                setFooter(NORMAL);
-                            }
-                        });
+                CategoryDataManager.getInstance().loadMore(getArticalObserver());
             }
         });
         return footerView;

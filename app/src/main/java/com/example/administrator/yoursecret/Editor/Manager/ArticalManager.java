@@ -88,8 +88,8 @@ public class ArticalManager {
             "            <div class=\"info\" style=\"padding: 20px 0 0 0\">\n" +
             "                <img src=\"{app_iconUri}\" style=\"position:relative;top:10%;max-width:20%;height:auto;top:10px\">\n" +
             "                <div class=\"info-content\" style=\"display:inline-block;text-align:left\">\n" +
-            "                    <strong style=\"font-size:24px;font-style: normal;\">足迹</strong>\n" +
-            "                    <div style=\"white-space:pre;line-height:18px\">踏遍世界每一个角落</div>\n" +
+            "                    <strong style=\"font-size:24px;font-style: normal;\">实时实地</strong>\n" +
+            "                    <div style=\"white-space:pre;line-height:18px\">洞悉周围每一个角落</div>\n" +
             "                </div>\n" +
             "            </div>\n" +
             "        </div>\n" +
