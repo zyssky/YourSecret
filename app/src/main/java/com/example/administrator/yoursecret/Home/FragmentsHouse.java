@@ -17,9 +17,7 @@ import java.util.Map;
 
 public class FragmentsHouse {
 
-    private Map<String, Fragment> fragments;
-
-
+    private Map<String,Fragment> fragments;
 
 
     public final static int RECIEVE_FRAGMENT = 0;
@@ -30,15 +28,7 @@ public class FragmentsHouse {
     private static FragmentsHouse instance;
 
 
-
-    public FragmentsHouse() {
-        fragments = new ArrayList<>();
-        fragments.add(RecieveFragment.newInstance());
-        fragments.add(DiscoverFragment.newInstance());
-        fragments.add(RecordFragment.newInstance());
-        fragments.add(AccountFragment.newInstance());
-
-    private FragmentsHouse(){
+    private FragmentsHouse() {
         fragments = new HashMap<>();
 //        fragments.put(RecieveFragment.class.getSimpleName(),RecieveFragment.newInstance());
 //        fragments.put(DiscoverFragment.class.getSimpleName(),DiscoverFragment.newInstance());
@@ -46,16 +36,7 @@ public class FragmentsHouse {
 //        fragments.put(AccountFragment.class.getSimpleName(),AccountFragment.newInstance());
 
 
-    private FragmentsHouse() {
-            fragments = new HashMap<>();
-//        fragments.put(RecieveFragment.class.getSimpleName(),RecieveFragment.newInstance());
-//        fragments.put(DiscoverFragment.class.getSimpleName(),DiscoverFragment.newInstance());
-//        fragments.put(RecieveFragment.class.getSimpleName(),RecordFragment.newInstance());
-//        fragments.put(AccountFragment.class.getSimpleName(),AccountFragment.newInstance());
-
-
-        }
-
+    }
     public static FragmentsHouse getInstance() {
         if (instance == null) {
             instance = new FragmentsHouse();

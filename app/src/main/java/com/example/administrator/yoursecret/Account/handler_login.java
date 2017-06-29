@@ -80,12 +80,8 @@ public class handler_login {
 
                                 Intent intent1 = new Intent(context, HomeActivity.class);
                                 Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"登录成功",Toast.LENGTH_SHORT).show();
-<<<<<<< HEAD
                                 context.startActivity(intent1);
 
-=======
-                                context.startActivity(intent);
->>>>>>> 907348ced13b29b45f3a2f46d37387932c128677
 
                             }
                           else {
