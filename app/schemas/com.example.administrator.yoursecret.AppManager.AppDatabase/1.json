@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9fc62555e4688986f270a9979b1675a0",
+    "identityHash": "2cbdb30c00859599b2b2caf573c05bc4",
     "entities": [
       {
         "tableName": "Artical",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT, `authorId` TEXT, `title` TEXT, `contentHtml` TEXT, `latitude` REAL, `longtitude` REAL, `locationDesc` TEXT, `articalType` TEXT, `imageUri` TEXT, `date` INTEGER, `articalHref` TEXT, `introduction` TEXT, `commentNum` INTEGER, `saveType` INTEGER, `finished` INTEGER, `html` TEXT, PRIMARY KEY(`uuid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT, `authorId` TEXT, `title` TEXT, `latitude` REAL, `longtitude` REAL, `locationDesc` TEXT, `articalType` TEXT, `imageUri` TEXT, `date` INTEGER, `articalHref` TEXT, `introduction` TEXT, `commentNum` INTEGER, `saveType` INTEGER, `finished` INTEGER, `html` TEXT, PRIMARY KEY(`uuid`))",
         "fields": [
           {
             "fieldPath": "uuid",
@@ -21,11 +21,6 @@
           {
             "fieldPath": "title",
             "columnName": "title",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "contentHtml",
-            "columnName": "contentHtml",
             "affinity": "TEXT"
           },
           {
@@ -267,7 +262,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"9fc62555e4688986f270a9979b1675a0\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2cbdb30c00859599b2b2caf573c05bc4\")"
     ]
   }
 }

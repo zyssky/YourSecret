@@ -5,13 +5,17 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Environment;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
@@ -26,29 +30,6 @@ import java.security.NoSuchAlgorithmException;
  */
 
 public final class FunctionUtils {
-    public static Bitmap createCircleImage(Bitmap source, int min) {
-        final Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        Bitmap target = Bitmap.createBitmap(min, min, Bitmap.Config.RGB_565);
-
-        /**
-         * 产生一个同样大小的画布
-         */
-        Canvas canvas = new Canvas(target);
-        /**
-         * 首先绘制圆形
-         */
-        canvas.drawCircle(min / 2, min / 2, min / 2, paint);
-        /**
-         * 使用SRC_IN
-         */
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        /**
-         * 绘制图片
-         */
-        canvas.drawBitmap(source, 0, 0, paint);
-        return target;
-    }
 
     public static Bitmap createCircleImage(Bitmap source){
         final Paint paint = new Paint();
@@ -65,6 +46,62 @@ public final class FunctionUtils {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(temp,0,0,paint);
         return target;
+    }
+
+
+    public static Bitmap createCircleImage2(Bitmap bitmap){
+        if (bitmap == null){
+            return null;
+        }
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        float roundPx;
+        float left, top, right, bottom, dst_left, dst_top, dst_right, dst_bottom;
+        if (width <= height){
+            roundPx = width / 2;
+            top = 0;
+            bottom = width;
+            left = 0;
+            right = width;
+            height = width;
+            dst_left = 0;
+            dst_top = 0;
+            dst_right = width;
+            dst_bottom = width;
+        } else{
+            roundPx = height / 2;
+            float clip = (width - height) / 2;
+            left = clip;
+            right = width - clip;
+            top = 0;
+            bottom = height;
+            width = height;
+            dst_left = 0;
+            dst_top = 0;
+            dst_right = height;
+            dst_bottom = height;
+        }
+
+        Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect src = new Rect((int) left, (int) top, (int) right,
+                (int) bottom);
+        final Rect dst = new Rect((int) dst_left, (int) dst_top,
+                (int) dst_right, (int) dst_bottom);
+        final RectF rectF = new RectF(dst);
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, src, dst, paint);
+        if (bitmap != null && !bitmap.isRecycled()){
+            bitmap.recycle();
+            bitmap = null;
+        }
+        return output;
     }
 
     public File getDiskCacheDir(Context context, String uniqueName) {

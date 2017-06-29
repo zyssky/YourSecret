@@ -115,26 +115,18 @@ public class ArticalManager {
 
 
 
-    private void save(String html){
-
-        String pattern = "^<h1>(.+?)</h1>(<hr>)?(.*)";
-        Pattern r = Pattern.compile(pattern);
-        Matcher m = r.matcher(html);
-        String title  = "";
-        String content = "";
-        if (m.find( )) {
-            title = m.group(1);
-            content = m.group(3);
-        } else {
-            content = html;
+    private void save(String title,String html){
+        if(title == null || title.isEmpty()){
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             title = df.format(new Date());
         }
+        if(html == null){
+            html = "";
+        }
 
         artical.title = title;
-        artical.contentHtml = content;
         artical.authorId = ApplicationDataManager.getInstance().getUserManager().getPhoneNum();
-        artical.introduction = getIntroduction(content);
+        artical.introduction = getIntroduction(html);
         artical.images = EditorDataManager.getInstance().getPhotoManager().getImages();
         artical.html = html;
         artical.date = new Date().getTime();
@@ -153,9 +145,9 @@ public class ArticalManager {
             AppDatabaseManager.updateArtical(artical);
     }
 
-    private void saveFinishedArtical(String html){
+    private void saveFinishedArtical(String title,String html){
         artical.finished = 1;
-        save(html);
+        save(title,html);
 
         ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(artical);
 
@@ -189,7 +181,7 @@ public class ArticalManager {
             }
 
         } else {
-            return null;
+            return "";
         }
         return sb.toString();
     }
@@ -201,8 +193,8 @@ public class ArticalManager {
         artical.articalType = type;
     }
 
-    public void setArticalFromRecord(KV kv) {
-        artical = ApplicationDataManager.getInstance().getRecordDataManager().removeArtical(kv);
+    public void setArticalFromRecord(Artical artical) {
+        this.artical = artical;
 
         isNew = false;
         //get data form database
@@ -226,9 +218,10 @@ public class ArticalManager {
     }
 
 
-    public void saveTempArtical(String html){
+    public void saveTempArtical(String title,String html){
+
         artical.finished = 0;
-        save(html);
+        save(title,html);
         ApplicationDataManager.getInstance().getRecordDataManager().saveTempArtical(artical);
 
         saveToDatabase();
@@ -236,15 +229,17 @@ public class ArticalManager {
         AppDatabaseManager.saveImages(EditorDataManager.getInstance().getPhotoManager().getImages());
     }
 
-    public void saveAsPublic(String html) {
+
+
+    public void saveAsPublic(String title,String html) {
         artical.saveType = AppContants.PUBLIC;
-        saveFinishedArtical(html);
+        saveFinishedArtical(title,html);
 
     }
 
-    public void saveAsPrivate(String html) {
+    public void saveAsPrivate(String title,String html) {
         artical.saveType = AppContants.PRIVATE;
-        saveFinishedArtical(html);
+        saveFinishedArtical(title,html);
     }
 
 
@@ -253,7 +248,7 @@ public class ArticalManager {
     public String getArticalHtml(){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-        setHtmlContent(artical.contentHtml);
+        setHtmlContent(artical.html);
         setHtmlDescriptino(artical.introduction);
         setHtmlTimeStamp(df.format(new Date()));
         if(artical.locationDesc!=null)

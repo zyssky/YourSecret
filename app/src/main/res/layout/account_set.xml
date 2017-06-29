@@ -58,7 +58,7 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:background="@null"
-                        android:src="@drawable/skin_about_brand"
+                        android:src="@drawable/ic_default_user"
                         android:layout_marginLeft="80dp"/>
 
 
