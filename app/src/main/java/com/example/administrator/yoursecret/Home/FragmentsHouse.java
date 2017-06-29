@@ -16,7 +16,11 @@ import java.util.Map;
  */
 
 public class FragmentsHouse {
+
     private Map<String, Fragment> fragments;
+
+
+
 
     public final static int RECIEVE_FRAGMENT = 0;
     public final static int DISCOVER_FRAGMENT = 1;
@@ -26,12 +30,21 @@ public class FragmentsHouse {
     private static FragmentsHouse instance;
 
 
+
     public FragmentsHouse() {
         fragments = new ArrayList<>();
         fragments.add(RecieveFragment.newInstance());
         fragments.add(DiscoverFragment.newInstance());
         fragments.add(RecordFragment.newInstance());
         fragments.add(AccountFragment.newInstance());
+
+    private FragmentsHouse(){
+        fragments = new HashMap<>();
+//        fragments.put(RecieveFragment.class.getSimpleName(),RecieveFragment.newInstance());
+//        fragments.put(DiscoverFragment.class.getSimpleName(),DiscoverFragment.newInstance());
+//        fragments.put(RecieveFragment.class.getSimpleName(),RecordFragment.newInstance());
+//        fragments.put(AccountFragment.class.getSimpleName(),AccountFragment.newInstance());
+
 
     private FragmentsHouse() {
             fragments = new HashMap<>();
@@ -55,25 +68,29 @@ public class FragmentsHouse {
     }
 
     public Fragment getFragment(String name) {
-        Fragment fragment = fragments.get(name);
-        if (fragment == null) {
-            if (name.equals(RecieveFragment.class.getSimpleName())) {
+
+        Fragment fragment =  fragments.get(name);
+        if(fragment == null){
+            if(name.equals(RecieveFragment.class.getSimpleName())){
                 fragment = new RecieveFragment();
             }
-            if (name.equals(DiscoverFragment.class.getSimpleName())) {
+            if(name.equals(DiscoverFragment.class.getSimpleName())){
                 fragment = new DiscoverFragment();
             }
-            if (name.equals(RecordFragment.class.getSimpleName())) {
+            if(name.equals(RecordFragment.class.getSimpleName())){
                 fragment = new RecordFragment();
             }
-            if (name.equals(AccountFragment.class.getSimpleName())) {
+            if(name.equals(AccountFragment.class.getSimpleName())){
+
                 fragment = new AccountFragment();
             }
         }
         return fragment;
     }
 
-    public void putFragment(String name, Fragment fragment) {
-        fragments.put(name, fragment);
+
+    public void putFragment(String name,Fragment fragment){
+        fragments.put(name,fragment);
+
     }
 }

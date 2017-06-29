@@ -110,17 +110,20 @@
 
 
 
+
+
         <activity android:name=".Account.activity_setBasic"
             android:launchMode="singleTask"/>
         <activity android:name=".Account.activity_setItem"
             android:launchMode="singleTask"/>
 
-        <activity android:name=".Account.activity_set_pas"
-            android:launchMode="singleTask"/>
+
+
 
         <activity android:name=".Comment.CommentActivity"
             android:label="我的评论"></activity>
-
+        <activity android:name=".Account.activity_set_pas"
+            android:launchMode="singleTask"/>
 
 
 
