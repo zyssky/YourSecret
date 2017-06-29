@@ -2,6 +2,8 @@ package com.example.administrator.yoursecret.Account;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -47,11 +49,13 @@ public class activity_login extends AppCompatActivity implements View.OnClickLis
     private handler_login loginHandler;
     private RelativeLayout main;
     private KeyboardLayout bindingView;
+    public static Activity Instance;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.login);
         super.onCreate(savedInstanceState);
         loginHandler = new handler_login(this);
+        Instance = this;
         intiView();
         initListener();
 
@@ -60,10 +64,7 @@ public class activity_login extends AppCompatActivity implements View.OnClickLis
 
     private void intiView() {
         bindingView = (KeyboardLayout)findViewById(R.id.main_ll);
-        final String account = getIntent().getStringExtra(AppContants.ACCOUNT);
-        final String password = getIntent().getStringExtra(AppContants.PASSWORD);
         l_btn_register = (Button) findViewById(R.id.l_btn_to_regist);
-        l_btn_forget = (Button) findViewById(R.id.l_forget_password);
         l_btn_to_login = (Button) findViewById(R.id.l_btn_login);
         touxiang = (ImageView) findViewById(R.id.l_logo);
         l_et_mobile = (EditText) findViewById(R.id.l_et_mobile);
@@ -72,6 +73,8 @@ public class activity_login extends AppCompatActivity implements View.OnClickLis
         l_clean_password = (ImageView) findViewById(R.id.l_clean_password);
         l_iv_show_pwd = (ImageView) findViewById(R.id.l_iv_show_pwd);
         scrollView = (ScrollView) findViewById(R.id.scrollView2);
+        final String account = getIntent().getStringExtra(AppContants.ACCOUNT);
+        final String password = getIntent().getStringExtra(AppContants.PASSWORD);
         if(account!=null&&password!=null)
         {
             l_et_mobile.setText(account);
@@ -222,6 +225,7 @@ public class activity_login extends AppCompatActivity implements View.OnClickLis
                 Intent intent1 = new Intent();
                 intent1.setClass(activity_login.this, activity_register.class);
                 startActivity(intent1);
+                finish();
             case R.id.l_iv_clean_phone:
                 l_et_mobile.setText("");
                 break;

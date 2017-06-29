@@ -240,34 +240,80 @@ public class NetworkManager {
 
 
 
-    public void getArticalsOnType(final String articalType,final int pageNo, final Observer<ArrayList<Artical>> observer){
-        Location location = getLocation();
+    public void getArticalsOnType(final Observer<ArrayList<Artical>> observer,final String articalType,final int pageNo){
 
-        RequestBody requestBody = new FormBody.Builder()
-                .add("latitude",""+location.getLatitude())
-                .add("longitude",""+location.getLongitude())
-                .add("pageNO",""+pageNo)
-                .build();
-        getArticalService().getArticalsOnType(articalType,requestBody)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+        LocationListener listener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("latitude",""+location.getLatitude())
+                        .add("longitude",""+location.getLongitude())
+                        .add("pageNO",""+pageNo)
+                        .build();
+                getArticalService().getArticalsOnType(articalType,requestBody)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
+                com.example.administrator.yoursecret.AppManager.LocationManager.stopLocation(this);
+
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        com.example.administrator.yoursecret.AppManager.LocationManager.getLocation(listener);
     }
 
 
 
     public void getArticalsOnMap(final Observer<ArrayList<Artical>> observer,final int pageNo){
-        Location location = getLocation();
 
-        RequestBody requestBody = new FormBody.Builder()
-                .add("latitude",""+location.getLatitude())
-                .add("longitude",""+location.getLongitude())
-                .add("pageNO",""+pageNo)
-                .build();
-        getArticalService().getArticalsOnMap(requestBody)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+        LocationListener listener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("latitude",""+location.getLatitude())
+                        .add("longitude",""+location.getLongitude())
+                        .add("pageNO",""+pageNo)
+                        .build();
+                getArticalService().getArticalsOnMap(requestBody)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
+
+                com.example.administrator.yoursecret.AppManager.LocationManager.stopLocation(this);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+        com.example.administrator.yoursecret.AppManager.LocationManager.getLocation(listener);
+
     }
 
 
@@ -276,43 +322,40 @@ public class NetworkManager {
 
     public void getArticals(final Observer<Map<String ,ArrayList<Artical>>> observer){
 
-        Location location = getLocation();
-        RequestBody requestBody = new FormBody.Builder()
-                .add("latitude",""+location.getLatitude())
-                .add("longitude",""+location.getLongitude())
-                .build();
-        getArticalService().getArticals(requestBody)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
-    }
-
-    public Location getLocation(){
-        LocationManager locationManager = (LocationManager) ApplicationDataManager.getInstance().getAppContext()
-                .getSystemService(Context.LOCATION_SERVICE);
-        String locationProvider = LocationManager.NETWORK_PROVIDER;
-
-        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-
-        Log.d("test 经度纬度", "getLocation: "+lastKnownLocation.getLatitude()+"    "+lastKnownLocation.getLongitude());
-
-        return lastKnownLocation;
-    }
-
-    public void getLocationDesc(double latitude,double longitude){
-        GeocodeSearch geo = new GeocodeSearch(ApplicationDataManager.getInstance().getAppContext());
-        geo.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
+        LocationListener listener = new LocationListener() {
             @Override
-            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
-                if(i == 1000)
-                Log.d("地理位置描述：", "onRegeocodeSearched: "+regeocodeResult.getRegeocodeAddress().getFormatAddress());
+            public void onLocationChanged(Location location) {
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("latitude",""+location.getLatitude())
+                        .add("longitude",""+location.getLongitude())
+                        .build();
+                getArticalService().getArticals(requestBody)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
+
+                com.example.administrator.yoursecret.AppManager.LocationManager.stopLocation(this);
+
             }
 
             @Override
-            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
             }
-        });
-        RegeocodeQuery query = new RegeocodeQuery(new LatLonPoint(latitude,longitude),100,GeocodeSearch.AMAP);
-        geo.getFromLocationAsyn(query);
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+        com.example.administrator.yoursecret.AppManager.LocationManager.getLocation(listener);
+
     }
+
+
 }

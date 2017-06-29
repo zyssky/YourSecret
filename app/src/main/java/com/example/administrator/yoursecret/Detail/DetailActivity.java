@@ -16,6 +16,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
@@ -42,6 +43,7 @@ public class DetailActivity extends AppCompatActivity {
     private EditText editText;
     private View inputLayout;
     private View footerView;
+    private TextView countComment;
 
     @Override
     protected void onDestroy() {
@@ -82,6 +84,7 @@ public class DetailActivity extends AppCompatActivity {
 
         inputLayout = findViewById(R.id.input_layout);
         editText =(EditText) findViewById(R.id.input_text);
+        countComment = (TextView) findViewById(R.id.count_comment);
 
         webView = (WebView) findViewById(R.id.content_detail);
         WebSettings webSettings = webView.getSettings();
@@ -109,6 +112,7 @@ public class DetailActivity extends AppCompatActivity {
                 DetailDataManager.getInstance().artical = artical;
                 webView.loadUrl(artical.articalHref);
                 DetailDataManager.getInstance().getComments();
+//                countComment.setText("评论："+artical.commentNum);
             }
 
         }

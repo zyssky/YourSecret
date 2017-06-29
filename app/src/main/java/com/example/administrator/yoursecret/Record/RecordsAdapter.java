@@ -59,6 +59,12 @@ public class RecordsAdapter extends MultiRecyclerAdapter<Artical>{
         if(holder instanceof TitleViewHolder){
             TitleViewHolder titleViewHolder = (TitleViewHolder) holder;
             titleViewHolder.textView.setText(title);
+            if(title.equals(AppContants.RECORD_CATOGORY_TEMP)) {
+                titleViewHolder.itemView.setBackgroundColor(titleViewHolder.itemView.getContext().getResources().getColor(R.color.TEMP));
+            }
+            if(title.equals(AppContants.RECORD_CATOGORY_HISTORY)) {
+                titleViewHolder.itemView.setBackgroundColor(titleViewHolder.itemView.getContext().getResources().getColor(R.color.HISTORY));
+            }
         }
     }
 

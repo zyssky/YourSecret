@@ -1,5 +1,6 @@
 package com.example.administrator.yoursecret.Home;
 
+import android.arch.persistence.room.Insert;
 import android.content.Intent;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -11,15 +12,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.administrator.yoursecret.Account.AccountFragment;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Comment.CommentActivity;
+import com.example.administrator.yoursecret.Discover.DiscoverFragment;
 import com.example.administrator.yoursecret.Editor.EditorActivity;
 import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.Network.NetworkMonitor;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.Recieve.RecieveDataManager;
+import com.example.administrator.yoursecret.Recieve.RecieveFragment;
 import com.example.administrator.yoursecret.Record.RecordDataManager;
 import com.example.administrator.yoursecret.AppManager.UserManager;
+import com.example.administrator.yoursecret.Record.RecordFragment;
+import com.example.administrator.yoursecret.TestMyActivity;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FunctionUtils;
 
@@ -32,7 +38,7 @@ public class HomeActivity extends AppCompatActivity{
 
     private Fragment currentFragment;
 
-    private int curFragmentPos = FragmentsHouse.RECIEVE_FRAGMENT;
+    private String curFragmentPos = RecieveFragment.class.getSimpleName();
 
     private FragmentsHouse fragments;
 
@@ -50,10 +56,21 @@ public class HomeActivity extends AppCompatActivity{
                 startActivity(intent);
                 break;
             case R.id.comments:
-                startActivity(new Intent(this, CommentActivity.class));
-                break;
+                return false;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if(curFragmentPos.equals(RecieveFragment.class.getSimpleName())){
+            super.onBackPressed();
+        }
+        else{
+            switchContent(fragments.getFragment(RecieveFragment.class.getSimpleName()));
+            navigationView.setSelectedItemId(R.id.nav_recieve);
+        }
     }
 
     @Override
@@ -65,13 +82,15 @@ public class HomeActivity extends AppCompatActivity{
         fragments = FragmentsHouse.getInstance();
 
         if(savedInstanceState!=null) {
-            int resId = savedInstanceState.getInt(AppContants.KEY, FragmentsHouse.RECIEVE_FRAGMENT);
-            curFragmentPos = resId;
+            String cur = savedInstanceState.getString(AppContants.KEY, RecieveFragment.class.getSimpleName());
+            curFragmentPos = cur;
         }
 
-        currentFragment = fragments.getFragment(curFragmentPos);
 
-        switchContent(currentFragment);
+            currentFragment = fragments.getFragment(curFragmentPos);
+
+            switchContent(currentFragment);
+        
 
         navigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         FunctionUtils.disableShiftMode(navigationView);
@@ -80,16 +99,16 @@ public class HomeActivity extends AppCompatActivity{
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_recieve:
-                        curFragmentPos = FragmentsHouse.RECIEVE_FRAGMENT;
+                        curFragmentPos = RecieveFragment.class.getSimpleName();
                         break;
                     case R.id.nav_discover:
-                        curFragmentPos = FragmentsHouse.DISCOVER_FRAGMENT;
+                        curFragmentPos = DiscoverFragment.class.getSimpleName();
                         break;
                     case R.id.nav_record:
-                        curFragmentPos = FragmentsHouse.RECORD_FRAGMENT;
+                        curFragmentPos = RecordFragment.class.getSimpleName();
                         break;
                     case R.id.nav_account:
-                        curFragmentPos = FragmentsHouse.ACCOUNT_FRAGMENT;
+                        curFragmentPos = AccountFragment.class.getSimpleName();
                         break;
                     default:
                         return true;
@@ -103,7 +122,7 @@ public class HomeActivity extends AppCompatActivity{
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(AppContants.KEY,curFragmentPos);
+        outState.putString(AppContants.KEY,curFragmentPos);
     }
 
     private void initManager(){

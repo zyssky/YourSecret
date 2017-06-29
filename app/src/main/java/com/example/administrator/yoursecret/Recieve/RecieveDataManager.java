@@ -4,7 +4,9 @@ import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Service.LocationService;
@@ -117,6 +119,7 @@ public class RecieveDataManager {
                 e.printStackTrace();
                 boolean[] status = {false};
                 listener.changeRefreshStatus(status);
+                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"无法连接到服务器-_-",Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -129,21 +132,6 @@ public class RecieveDataManager {
         };
 
         ApplicationDataManager.getInstance().getNetworkManager().getArticals(observer);
-
-    }
-
-    private void getLocation(){
-//        final LocationService.MyBinder myBinder = null;
-//        ServiceConnection connection = new ServiceConnection() {
-//            @Override
-//            public void onServiceConnected(ComponentName name, IBinder service) {
-//                myBinder = (LocationService.MyBinder) service;
-//            }
-//
-//            @Override
-//            public void onServiceDisconnected(ComponentName name) {
-//            }
-//        };
     }
 
 }

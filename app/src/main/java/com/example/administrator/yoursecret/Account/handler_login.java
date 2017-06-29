@@ -69,9 +69,20 @@ public class handler_login {
                                 usermanager.setNickName(userResponse.nickName);
                                 usermanager.setIconPath(userResponse.userIconPath);
                                 usermanager.setToken(userResponse.token);
-                                Intent intent = new Intent(context, HomeActivity.class);
+
+                                Toast.makeText(activity_login.Instance,"登录成功",Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(activity_login.Instance,HomeActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                                intent.putExtra("page",4);
+                               activity_login.Instance.startActivity(intent);
+
+
+
+                                Intent intent1 = new Intent(context, HomeActivity.class);
                                 Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"登录成功",Toast.LENGTH_SHORT).show();
-                                context.startActivity(intent);
+                                context.startActivity(intent1);
+
+
                             }
                           else {
                                 Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"账号不存在或者密码错误",Toast.LENGTH_SHORT).show();

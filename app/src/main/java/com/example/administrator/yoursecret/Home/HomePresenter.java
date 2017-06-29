@@ -24,7 +24,7 @@ public class HomePresenter implements HomeContract.Presenter{
 
     public HomePresenter (HomeContract.View view){
         this.view = view;
-        fragments = new FragmentsHouse();
+        fragments = (Fragments) new FragmentsHouse();
     }
 
     public void setFragments(Fragments fragments) {

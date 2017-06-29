@@ -40,6 +40,8 @@ public class CommentActivity extends AppCompatActivity implements OnHasCommentsL
 
         CommentDataManager.getInstance().setListener(this);
         CommentDataManager.getInstance().loadComments();
+
+        ApplicationDataManager.getInstance().getUserManager().sethasUnReadMessage(false);
     }
 
     @Override

@@ -57,6 +57,7 @@
                         android:id="@+id/touxiang2"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
+                        android:background="@null"
                         android:src="@drawable/skin_about_brand"
                         android:layout_marginLeft="80dp"/>
 

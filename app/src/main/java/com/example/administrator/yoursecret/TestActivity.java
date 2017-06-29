@@ -1,6 +1,8 @@
 package com.example.administrator.yoursecret;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.administrator.yoursecret.Home.HomeActivity;
 import com.example.administrator.yoursecret.client.ServiceManager;
 
 public class TestActivity extends AppCompatActivity {
@@ -18,32 +21,36 @@ public class TestActivity extends AppCompatActivity {
 
     ServiceManager serviceManager;
 
+    private Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        activity = this;
         // Settings
         Button okButton = (Button) findViewById(R.id.btn_settings);
         okButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                ServiceManager.viewNotificationSettings(TestActivity.this);
+                Intent intent = new Intent(activity, HomeActivity.class);
+                startActivity(intent);
             }
         });
-
-        serviceManager = new ServiceManager(this);
-
-        //request the permission
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_PHONE_STATE}
-                    ,MY_PERMISSION_READ_PHONE_STATE);
-        }
-
-        // Start the service
-
-        serviceManager.setNotificationIcon(android.R.drawable.sym_def_app_icon);
-        serviceManager.startService();
+//
+//        serviceManager = new ServiceManager(this);
+//
+//        //request the permission
+//        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+//                != PackageManager.PERMISSION_GRANTED){
+//            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_PHONE_STATE}
+//                    ,MY_PERMISSION_READ_PHONE_STATE);
+//        }
+//
+//        // Start the service
+//
+//        serviceManager.setNotificationIcon(android.R.drawable.sym_def_app_icon);
+//        serviceManager.startService();
     }
 
     @Override

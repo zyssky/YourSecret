@@ -22,8 +22,10 @@ import android.widget.Toast;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Entity.UserResponse;
+import com.example.administrator.yoursecret.Home.HomeActivity;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.FileUtils;
+import com.example.administrator.yoursecret.utils.FunctionUtils;
 import com.example.administrator.yoursecret.utils.GlideImageLoader;
 
 import java.io.File;
@@ -180,8 +182,10 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
         Bundle extras = picdata.getExtras();
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
-            Drawable drawable = new BitmapDrawable(photo);
-            touxiang.setImageDrawable(drawable);
+            photo = FunctionUtils.createCircleImage(photo);
+//            Drawable drawable = new BitmapDrawable(photo);
+            touxiang.setImageBitmap(photo);
+//            touxiang.setImageDrawable(drawable);
            FileUtils.saveAsPng(savepath,photo);
             ApplicationDataManager.getInstance().getNetworkManager().modify(null,savepath)
                    .subscribeOn(Schedulers.io())

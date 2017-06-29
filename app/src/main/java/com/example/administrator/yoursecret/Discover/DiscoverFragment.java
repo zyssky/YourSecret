@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Detail.DetailActivity;
+import com.example.administrator.yoursecret.Home.FragmentsHouse;
 import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.Entity.Artical;
@@ -69,6 +71,7 @@ public class DiscoverFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        FragmentsHouse.getInstance().putFragment(DiscoverFragment.class.getSimpleName(),this);
     }
 
     @Override
@@ -117,7 +120,7 @@ public class DiscoverFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_discover, container, false);
-        Button Changer = (Button)rootView.findViewById(R.id.traffic);
+        ImageButton Changer = (ImageButton)rootView.findViewById(R.id.traffic);
         Changer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

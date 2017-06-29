@@ -4,7 +4,8 @@
 
     <item
         android:id="@+id/comments"
-        android:icon="@drawable/ic_comment"
+        android:icon="@drawable/ic_comment_1"
         android:title="Item"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:orderInCategory="0"/>
 </menu>

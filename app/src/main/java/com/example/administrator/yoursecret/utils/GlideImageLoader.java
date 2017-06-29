@@ -14,12 +14,12 @@ import com.example.administrator.yoursecret.R;
 public final class GlideImageLoader {
     public static void loadImageNail(Context context, Object path, ImageView imageView) {
 //        Integer integer = (Integer) path;
-        Glide.with(context).load(path).placeholder(R.drawable.placeholder).error(R.drawable.error).into(imageView);
+        Glide.with(context).load(path).thumbnail(0.1f).placeholder(R.drawable.placeholder).error(R.drawable.error).into(imageView);
     }
 
     public static void loadImageNail(Fragment fragment, Object path, ImageView imageView) {
 //        Integer integer = (Integer) path;
-        Glide.with(fragment).load(path).placeholder(R.drawable.placeholder).error(R.drawable.error).into(imageView);
+        Glide.with(fragment).load(path).thumbnail(0.1f).placeholder(R.drawable.placeholder).error(R.drawable.error).into(imageView);
     }
 
     public static void loadImage(Context context, Object path, ImageView imageView){

@@ -6,6 +6,7 @@ import com.example.administrator.yoursecret.DAO.CommentDao;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Entity.Comment;
 import com.example.administrator.yoursecret.Entity.Image;
+import com.example.administrator.yoursecret.Entity.User;
 
 import java.util.List;
 

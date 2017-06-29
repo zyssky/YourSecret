@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "131f2ffa84d61f9cc4e893361e351299",
+    "identityHash": "9fc62555e4688986f270a9979b1675a0",
     "entities": [
       {
         "tableName": "Artical",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT, `authorId` TEXT, `title` TEXT, `contentHtml` TEXT, `latitude` REAL, `longtitude` REAL, `locationDesc` TEXT, `articalType` TEXT, `imageUri` TEXT, `date` INTEGER, `articalHref` TEXT, `introduction` TEXT, `saveType` INTEGER, `finished` INTEGER, `html` TEXT, PRIMARY KEY(`uuid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT, `authorId` TEXT, `title` TEXT, `contentHtml` TEXT, `latitude` REAL, `longtitude` REAL, `locationDesc` TEXT, `articalType` TEXT, `imageUri` TEXT, `date` INTEGER, `articalHref` TEXT, `introduction` TEXT, `commentNum` INTEGER, `saveType` INTEGER, `finished` INTEGER, `html` TEXT, PRIMARY KEY(`uuid`))",
         "fields": [
           {
             "fieldPath": "uuid",
@@ -67,6 +67,11 @@
             "fieldPath": "introduction",
             "columnName": "introduction",
             "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "commentNum",
+            "columnName": "commentNum",
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "saveType",
@@ -209,11 +214,60 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "User",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`authorId` TEXT, `iconPath` TEXT, `nickName` TEXT, `token` TEXT, `iconLocalPath` TEXT, `lastCommentDate` TEXT, `hasUnReadMessage` INTEGER, PRIMARY KEY(`authorId`))",
+        "fields": [
+          {
+            "fieldPath": "authorId",
+            "columnName": "authorId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "iconPath",
+            "columnName": "iconPath",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "nickName",
+            "columnName": "nickName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "token",
+            "columnName": "token",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "iconLocalPath",
+            "columnName": "iconLocalPath",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "lastCommentDate",
+            "columnName": "lastCommentDate",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "hasUnReadMessage",
+            "columnName": "hasUnReadMessage",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "authorId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"131f2ffa84d61f9cc4e893361e351299\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"9fc62555e4688986f270a9979b1675a0\")"
     ]
   }
 }

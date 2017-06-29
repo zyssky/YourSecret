@@ -99,10 +99,7 @@ public class LocationService extends Service implements AMapLocationListener{
                 Log.e("AmapError","location Error, ErrCode:"
                         + amapLocation.getErrorCode() + ", errInfo:"
                         + amapLocation.getErrorInfo());
-                Location location = ApplicationDataManager.getInstance().getNetworkManager().getLocation();
-                if(listener!=null){
-                    listener.onCall(location.getLatitude(),location.getLongitude(),"");
-                }
+
             }
         }
 //        mLocationClient.stopLocation();

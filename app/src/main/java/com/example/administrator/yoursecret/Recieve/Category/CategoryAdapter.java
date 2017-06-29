@@ -1,5 +1,6 @@
 package com.example.administrator.yoursecret.Recieve.Category;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,16 +20,12 @@ import com.example.administrator.yoursecret.utils.MultiRecyclerAdapter;
  */
 
 public class CategoryAdapter extends MultiRecyclerAdapter<Artical> {
-//    @Override
-//    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-//        return null;
-//    }
-//
-//    @Override
-//    public RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {
-//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.footer_loading,parent,false);
-//        return new TitleViewHolder(view);
-//    }
+
+    private int dividerColor = Color.GRAY;
+
+    public void setDividerColor(int color){
+        dividerColor = color;
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateTitleViewHolder(ViewGroup parent) {
@@ -42,16 +39,6 @@ public class CategoryAdapter extends MultiRecyclerAdapter<Artical> {
         return new CategoryAdapter.ItemViewHolder(view);
     }
 
-//    @Override
-//    public void onBindHeader(RecyclerView.ViewHolder holder) {
-//
-//    }
-//
-//    @Override
-//    public void onBindFooter(RecyclerView.ViewHolder holder) {
-//
-//    }
-
     @Override
     public void onBindTitle(RecyclerView.ViewHolder holder, String title) {
         if(holder instanceof TitleViewHolder){
@@ -61,6 +48,7 @@ public class CategoryAdapter extends MultiRecyclerAdapter<Artical> {
                 titleViewHolder.day.setText(times[1]);
                 titleViewHolder.year.setText(times[0]);
             }
+            holder.itemView.setBackgroundColor(dividerColor);
         }
     }
 
