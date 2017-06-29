@@ -1,5 +1,6 @@
 package com.example.administrator.yoursecret.Home;
 
+import android.arch.persistence.room.Insert;
 import android.content.Intent;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.example.administrator.yoursecret.Recieve.RecieveFragment;
 import com.example.administrator.yoursecret.Record.RecordDataManager;
 import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Record.RecordFragment;
+import com.example.administrator.yoursecret.TestMyActivity;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FunctionUtils;
 

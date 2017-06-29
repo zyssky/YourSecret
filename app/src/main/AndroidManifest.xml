@@ -34,7 +34,9 @@
             android:name="com.amap.api.v2.apikey"
             android:value="ae7c799c265efac59946d28dd09075dd" />
 
-        <activity android:name=".TestActivity" />
+        <activity android:name=".TestActivity">
+
+        </activity>
         <activity
             android:name=".client.NotificationDetailsActivity"
             android:label="Notification Details" />
@@ -58,7 +60,7 @@
             android:theme="@style/TransparentNoBar" />
         <activity
             android:name=".Home.HomeActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
