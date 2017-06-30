@@ -71,7 +71,6 @@
                             android:layout_marginTop="20dp"
                             android:maxLines="1"
                             android:text="mkd"
-                            android:textSize="12sp"
                             android:textColor="#000" />
 
                         <TextView
@@ -80,6 +79,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="5dp"
+                            android:textSize="12sp"
                             android:text="账号：" />
                     </LinearLayout>
 
