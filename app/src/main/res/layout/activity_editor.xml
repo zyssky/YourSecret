@@ -22,7 +22,8 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:hint="请输入标题"
-                android:textSize="30dp" />
+                android:textStyle="bold"
+                android:textSize="26dp" />
 
             <jp.wasabeef.richeditor.RichEditor
                 android:id="@+id/editor"
