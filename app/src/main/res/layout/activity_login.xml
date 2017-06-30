@@ -17,7 +17,7 @@
         android:background="@null"
         android:layout_marginTop="60dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/skin_about_brand" />
+        android:src="@drawable/ic_default_user" />
 
     <ScrollView
         android:id="@+id/scrollView"

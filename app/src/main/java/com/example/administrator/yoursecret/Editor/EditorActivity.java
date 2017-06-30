@@ -1,6 +1,7 @@
 package com.example.administrator.yoursecret.Editor;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
@@ -21,6 +23,7 @@ import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
 import com.example.administrator.yoursecret.Editor.Manager.ArticalManager;
 import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.Editor.Manager.PhotoManager;
+import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.Editor.Photo.PhotosActivity;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
@@ -58,6 +61,12 @@ public class EditorActivity extends AppCompatActivity {
 
     private NetworkManager networkManager;
 
+    private MyImageButton insertImageButton;
+
+    private EditText titleEditor;
+
+    private Context context;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.type_menu,menu);
@@ -84,28 +93,35 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
+        context = this;
+
         editor = (RichEditor) findViewById(R.id.editor);
         recyclerView = (RecyclerView) findViewById(R.id.insert_gallery);
         text_toolbar = findViewById(R.id.text_toolbar);
+        insertImageButton = (MyImageButton) findViewById(R.id.insert_image_btn);
+        titleEditor = (EditText) findViewById(R.id.editor_title);
 
         initModels();
 
         Intent intent = getIntent();
         if(intent.getExtras()!=null) {
             KV kv = intent.getExtras().getParcelable(AppContants.FROM_RECORD);
+            Artical artical = ApplicationDataManager.getInstance().getRecordDataManager().removeArtical(kv);
+            editor.setHtml(artical.html);
+            titleEditor.setText(artical.title);
 
-            articalManager.setArticalFromRecord(kv);
-            //to set the loaded choosed
+            articalManager.setArticalFromRecord(artical);
             TypeDialog.setChoosed(articalManager.getArtical().articalType);
 
         }
 
         initAdapters();
 
+        editor.setEditorHeight(getResources().getDisplayMetrics().heightPixels);
         editor.setPadding(10, 10, 10, 10);
         editor.loadCSS(FoundationManager.getCssPath());
-        editor.setHtml(articalManager.getArtical().html);
-
+        editor.setPlaceholder("请输入内容......");
+//
         recyclerView.setAdapter(insertImageAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         recyclerView.addItemDecoration(new SpaceItemDecoration(15,0,15,15));
@@ -139,6 +155,7 @@ public class EditorActivity extends AppCompatActivity {
             public void onItemClick(int position, Object data) {
                 insertImageIntoEditor(position);
                 recyclerView.setVisibility(View.GONE);
+                click(insertImageButton);
             }
         });
 
@@ -157,7 +174,8 @@ public class EditorActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        articalManager.saveTempArtical(editor.getHtml());
+        if(!isEmpty())
+            articalManager.saveTempArtical(titleEditor.getText().toString(),editor.getHtml());
 
     }
 
@@ -217,32 +235,68 @@ public class EditorActivity extends AppCompatActivity {
         dialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean finished = true;
                 switch (v.getId()){
                     case R.id.save_delete:
                         articalManager.deleteArtical();
                         break;
                     case R.id.save_public:
-                        if(!ApplicationDataManager.getInstance().getUserManager().hasLogin()){
-                            Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"请先登录！",Toast.LENGTH_LONG).show();
-                            articalManager.saveTempArtical(editor.getHtml());
+                        if(!publishable()){
+                            finished = false;
+                            break;
                         }
-                        else
-                            articalManager.saveAsPublic(editor.getHtml());
+                        articalManager.saveAsPublic(titleEditor.getText().toString(),editor.getHtml());
                         break;
                     case R.id.save_private:
-                        if(!ApplicationDataManager.getInstance().getUserManager().hasLogin()){
-                            Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"请先登录！",Toast.LENGTH_LONG).show();
-                            articalManager.saveTempArtical(editor.getHtml());
+                        if(!publishable()){
+                            finished = false;
+                            break;
                         }
-                        else
-                            articalManager.saveAsPrivate(editor.getHtml());
+                        articalManager.saveAsPrivate(titleEditor.getText().toString(),editor.getHtml());
                         break;
                 }
                 dialog.dismiss();
-                finish();
+                if(finished)
+                    finish();
             }
         });
         dialog.show();
+    }
+
+    public boolean isEmpty(){
+        boolean flag = true;
+        if(!titleEditor.getText().toString().isEmpty())
+            flag = false;
+        if(editor.getHtml()!= null && !editor.getHtml().isEmpty())
+            flag = false;
+        if(!photoManager.getImages().isEmpty())
+            flag = false;
+        return flag;
+    }
+
+    public boolean publishable(){
+        boolean flag = true;
+        if(titleEditor.getText().toString().isEmpty())
+            flag = false;
+        if(editor.getHtml() == null)
+            flag = false;
+        else{
+            if(editor.getHtml().isEmpty())
+                flag = false;
+        }
+        if(photoManager.getImages().isEmpty())
+            flag = false;
+
+        if(flag){
+            if(!ApplicationDataManager.getInstance().getUserManager().hasLogin()){
+                Toast.makeText(context,"请先登录！",Toast.LENGTH_LONG).show();
+                flag = false;
+            }
+        }
+        else {
+            Toast.makeText(context,"内容不完整！",Toast.LENGTH_SHORT).show();
+        }
+        return flag;
     }
 
     public void checkPhotos(View view){

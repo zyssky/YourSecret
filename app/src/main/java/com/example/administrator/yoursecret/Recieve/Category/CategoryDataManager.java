@@ -124,6 +124,9 @@ public class CategoryDataManager {
 			}
 			datas.get(date).add(artical);
 		}
+
+		adapter.notifyDataSetChanged();
+
     }
 
     private boolean loading = false;
@@ -140,10 +143,23 @@ public class CategoryDataManager {
 
         for (int i = 0; i < articals.size(); i++) {
             if(articals.get(i).articalHref.equals(newestArticalHref)){
-                addArticalList(articals.subList(0,i));
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM月dd日");
+                List<Artical> list = articals.subList(0,i);
+                for (int k = list.size()-1; k>-1 ; k--) {
+                    Artical artical = list.get(k);
+                    String date = dateFormat.format(new Date(artical.date));
+                    if(!datas.containsKey(date)){
+                        titles.add(0,date);
+                        datas.put(date,new ArrayList<Artical>());
+                    }
+                    datas.get(date).add(0,artical);
+                }
+
                 break;
             }
         }
         newestArticalHref = articals.get(0).articalHref;
+
+        adapter.notifyDataSetChanged();
     }
 }

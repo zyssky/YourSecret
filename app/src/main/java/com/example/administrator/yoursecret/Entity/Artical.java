@@ -27,7 +27,7 @@ public class Artical implements Parcelable{
 
     public String title = "";
 
-    public String contentHtml = "";
+//    public String contentHtml = "";
 
     public double latitude;
 
@@ -60,7 +60,6 @@ public class Artical implements Parcelable{
         uuid = in.readString();
         authorId = in.readString();
         title = in.readString();
-        contentHtml = in.readString();
         latitude = in.readDouble();
         longtitude = in.readDouble();
         locationDesc = in.readString();
@@ -97,7 +96,6 @@ public class Artical implements Parcelable{
         dest.writeString(uuid);
         dest.writeString(authorId);
         dest.writeString(title);
-        dest.writeString(contentHtml);
         dest.writeDouble(latitude);
         dest.writeDouble(longtitude);
         dest.writeString(locationDesc);
