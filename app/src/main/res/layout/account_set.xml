@@ -93,7 +93,7 @@
                         android:id="@+id/set_basic_nic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="160dp"
+                        android:layout_marginLeft="85dp"
                         android:text="haha"
                         android:maxLines="1"
                         android:textColor="#000"
@@ -128,7 +128,7 @@
                         android:id="@+id/set_basic_acc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="160dp"
+                        android:layout_marginLeft="85dp"
                         android:text="13662456616"
                         android:textColor="#000"
                         android:textSize="12sp" />
