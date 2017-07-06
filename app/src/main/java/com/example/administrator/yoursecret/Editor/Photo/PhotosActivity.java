@@ -22,7 +22,7 @@ import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.Service.CallbackListener;
 import com.example.administrator.yoursecret.Service.LocationService;
-import com.example.administrator.yoursecret.utils.BitmapUtil;
+import com.example.administrator.yoursecret.utils.BitmapUtils;
 import com.example.administrator.yoursecret.Editor.Adapter.WriteImagesAdapter;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
@@ -113,7 +113,7 @@ public class PhotosActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                curImageUri= Uri.fromFile(BitmapUtil.getTempImage());
+                curImageUri= Uri.fromFile(BitmapUtils.getTempImage());
                 intent.putExtra(MediaStore.EXTRA_OUTPUT,curImageUri);
                 startActivityForResult(intent,TAKE_PHOTO_REQUEST);
 

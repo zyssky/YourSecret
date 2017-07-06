@@ -2,20 +2,18 @@ package com.example.administrator.yoursecret.Editor.Manager;
 
 import android.util.Log;
 
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FileUtils;
-import com.example.administrator.yoursecret.utils.KV;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -125,7 +123,7 @@ public class ArticalManager {
         }
 
         artical.title = title;
-        artical.authorId = ApplicationDataManager.getInstance().getUserManager().getPhoneNum();
+        artical.authorId = App.getInstance().getUserManager().getPhoneNum();
         artical.introduction = getIntroduction(html);
         artical.images = EditorDataManager.getInstance().getPhotoManager().getImages();
         artical.html = html;
@@ -149,7 +147,7 @@ public class ArticalManager {
         artical.finished = 1;
         save(title,html);
 
-        ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(artical);
+        App.getInstance().getRecordDataManager().saveFinishArtical(artical);
 
         saveToDatabase();
 
@@ -157,11 +155,11 @@ public class ArticalManager {
         AppDatabaseManager.saveImages(EditorDataManager.getInstance().getPhotoManager().getImages());
 
         //nerwork operation
-//        ApplicationDataManager.getInstance().getNetworkMonitor().pushArtical(artical);
+//        App.getInstance().getNetworkMonitor().pushArtical(artical);
         EditorDataManager.getInstance().getNetworkManager().uploadArtical()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(ApplicationDataManager.getInstance().getNetworkMonitor().getUploadArticalObserver(artical));
+                .subscribe(App.getInstance().getNetworkMonitor().getUploadArticalObserver(artical));
 
     }
 
@@ -222,7 +220,7 @@ public class ArticalManager {
 
         artical.finished = 0;
         save(title,html);
-        ApplicationDataManager.getInstance().getRecordDataManager().saveTempArtical(artical);
+        App.getInstance().getRecordDataManager().saveTempArtical(artical);
 
         saveToDatabase();
 
@@ -253,7 +251,7 @@ public class ArticalManager {
         setHtmlTimeStamp(df.format(new Date()));
         if(artical.locationDesc!=null)
             setHtmlLocation(artical.locationDesc);
-        setHtmlAutohrName(ApplicationDataManager.getInstance().getUserManager().getNickName());
+        setHtmlAutohrName(App.getInstance().getUserManager().getNickName());
         setHtmlTitle(artical.title);
         setHtmlType(artical.articalType);
 
@@ -261,7 +259,7 @@ public class ArticalManager {
         if(artical.imageUri!=null)
             setHtmlImage(artical.imageUri);
         setHtmlLocationIcon(FoundationManager.LOCATION_ICON_URL);
-        setHtmlAuthorIcon(ApplicationDataManager.getInstance().getUserManager().getIconPath());
+        setHtmlAuthorIcon(App.getInstance().getUserManager().getIconPath());
 
 //        setHtmlArticalHref("");
 

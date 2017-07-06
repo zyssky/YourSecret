@@ -2,7 +2,6 @@ package com.example.administrator.yoursecret.Service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -11,7 +10,6 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 
 public class LocationService extends Service implements AMapLocationListener{
 

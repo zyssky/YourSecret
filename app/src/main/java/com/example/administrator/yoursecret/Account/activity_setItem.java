@@ -1,7 +1,6 @@
 package com.example.administrator.yoursecret.Account;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,16 +9,13 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Entity.UserResponse;
-import com.example.administrator.yoursecret.Home.HomeActivity;
 import com.example.administrator.yoursecret.R;
 
 import io.reactivex.Observer;
@@ -76,7 +72,7 @@ public class activity_setItem extends Activity {
 
                 }
                 else {
-                    ApplicationDataManager.getInstance().getNetworkManager().modify(nic,null )
+                    App.getInstance().getNetworkManager().modify(nic,null )
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Observer<UserResponse>() {
@@ -89,7 +85,7 @@ public class activity_setItem extends Activity {
                                 public void onNext(@NonNull UserResponse userResponse) {
 
                                     if (userResponse.code == 200) {
-                                        UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
+                                        UserManager usermanager = App.getInstance().getUserManager();
                                         usermanager.setNickName(nic);
                                         Toast.makeText(activity_setItem.this, "修改成功", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent();

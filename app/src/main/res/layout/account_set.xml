@@ -55,11 +55,12 @@
 
                     <ImageView
                         android:id="@+id/touxiang2"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="70dp"
+                        android:layout_gravity="center|left"
+                        android:layout_height="70dp"
                         android:background="@null"
                         android:src="@drawable/ic_default_user"
-                        android:layout_marginLeft="80dp"/>
+                        android:layout_marginLeft="50dp"/>
 
 
                 </LinearLayout>
@@ -93,11 +94,11 @@
                         android:id="@+id/set_basic_nic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="85dp"
+                        android:layout_marginLeft="55dp"
                         android:text="haha"
                         android:maxLines="1"
                         android:textColor="#000"
-                        android:textSize="12sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
 
@@ -128,10 +129,9 @@
                         android:id="@+id/set_basic_acc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="85dp"
-                        android:text="13662456616"
+                        android:layout_marginLeft="55dp"
                         android:textColor="#000"
-                        android:textSize="12sp" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 

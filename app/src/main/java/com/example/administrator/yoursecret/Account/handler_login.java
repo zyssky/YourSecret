@@ -1,18 +1,15 @@
 package com.example.administrator.yoursecret.Account;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Entity.UserResponse;
 import com.example.administrator.yoursecret.Home.HomeActivity;
-import com.example.administrator.yoursecret.Login.LoginHandler;
-import com.example.administrator.yoursecret.Login.WaitingActivity;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FunctionUtils;
@@ -51,8 +48,8 @@ public class handler_login {
             String password = bundle.getString(AppContants.PASSWORD);
             String identifier = FunctionUtils.getSHA256String(account+password);
             Log.d(TAG, "onLogin: "+account+","+password+","+identifier);
-            ApplicationDataManager.getInstance().getUserManager().setTempPhoneNum(account);
-            ApplicationDataManager.getInstance().getNetworkManager().login(account,password)
+            App.getInstance().getUserManager().setTempPhoneNum(account);
+            App.getInstance().getNetworkManager().login(account,password)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<UserResponse>() {
@@ -64,28 +61,29 @@ public class handler_login {
                         @Override
                         public void onNext(@NonNull UserResponse userResponse) {
                             if(userResponse.code == 200){
-                                UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
+                                UserManager usermanager = App.getInstance().getUserManager();
                                 usermanager.savePhoneNum();
                                 usermanager.setNickName(userResponse.nickName);
                                 usermanager.setIconPath(userResponse.userIconPath);
                                 usermanager.setToken(userResponse.token);
 
-                                Toast.makeText(activity_login.Instance,"登录成功",Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(activity_login.Instance,HomeActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                Toast.makeText(LoginActivity.Instance,"登录成功",Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.Instance,HomeActivity.class);
+                                App.getInstance().refresh();
+//                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 //                                intent.putExtra("page",4);
-                               activity_login.Instance.startActivity(intent);
+                               LoginActivity.Instance.startActivity(intent);
 
 
 
-                                Intent intent1 = new Intent(context, HomeActivity.class);
-                                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"登录成功",Toast.LENGTH_SHORT).show();
-                                context.startActivity(intent1);
+//                                Intent intent1 = new Intent(context, HomeActivity.class);
+//                                Toast.makeText(App.getInstance().getAppContext(),"登录成功",Toast.LENGTH_SHORT).show();
+//                                context.startActivity(intent1);
 
 
                             }
                           else {
-                                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"账号不存在或者密码错误",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(App.getInstance().getAppContext(),"账号不存在或者密码错误",Toast.LENGTH_SHORT).show();
                             }
 
                           /*  Intent intent = new Intent(context, WaitingActivity.class);*/
@@ -136,7 +134,7 @@ public class handler_login {
             String identifier = FunctionUtils.getSHA256String(account+password);
             final String nickname = bundle.getString(AppContants.NICKNAME);
             Log.d(TAG, "onLogin: "+account+","+password+","+identifier);
-            ApplicationDataManager.getInstance().getNetworkManager().register(account,password,nickname)
+            App.getInstance().getNetworkManager().register(account,password,nickname)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<UserResponse>() {
@@ -150,19 +148,19 @@ public class handler_login {
 
                             if(userResponse.code == 200)
                             {
-                               /* ApplicationDataManager.getInstance().getUserManager().setNickName(nickname);
-                                ApplicationDataManager.getInstance().getUserManager().setPhoneNum(account);*/
-                            Intent intent = new Intent(context, activity_login.class);
+                               /* App.getInstance().getUserManager().setNickName(nickname);
+                                App.getInstance().getUserManager().setPhoneNum(account);*/
+                            Intent intent = new Intent(context, LoginActivity.class);
                             intent.putExtra(AppContants.ACCOUNT, bundle.getString(AppContants.ACCOUNT));
                             intent.putExtra(AppContants.TYPE, AppContants.LOGIN);
                             intent.putExtra(AppContants.PASSWORD, bundle.getString(AppContants.PASSWORD));
-                                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"注册成功",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(App.getInstance().getAppContext(),"注册成功",Toast.LENGTH_SHORT).show();
                             context.startActivity(intent);
 
 
                             }
                             else{
-                                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"账号已存在",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(App.getInstance().getAppContext(),"账号已存在",Toast.LENGTH_SHORT).show();
                             }
 
                         }

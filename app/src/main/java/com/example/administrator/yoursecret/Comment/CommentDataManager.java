@@ -3,7 +3,7 @@ package com.example.administrator.yoursecret.Comment;
 import android.util.Log;
 
 import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.Entity.Comment;
 
 import java.util.ArrayList;
@@ -36,15 +36,18 @@ public class CommentDataManager {
         instance = null;
     }
 
-    private OnHasCommentsListener listener;
-
-    public void setListener(OnHasCommentsListener listener){
-        this.listener = listener;
-    }
 
     private List<Comment> datas;
 
     private CommentsAdapter adapter;
+
+    private CommentObserver mObserver;
+
+
+    public void setObserver(CommentObserver observer){
+        mObserver = observer;
+    }
+
     public CommentsAdapter getAdapter(){
         if(adapter == null){
             adapter = new CommentsAdapter();
@@ -60,74 +63,93 @@ public class CommentDataManager {
         return datas;
     }
 
-    public void loadComments(){
-//        if(getDatas().size()>0){
-//            return;
-//        }
 
-        if(ApplicationDataManager.getInstance().getUserManager().hasLogin()) {
-            String authorId = ApplicationDataManager.getInstance().getUserManager().getPhoneNum();
+    private void updateHint(){
+        if(datas.isEmpty()){
+            mObserver.showNoCommentHint();
+        }
+        else{
+            mObserver.hideNoCommentHint();
+        }
+    }
+
+    public void loadComments(){
+
+        final Observer<List<Comment>> observerNetwork = new Observer<List<Comment>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                Log.d(TAG, "onSubscribe: ");
+            }
+
+            @Override
+            public void onNext(@NonNull List<Comment> comments) {
+                datas.addAll(0,comments);
+                if(datas.size()>0){
+                    AppDatabaseManager.addComments(comments);
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                updateHint();
+
+                Log.d(TAG, "onError: ");
+
+            }
+
+            @Override
+            public void onComplete() {
+
+                updateHint();
+
+                adapter.notifyDataSetChanged();
+                Log.d(TAG, "onComplete: ");
+            }
+        };
+
+        Observer<List<Comment>> observerDatabase = new Observer<List<Comment>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                Log.d(TAG, "onSubscribe: ");
+            }
+
+            @Override
+            public void onNext(@NonNull List<Comment> comments) {
+                datas.addAll(comments);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                updateHint();
+                Log.d(TAG, "onError: ");
+            }
+
+            @Override
+            public void onComplete() {
+                updateHint();
+
+                String lastDate = "0";
+                if(!datas.isEmpty()){
+                    lastDate = ""+datas.get(0).date;
+                }
+                App.getInstance().getNetworkManager().getUserComments(lastDate)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observerNetwork);
+            }
+        };
+
+
+        if(App.getInstance().getUserManager().hasLogin()) {
+            String authorId = App.getInstance().getUserManager().getPhoneNum();
             AppDatabaseManager.getComments(authorId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<List<Comment>>() {
-                        @Override
-                        public void onSubscribe(@NonNull Disposable d) {
-                            Log.d(TAG, "onSubscribe: ");
-                        }
-
-                        @Override
-                        public void onNext(@NonNull List<Comment> comments) {
-                            datas.addAll(comments);
-
-                        }
-
-                        @Override
-                        public void onError(@NonNull Throwable e) {
-                            Log.d(TAG, "onError: ");
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            String lastDate = "0";
-                            if(!datas.isEmpty()){
-                                lastDate = ""+datas.get(0).date;
-                                listener.onUIChange();
-                            }
-                            ApplicationDataManager.getInstance().getNetworkManager().getUserComments(lastDate)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(new Observer<List<Comment>>() {
-                                        @Override
-                                        public void onSubscribe(@NonNull Disposable d) {
-                                            Log.d(TAG, "onSubscribe: ");
-                                        }
-
-                                        @Override
-                                        public void onNext(@NonNull List<Comment> comments) {
-                                            datas.addAll(0,comments);
-                                            if(datas.size()>0){
-                                                listener.onUIChange();
-                                                AppDatabaseManager.addComments(comments);
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onError(@NonNull Throwable e) {
-                                            Log.d(TAG, "onError: ");
-                                        }
-
-                                        @Override
-                                        public void onComplete() {
-                                            adapter.notifyDataSetChanged();
-                                            Log.d(TAG, "onComplete: ");
-                                        }
-                                    });
-                        }
-                    });
+                    .subscribe(observerDatabase);
         }
-
-
+        else{
+            updateHint();
+        }
     }
 
 

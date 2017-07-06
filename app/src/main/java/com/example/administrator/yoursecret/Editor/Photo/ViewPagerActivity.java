@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.example.administrator.yoursecret.Editor.Photo;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -28,7 +27,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
 import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.Entity.Image;

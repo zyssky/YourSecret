@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,11 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Entity.UserResponse;
-import com.example.administrator.yoursecret.Home.HomeActivity;
 import com.example.administrator.yoursecret.R;
+import com.example.administrator.yoursecret.utils.BitmapUtils;
 import com.example.administrator.yoursecret.utils.FileUtils;
 import com.example.administrator.yoursecret.utils.FunctionUtils;
 import com.example.administrator.yoursecret.utils.GlideImageLoader;
@@ -52,6 +50,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.account_set);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
         initView2();
         super.onCreate(savedInstanceState);
@@ -60,7 +59,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
 
     private void initView2() {
 
-        UserManager user = ApplicationDataManager.getInstance().getUserManager();
+        UserManager user = App.getInstance().getUserManager();
         String nic = user.getNickName();
         String acc = user.getPhoneNum();
         m_zhanghao.setText(acc);
@@ -182,12 +181,12 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
         Bundle extras = picdata.getExtras();
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
-            photo = FunctionUtils.createCircleImage(photo);
+            photo = BitmapUtils.createCircleImage(photo);
 //            Drawable drawable = new BitmapDrawable(photo);
             touxiang.setImageBitmap(photo);
 //            touxiang.setImageDrawable(drawable);
            FileUtils.saveAsPng(savepath,photo);
-            ApplicationDataManager.getInstance().getNetworkManager().modify(null,savepath)
+            App.getInstance().getNetworkManager().modify(null,savepath)
                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<UserResponse>() {
@@ -200,7 +199,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                         public void onNext(@NonNull UserResponse userResponse) {
                             if(userResponse.code==200)
                             {
-                                UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
+                                UserManager usermanager = App.getInstance().getUserManager();
                                 usermanager.setIconLocalPath(savepath);
                                 usermanager.setIconPath(userResponse.userIconPath);
                                 Toast.makeText(activity_setBasic.this,"修改成功",Toast.LENGTH_LONG).show();
@@ -230,7 +229,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
     }
     private Uri getImageUri()
     {
-      UserManager userManager = ApplicationDataManager.getInstance().getUserManager();
+      UserManager userManager = App.getInstance().getUserManager();
         userManager.setIconLocalTempPath(parent+File.separator+"icon.jpg");
         String IconLocalTempath =userManager.getIconLocalTempPath();
         return Uri.fromFile(new File(IconLocalTempath));
@@ -305,12 +304,12 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
             return;
         }else{*/
      initView2();
-    UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
+    UserManager usermanager = App.getInstance().getUserManager();
     if(usermanager.hasLogin()){
         String iconPath = usermanager.getIconPath();
         GlideImageLoader.loadImageNail(this,iconPath,touxiang);
     }
-    /*String filesDir = ApplicationDataManager.getInstance().getUserManager().getIconPath();
+    /*String filesDir = App.getInstance().getUserManager().getIconPath();
     File file = new File(filesDir);
             if(file.exists())
                 

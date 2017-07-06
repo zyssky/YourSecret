@@ -2,7 +2,7 @@ package com.example.administrator.yoursecret.Detail;
 
 import android.util.Log;
 
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Entity.Comment;
 
@@ -40,8 +40,14 @@ public class DetailDataManager {
         instance = null;
     }
 
+
     private List<Comment> list;
     private CommentRecyclerAdapter adapter;
+    private DetailObserver mObserver;
+
+    public void setObserver(DetailObserver observer){
+        mObserver = observer;
+    }
 
     public Artical artical;
 
@@ -94,7 +100,7 @@ public class DetailDataManager {
             }
         };
 
-        ApplicationDataManager.getInstance().getNetworkManager().getComments(0,artical.articalHref)
+        App.getInstance().getNetworkManager().getComments(0,artical.articalHref)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
@@ -109,10 +115,10 @@ public class DetailDataManager {
         comment.articalHref = artical.articalHref;
         comment.authorId = artical.authorId;
         comment.content = content;
-        comment.iconPath = ApplicationDataManager.getInstance().getUserManager().getIconPath();
-        comment.nickName = ApplicationDataManager.getInstance().getUserManager().getNickName();
+        comment.iconPath = App.getInstance().getUserManager().getIconPath();
+        comment.nickName = App.getInstance().getUserManager().getNickName();
         comment.date = new Date().getTime();
-        ApplicationDataManager.getInstance().getNetworkManager().putComment(comment)
+        App.getInstance().getNetworkManager().putComment(comment)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ResponseBody>() {
@@ -147,11 +153,36 @@ public class DetailDataManager {
                 });
     }
 
-    public Observable<List<Comment>> loadMoreComment() {
-        return ApplicationDataManager.getInstance().getNetworkManager().getComments(commentPage++,artical.articalHref);
+    public void loadMoreComment() {
+
+        App.getInstance().getNetworkManager().getComments(commentPage++,artical.articalHref)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Comment>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        mObserver.setLoading();
+                    }
+
+                    @Override
+                    public void onNext(@NonNull List<Comment> list) {
+                        addDataList(list);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        e.printStackTrace();
+                        mObserver.setNormal();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mObserver.setNormal();
+                    }
+                });
     }
 
-    public void addDataList(List<Comment> list){
+    private void addDataList(List<Comment> list){
         this.list.addAll(list);
         adapter.notifyDataSetChanged();
     }

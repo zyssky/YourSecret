@@ -3,8 +3,8 @@ package com.example.administrator.yoursecret.Network;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Entity.ArticalResponse;
 
@@ -55,15 +55,15 @@ public class NetworkMonitor {
                 if(articalResponse.code == 200){
                     artical.imageUri = articalResponse.imageUri;
                     artical.articalHref = articalResponse.articalHref;
-                    Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"上传成功！",Toast.LENGTH_LONG).show();
-                    ApplicationDataManager.getInstance().getRecordDataManager().updateArtical(articalResponse.imageUri,articalResponse.articalHref,articalResponse.articalClientUuid);
+                    Toast.makeText(App.getInstance().getAppContext(),"上传成功！",Toast.LENGTH_LONG).show();
+                    App.getInstance().getRecordDataManager().updateArtical(articalResponse.imageUri,articalResponse.articalHref,articalResponse.articalClientUuid);
                     AppDatabaseManager.updateArtical(articalResponse.imageUri,articalResponse.articalHref,articalResponse.articalClientUuid);
                     AppDatabaseManager.deleteImages(articalResponse.articalClientUuid);
                 }
                 else{
-                    Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"上传失败",Toast.LENGTH_LONG).show();
+                    Toast.makeText(App.getInstance().getAppContext(),"上传失败",Toast.LENGTH_LONG).show();
                     artical.finished = 0;
-                    ApplicationDataManager.getInstance().getRecordDataManager().moveArticalToTemp(artical.uuid);
+                    App.getInstance().getRecordDataManager().moveArticalToTemp(artical.uuid);
                     AppDatabaseManager.updateArtical(artical.finished,artical.uuid);
                 }
             }
@@ -71,10 +71,10 @@ public class NetworkMonitor {
             @Override
             public void onError(@NonNull Throwable e) {
                 e.printStackTrace();
-                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"上传失败",Toast.LENGTH_LONG).show();
+                Toast.makeText(App.getInstance().getAppContext(),"上传失败",Toast.LENGTH_LONG).show();
                 Artical artical = popLatestArtical();
                 artical.finished = 0;
-                ApplicationDataManager.getInstance().getRecordDataManager().moveArticalToTemp(artical.uuid);
+                App.getInstance().getRecordDataManager().moveArticalToTemp(artical.uuid);
                 AppDatabaseManager.updateArtical(artical.finished,artical.uuid);
             }
 
@@ -102,18 +102,19 @@ public class NetworkMonitor {
                 try{
                     result = response.string();
                     if(result!=null && result.equals("success")){
+//                        App.getInstance().getRecordDataManager().deleteFinishedArtical(artical);
                         AppDatabaseManager.deleteArtical(artical);
-                        Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"删除成功！",Toast.LENGTH_LONG).show();
+                        Toast.makeText(App.getInstance().getAppContext(),"删除成功！",Toast.LENGTH_LONG).show();
                         return;
                     }
                     else{
-                        ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(artical);
-                        Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"删除失败！",Toast.LENGTH_LONG).show();
+                        App.getInstance().getRecordDataManager().saveFinishArtical(artical);
+                        Toast.makeText(App.getInstance().getAppContext(),"删除失败！",Toast.LENGTH_LONG).show();
                     }
                 }catch (IOException e){
                     e.printStackTrace();
-                    ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(artical);
-                    Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"删除失败！",Toast.LENGTH_LONG).show();
+                    App.getInstance().getRecordDataManager().saveFinishArtical(artical);
+                    Toast.makeText(App.getInstance().getAppContext(),"删除失败！",Toast.LENGTH_LONG).show();
 
                 }
             }
@@ -121,8 +122,8 @@ public class NetworkMonitor {
             @Override
             public void onError(@NonNull Throwable e) {
                 Artical artical = popLatestArtical();
-                ApplicationDataManager.getInstance().getRecordDataManager().saveFinishArtical(artical);
-                Toast.makeText(ApplicationDataManager.getInstance().getAppContext(),"删除失败！",Toast.LENGTH_LONG).show();
+                App.getInstance().getRecordDataManager().saveFinishArtical(artical);
+                Toast.makeText(App.getInstance().getAppContext(),"删除失败！",Toast.LENGTH_LONG).show();
                 Log.d(TAG, "onError: ");
             }
 

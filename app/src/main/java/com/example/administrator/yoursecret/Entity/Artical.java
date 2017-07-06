@@ -51,7 +51,11 @@ public class Artical implements Parcelable{
 
     public int finished = 0;
 
-    public String html = "<h1>请输入标题......</h1><hr>请输入内容......";
+    public String html = "";
+
+    public int isCache = 0;
+
+    public int isOutside = 0;
 
     @Ignore
     public List<Image> images;

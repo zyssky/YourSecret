@@ -1,12 +1,7 @@
 package com.example.administrator.yoursecret.Recieve.Category;
 
-import android.util.Log;
-import android.widget.Toast;
-
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.Entity.Artical;
-import com.example.administrator.yoursecret.Recieve.OnRefreshChangeListener;
-import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.KV;
 
 import java.text.SimpleDateFormat;
@@ -16,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -52,26 +46,25 @@ public class CategoryDataManager {
 
     private String categoryType;
 
-    private OnRefreshChangeListener listener;
-
     private String newestArticalHref;
 
-    public void setListener(OnRefreshChangeListener listener){
-        this.listener = listener;
+    private CategoryObserver mObserver;
+
+    public void setObserver(CategoryObserver observer){
+        mObserver = observer;
     }
+
 
     public void setCategoryType(String categoryType){
         this.categoryType = categoryType;
-        List<Artical> list = ApplicationDataManager.getInstance().getRecieveDataManager().getDatas().get(categoryType);
+        List<Artical> list = App.getInstance().getRecieveDataManager().getDatas().get(categoryType);
         addArticalList(list);
-
     }
 
     public CategoryAdapter getAdapter() {
         if(adapter==null){
             adapter = new CategoryAdapter();
             adapter.setDatas(getDatas(),getTitles());
-
         }
         return adapter;
     }
@@ -80,16 +73,10 @@ public class CategoryDataManager {
         getAdapter().setDividerColor(color);
     }
 
+
+
     public Artical getArtical(KV kv){
         return datas.get(kv.key).get(kv.value);
-    }
-
-    public void loadMore(Observer<ArrayList<Artical>> observer){
-        ApplicationDataManager.getInstance().getNetworkManager().getArticalsOnType(observer,categoryType, pageNo++);
-    }
-
-    public void refresh(Observer<ArrayList<Artical>> observer){
-        ApplicationDataManager.getInstance().getNetworkManager().getArticalsOnType(observer,categoryType, 0);
     }
 
     private List<String> getTitles() {
@@ -105,6 +92,68 @@ public class CategoryDataManager {
         }
         return datas;
     }
+
+
+
+
+    public void loadMore(){
+        Observer<ArrayList<Artical>> observer = new Observer<ArrayList<Artical>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                mObserver.setFooterLoading();
+            }
+
+            @Override
+            public void onNext(@NonNull ArrayList<Artical> list) {
+                CategoryDataManager.getInstance().addArticalList(list);
+                if(list.isEmpty()){
+                    mObserver.showNoMsgToast();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                e.printStackTrace();
+                mObserver.removeFooterLoading();
+            }
+
+            @Override
+            public void onComplete() {
+                mObserver.removeFooterLoading();
+            }
+        };
+        App.getInstance().getNetworkManager().getArticalsOnType(observer,categoryType, pageNo++);
+    }
+
+    public void refresh(){
+        Observer<ArrayList<Artical>> observer = new Observer<ArrayList<Artical>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull ArrayList<Artical> articals) {
+                CategoryDataManager.getInstance().addNewArticals(articals);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                mObserver.removeLoading();
+                mObserver.showErrorToast();
+            }
+
+            @Override
+            public void onComplete() {
+                mObserver.removeLoading();
+                mObserver.showNewestToast();
+            }
+        };
+
+        App.getInstance().getNetworkManager().getArticalsOnType(observer,categoryType, 0);
+    }
+
+
 
     private void addCatogory(String title){
         getTitles().add(title);
@@ -127,16 +176,6 @@ public class CategoryDataManager {
 
 		adapter.notifyDataSetChanged();
 
-    }
-
-    private boolean loading = false;
-
-    public boolean isLoading() {
-        return loading;
-    }
-
-    public void setLoading(boolean status){
-        loading = status;
     }
 
     public void addNewArticals(ArrayList<Artical> articals) {
