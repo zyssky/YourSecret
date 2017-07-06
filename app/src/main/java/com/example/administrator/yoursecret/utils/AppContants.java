@@ -45,4 +45,7 @@ public class AppContants {
     public static String packageName = "com.example.administrator.yoursecret";
     public static String LASTCOMMENTDATE = "LASTCOMMENTDATE";
     public static String UNREAD = "UNREAD";
+
+    public static String PUSH = "PUSH";
+    public static String LASTREFRESH = "lastRefresh";
 }

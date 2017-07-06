@@ -1,6 +1,7 @@
 package com.example.administrator.yoursecret.AppManager;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
@@ -8,6 +9,7 @@ import com.example.administrator.yoursecret.utils.PropUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Date;
 import java.util.Properties;
 
 import static com.example.administrator.yoursecret.utils.FileUtils.checkSDcard;
@@ -24,13 +26,13 @@ public class FoundationManager {
 
     public static String LOCATION_ICON_URL;
 
+    public static long INTERVAL = 20*60*1000;
+
     public static void setup(Context context){
         Properties properties = PropUtil.loadResProperties(context, R.raw.api);
         String domain = properties.getProperty("domain");
-        String port = properties.getProperty("port");
-        String root = properties.getProperty("root");
 
-        SERVER_BASE_URL = domain+port+root;
+        SERVER_BASE_URL = domain;
 
         APP_ICON_URL = SERVER_BASE_URL+"static/logo.png";
 
@@ -56,5 +58,34 @@ public class FoundationManager {
             return css.getPath();
         }
         return null;
+    }
+
+    public static boolean isAutoPush(){
+        SharedPreferences sharedPreferences = App.getInstance().getAppContext().getSharedPreferences("com.example.administrator.yoursecret",Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(AppContants.PUSH,true);
+    }
+
+    public static void setAutoPush(boolean status){
+        SharedPreferences sharedPreferences = App.getInstance().getAppContext().getSharedPreferences("com.example.administrator.yoursecret",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(AppContants.PUSH,status);
+        editor.commit();
+    }
+
+    public static void setLastRreshDate(Date date){
+        SharedPreferences sharedPreferences = App.getInstance().getAppContext().getSharedPreferences("com.example.administrator.yoursecret",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(AppContants.LASTREFRESH,date.getTime());
+        editor.commit();
+    }
+
+    public static boolean needToRefresh(){
+        SharedPreferences sharedPreferences = App.getInstance().getAppContext().getSharedPreferences("com.example.administrator.yoursecret",Context.MODE_PRIVATE);
+        long last = sharedPreferences.getLong(AppContants.LASTREFRESH,0);
+        if(new Date().getTime() - last > INTERVAL){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

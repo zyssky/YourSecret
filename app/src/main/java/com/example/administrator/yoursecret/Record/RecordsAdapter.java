@@ -106,6 +106,12 @@ public class RecordsAdapter extends MultiRecyclerAdapter<Artical>{
         }
     }
 
+    public void notifyItemChange(){
+//        this.no
+    }
+
+
+
     public static class TitleViewHolder extends RecyclerView.ViewHolder{
         TextView textView ;
 

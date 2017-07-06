@@ -1,13 +1,11 @@
 package com.example.administrator.yoursecret.Discover;
 
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Network.NetworkManager;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import io.reactivex.Observable;
+
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -24,7 +22,7 @@ public class ArticlalGetter {
     public ArticlalGetter(){
 
         //Stretch Articles from Network Service
-        NetworkManager networkManager = ApplicationDataManager.getInstance().getNetworkManager();//Acquire a network manager.
+        NetworkManager networkManager = App.getInstance().getNetworkManager();//Acquire a network manager.
         Observer<ArrayList<Artical>> article_observer = new Observer<ArrayList<Artical>>() {
             //Implement an Observer to get data.
             @Override

@@ -5,17 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
-import android.test.suitebuilder.annotation.LargeTest;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.amap.api.location.AMapLocation;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -25,7 +21,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.Detail.DetailActivity;
 import com.example.administrator.yoursecret.Home.FragmentsHouse;
 import com.example.administrator.yoursecret.Network.NetworkManager;
@@ -54,7 +50,7 @@ public class DiscoverFragment extends Fragment {
     private boolean switcher = true;
     private boolean switcher2 = true;
 
-    NetworkManager networkManager = ApplicationDataManager.getInstance().getNetworkManager();
+    NetworkManager networkManager = App.getInstance().getNetworkManager();
     MapCalculator mapCalculator = new MapCalculator();
 
     public DiscoverFragment() {

@@ -19,14 +19,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.App;
+import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Entity.Comment;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.DividerItemDecoration;
-import com.example.administrator.yoursecret.utils.EndlessOnScrollListener;
-import com.example.administrator.yoursecret.utils.KV;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements DetailObserver {
 
     private RecyclerView recyclerView;
     private WebView webView;
@@ -77,49 +76,57 @@ public class DetailActivity extends AppCompatActivity {
         return true;
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DetailDataManager.onDestroy();
         setContentView(R.layout.content_detail);
+
+        App.getInstance().setAppContext(this.getApplicationContext());
 
         inputLayout = findViewById(R.id.input_layout);
         editText =(EditText) findViewById(R.id.input_text);
         countComment = (TextView) findViewById(R.id.count_comment);
 
         webView = (WebView) findViewById(R.id.content_detail);
+        setupWebview();
+
+        recyclerView = (RecyclerView) findViewById(R.id.comment_recycler);
+        setupRecyclerView();
+
+        DetailDataManager.getInstance().setObserver(this);
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            Artical artical = bundle.getParcelable(AppContants.KEY);
+            if(artical!=null) {
+
+                DetailDataManager.getInstance().artical = artical;
+                webView.loadUrl(artical.articalHref);
+                DetailDataManager.getInstance().getComments();
+            }
+        }
+    }
+
+    private void setupWebview(){
         WebSettings webSettings = webView.getSettings();
         webSettings.setLoadsImagesAutomatically(true);
         webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
-//        webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
-//        webSettings.setAllowFileAccess(true);
-//        webSettings.setBlockNetworkImage(false);
 
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-//                return super.shouldOverrideUrlLoading(view, request);
                 view.loadUrl(request.getUrl().getPath());
                 return true;
             }
 
         });
 
-        Bundle bundle = getIntent().getExtras();
-        if(bundle!=null){
+    }
 
-            Artical artical = bundle.getParcelable(AppContants.KEY);
-            if(artical!=null) {
-                DetailDataManager.getInstance().artical = artical;
-                webView.loadUrl(artical.articalHref);
-                DetailDataManager.getInstance().getComments();
-//                countComment.setText("评论："+artical.commentNum);
-            }
-
-        }
-
-
-
-        recyclerView = (RecyclerView) findViewById(R.id.comment_recycler);
+    private void setupRecyclerView(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST,0,0,0,0));
@@ -129,47 +136,22 @@ public class DetailActivity extends AppCompatActivity {
         adapter.setContext(this);
         adapter.setFooterView(getFooterView());
         recyclerView.setAdapter(adapter);
-
-
     }
 
-    public View getFooterView(){
+    private View getFooterView(){
         footerView = getLayoutInflater().inflate(R.layout.footer_more_comment,recyclerView,false);
         footerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DetailDataManager.getInstance().loadMoreComment()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<List<Comment>>() {
-                            @Override
-                            public void onSubscribe(@NonNull Disposable d) {
-                                setFooter(LOADING);
-                            }
-
-                            @Override
-                            public void onNext(@NonNull List<Comment> list) {
-                                DetailDataManager.getInstance().addDataList(list);
-                            }
-
-                            @Override
-                            public void onError(@NonNull Throwable e) {
-                                e.printStackTrace();
-                                setFooter(NORMAL);
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                setFooter(NORMAL);
-                            }
-                        });
+                DetailDataManager.getInstance().loadMoreComment();
             }
         });
         return footerView;
     }
-    public final static int NORMAL = 0;
-    public final static int LOADING = 1;
-    public void setFooter(int status){
+
+    private final static int NORMAL = 0;
+    private final static int LOADING = 1;
+    private void setFooter(int status){
         switch (status){
             case NORMAL:
                 footerView.findViewById(R.id.normal).setVisibility(View.VISIBLE);
@@ -184,16 +166,28 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void sendComment(View view){
-        if(!ApplicationDataManager.getInstance().getUserManager().hasLogin()){
+        if(!App.getInstance().getUserManager().hasLogin()){
             Toast.makeText(this,"请先登录！",Toast.LENGTH_LONG).show();
             return;
         }
         String content = editText.getText().toString();
         Log.d("DetailActivity ", "sendComment: "+content);
         DetailDataManager.getInstance().sendComment(content);
+
         inputLayout.setVisibility(View.GONE);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
         editText.setText("");
+    }
+
+
+    @Override
+    public void setLoading() {
+        setFooter(LOADING);
+    }
+
+    @Override
+    public void setNormal() {
+        setFooter(NORMAL);
     }
 }

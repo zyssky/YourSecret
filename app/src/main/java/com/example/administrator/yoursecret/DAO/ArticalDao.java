@@ -15,10 +15,10 @@ import java.util.List;
  */
 @Dao
 public interface ArticalDao {
-    @Query("SELECT * FROM artical WHERE finished = 0 AND authorId = :authorId ORDER BY date DESC")
+    @Query("SELECT * FROM artical WHERE finished = 0 AND isCache = 0 AND authorId = :authorId ORDER BY date DESC")
     List<Artical> getAllTempArticals(String authorId);
 
-    @Query("SELECT * FROM artical WHERE finished = 1 AND authorId = :authorId ORDER BY date DESC")
+    @Query("SELECT * FROM artical WHERE finished = 1 AND isCache = 0 AND authorId = :authorId ORDER BY date DESC")
     List<Artical> getAllFinishedArtical(String authorId);
 
     @Insert
@@ -38,4 +38,10 @@ public interface ArticalDao {
 
     @Query("UPDATE artical SET finished = :finished WHERE uuid = :uuid")
     void update(int finished, String uuid);
+
+    @Query("DELETE FROM artical WHERE isCache = 1")
+    void deleteCache();
+
+    @Query("SELECT * FROM artical WHERE isCache = 1 ORDER BY date DESC")
+    List<Artical> getCacheArticals();
 }

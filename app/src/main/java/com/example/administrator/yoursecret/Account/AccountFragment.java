@@ -1,15 +1,12 @@
 package com.example.administrator.yoursecret.Account;
 
-import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,38 +18,26 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Home.FragmentsHouse;
-import com.example.administrator.yoursecret.Login.LoginActivity;
 import com.example.administrator.yoursecret.R;
-import com.example.administrator.yoursecret.utils.AppContants;
-import com.example.administrator.yoursecret.utils.FileUtils;
+import com.example.administrator.yoursecret.Service.PushService;
 import com.example.administrator.yoursecret.utils.GlideImageLoader;
-
-import java.io.File;
-
-import static android.support.v7.appcompat.R.styleable.CompoundButton;
 
 
 public class AccountFragment extends Fragment implements View.OnClickListener , OnCheckedChangeListener{
 
     private LinearLayout basic_set,exit,login,pssword_set;
-    private Switch wifi_set;
+//    private Switch wifi_set;
+    private Switch push_set;
     private ImageView touxiang;
     private TextView m_nickname,m_account;
-    String parent = FileUtils.toRootPath();
-    String savepath = parent+File.separator+"icon.png" ;
+
     public AccountFragment() {
-        // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static AccountFragment newInstance() {
-        AccountFragment fragment = new AccountFragment();
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,42 +54,41 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
         // Inflate the layout for this fragment
 
         View rootView= inflater.inflate(R.layout.fragment_account, container, false);
-        wifi_set=(Switch) rootView.findViewById(R.id.wifi_kaiguan);
+//        wifi_set=(Switch) rootView.findViewById(R.id.wifi_kaiguan);
+        push_set=(Switch) rootView.findViewById(R.id.switch_push);
         pssword_set=(LinearLayout) rootView.findViewById(R.id.set_pas);
         basic_set=(LinearLayout)rootView.findViewById(R.id.basics_set);
         exit=(LinearLayout) rootView.findViewById(R.id.exit1);
         login=(LinearLayout)rootView.findViewById(R.id.denglu) ;
         touxiang=(ImageView)rootView.findViewById(R.id.touxiang1) ;
+        m_account = (TextView) rootView.findViewById(R.id.m_zhanghao) ;
+        m_nickname = (TextView) rootView.findViewById(R.id.m_nickname) ;
+
         basic_set.setOnClickListener(this);
-        wifi_set.setOnCheckedChangeListener(this);
+//        wifi_set.setOnCheckedChangeListener(this);
+        push_set.setOnCheckedChangeListener(this);
         login.setOnClickListener(this);
         exit.setOnClickListener(this);
         pssword_set.setOnClickListener(this);
-        m_account = (TextView) rootView.findViewById(R.id.m_zhanghao) ;
-        m_nickname = (TextView) rootView.findViewById(R.id.m_nickname) ;
+
+
         initView();
 
-//        initView();
         return rootView;
 
 
     }
 
     private void initView() {
-        UserManager user = ApplicationDataManager.getInstance().getUserManager();
+        UserManager user = App.getInstance().getUserManager();
         String nic = user.getNickName();
         String acc = user.getPhoneNum();
         m_account.setText("账号:"+acc);
         m_nickname.setText(nic);
+
+        push_set.setChecked(FoundationManager.isAutoPush());
     }
 
-    /*private void initView() {
-
-
-
-
-
-    }*/
 
 
     @Override
@@ -117,7 +101,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
                 break;
             case R.id.denglu:
                 Intent intent2=new Intent();
-                intent2.setClass(getActivity(),activity_login.class);
+                intent2.setClass(getActivity(),LoginActivity.class);
                 startActivity(intent2 );
                 break;
             case R.id.exit1:
@@ -133,82 +117,59 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
 
 
 
-    private boolean isConnectWithWifi(Context context) {
-         {
-             ConnectivityManager manager =(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-             NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-             if(networkInfo != null && networkInfo.isConnected()){
-                 String type = networkInfo.getTypeName();
-                 return type.equalsIgnoreCase("WIFI");
-             }else{
-                 return false;
-             }
-         }
-     }
+//    private boolean isConnectWithWifi(Context context) {
+//         {
+//             ConnectivityManager manager =(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+//             NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+//             if(networkInfo != null && networkInfo.isConnected()){
+//                 String type = networkInfo.getTypeName();
+//                 return type.equalsIgnoreCase("WIFI");
+//             }else{
+//                 return false;
+//             }
+//         }
+//     }
 
 
 
-    private boolean readImage() {
-        String filesDir;
-        filesDir = FileUtils.toRootPath();
-        /*if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){//判断sd卡是否挂载
-            //路径1：storage/sdcard/Android/data/包名/files
-            filesDir = getApplicationContext().getExternalFilesDir("");
-
-        }else{//手机内部存储
-            //路径：data/data/包名/files
-            filesDir = getApplicationContext().getFilesDir();
-
-        }*/
-        File file = new File(filesDir,"icon.png");
-        if(file.exists()){
-            //存储--->内存
-            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-            touxiang.setImageBitmap(bitmap);
-            return true;
-        }
-        else
-            return false;
-
-    }
     public void onResume() {
         super.onResume();
         initView();
 
-        UserManager usermanager = ApplicationDataManager.getInstance().getUserManager();
+        UserManager usermanager = App.getInstance().getUserManager();
 
 
         if(usermanager.hasLogin()){
             String iconPath = usermanager.getIconPath();
             GlideImageLoader.loadImageNail(this,iconPath,touxiang);
         }
-//            String filesDir = ApplicationDataManager.getInstance().getUserManager().getIconPath();
-//            File file = new File(filesDir);
-//            if(file.exists()){
-//                //存储--->内存
-//                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-//                touxiang.setImageBitmap(bitmap);
-//
-//            }
-//            else{
-//
-//
-//            }
-
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if((isChecked)&&isConnectWithWifi(getContext()))
+        switch (buttonView.getId()){
+//            case R.id.wifi_kaiguan:
+//                if((isChecked)&&isConnectWithWifi(getContext())) {
+//                    FoundationManager.ISUNDER_WIFI="TRUE";
+//                    Toast.makeText(getContext(),(String)FoundationManager.ISUNDER_WIFI,Toast.LENGTH_LONG).show();
+//                }
+//                else {
+//                    FoundationManager.ISUNDER_WIFI="fALSE";
+//                    Toast.makeText(getContext(),FoundationManager.ISUNDER_WIFI,Toast.LENGTH_LONG).show();
+//                }
+//                break;
+            case R.id.switch_push:
+                Log.d("推送测试", "onCheckedChanged: "+isChecked);
+                FoundationManager.setAutoPush(isChecked);
+                Intent intent = new Intent(getActivity(), PushService.class);
+                if(isChecked){
+                    getActivity().startService(intent);
+                }else{
+                    getActivity().stopService(intent);
+                }
+                break;
+        }
 
-        {
-            FoundationManager.ISUNDER_WIFI="TRUE";
-            Toast.makeText(getContext(),(String)FoundationManager.ISUNDER_WIFI,Toast.LENGTH_LONG).show();
-        }
-        else {
-            FoundationManager.ISUNDER_WIFI="fALSE";
-            Toast.makeText(getContext(),FoundationManager.ISUNDER_WIFI,Toast.LENGTH_LONG).show();
-        }
     }
 
 

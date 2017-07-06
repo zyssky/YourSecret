@@ -16,7 +16,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.Editor.Adapter.InsertImageAdapter;
 import com.example.administrator.yoursecret.Editor.Adapter.WriteImagesAdapter;
 import com.example.administrator.yoursecret.Editor.Manager.AdapterManager;
@@ -106,7 +106,7 @@ public class EditorActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if(intent.getExtras()!=null) {
             KV kv = intent.getExtras().getParcelable(AppContants.FROM_RECORD);
-            Artical artical = ApplicationDataManager.getInstance().getRecordDataManager().removeArtical(kv);
+            Artical artical = App.getInstance().getRecordDataManager().removeArtical(kv);
             editor.setHtml(artical.html);
             titleEditor.setText(artical.title);
 
@@ -288,7 +288,7 @@ public class EditorActivity extends AppCompatActivity {
             flag = false;
 
         if(flag){
-            if(!ApplicationDataManager.getInstance().getUserManager().hasLogin()){
+            if(!App.getInstance().getUserManager().hasLogin()){
                 Toast.makeText(context,"请先登录！",Toast.LENGTH_LONG).show();
                 flag = false;
             }

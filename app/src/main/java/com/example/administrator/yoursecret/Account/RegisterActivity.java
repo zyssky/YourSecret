@@ -1,6 +1,5 @@
 package com.example.administrator.yoursecret.Account;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -23,13 +22,14 @@ import com.example.administrator.yoursecret.utils.AppContants;
  * Created by j on 2017/6/19.
  */
 
-public class activity_register extends AppCompatActivity implements View.OnClickListener{
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText r_et_mobile,r_et_password,r_et_password_confirm,r_et_id;
     private ImageView r_iv_show_pwd,r_iv_show_pwd_confirm,r_clean_password,r_clean_password_confirm,r_clean_id,r_clean_phone;
     private Button r_register;
     handler_login RegisterHandler;
     private KeyboardLayout bindingView;
     private ScrollView scrollView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.register);
@@ -73,7 +73,7 @@ public class activity_register extends AppCompatActivity implements View.OnClick
         r_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(activity_register.this,"test",Toast.LENGTH_LONG).show();
+                //Toast.makeText(RegisterActivity.this,"test",Toast.LENGTH_LONG).show();
                 Bundle bundle = new Bundle();
                 bundle.putCharSequence(AppContants.ACCOUNT,r_et_mobile.getText().toString());
                 bundle.putCharSequence(AppContants.PASSWORD,r_et_password.getText().toString());
@@ -103,7 +103,7 @@ public class activity_register extends AppCompatActivity implements View.OnClick
                 }
                 else if(!s.toString().matches("[\\u4e00-\\u9fa5\\w]+")) {
                     String temp = s.toString();
-                    Toast.makeText(activity_register.this, R.string.please_input_limit_acc, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, R.string.please_input_limit_acc, Toast.LENGTH_SHORT).show();
                     s.delete(temp.length() - 1, temp.length());
                     r_et_mobile.setSelection(s.length());
                 }
@@ -132,7 +132,7 @@ public class activity_register extends AppCompatActivity implements View.OnClick
                 }
                 else if(!s.toString().matches("[0-9]+")) {
                     String temp = s.toString();
-                    Toast.makeText(activity_register.this, R.string.please_input_limit_acc, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, R.string.please_input_limit_acc, Toast.LENGTH_SHORT).show();
                     s.delete(temp.length() - 1, temp.length());
                     r_et_mobile.setSelection(s.length());
                 }
@@ -160,7 +160,7 @@ public class activity_register extends AppCompatActivity implements View.OnClick
                     return;
                 if (!s.toString().matches("[A-Za-z0-9]+")) {
                     String temp = s.toString();
-                    Toast.makeText(activity_register.this, R.string.please_input_limit_pwd, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, R.string.please_input_limit_pwd, Toast.LENGTH_SHORT).show();
                     s.delete(temp.length() - 1, temp.length());
                     r_et_password.setSelection(s.length());
                 }
@@ -189,7 +189,7 @@ public class activity_register extends AppCompatActivity implements View.OnClick
                     return;
                 if (!s.toString().matches("[A-Za-z0-9]+")) {
                     String temp = s.toString();
-                    Toast.makeText(activity_register.this, R.string.please_input_limit_pwd, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, R.string.please_input_limit_pwd, Toast.LENGTH_SHORT).show();
                     s.delete(temp.length() - 1, temp.length());
                     r_et_password_confirm.setSelection(s.length());
                 }

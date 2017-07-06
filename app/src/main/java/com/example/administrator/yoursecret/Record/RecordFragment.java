@@ -12,11 +12,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
 import com.example.administrator.yoursecret.Comment.CommentActivity;
 import com.example.administrator.yoursecret.Detail.DetailActivity;
 import com.example.administrator.yoursecret.Editor.EditorActivity;
@@ -38,11 +39,9 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class RecordFragment extends Fragment{
+public class RecordFragment extends Fragment implements RecordObserver{
 
     private Context context;
-
-    private View rootView;
 
     private RecyclerView recordsView;
 
@@ -50,16 +49,8 @@ public class RecordFragment extends Fragment{
 
 
     public RecordFragment() {
-        // Required empty public constructor
     }
 
-
-    // TODO: Rename and change types and number of parameters
-    public static RecordFragment newInstance() {
-        RecordFragment fragment = new RecordFragment();
-
-        return fragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,60 +58,6 @@ public class RecordFragment extends Fragment{
         setHasOptionsMenu(true);
         setRetainInstance(true);
         FragmentsHouse.getInstance().putFragment(RecordFragment.class.getSimpleName(),this);
-
-    }
-
-    public void checkNewComment(){
-        if(!ApplicationDataManager.getInstance().getUserManager().hasUnReadMessage()) {
-            String lastDate = ApplicationDataManager.getInstance().getUserManager().getLastCommentDate();
-            ApplicationDataManager.getInstance().getNetworkManager().getUserComments(lastDate)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<List<Comment>>() {
-                        @Override
-                        public void onSubscribe(@NonNull Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onNext(@NonNull List<Comment> list) {
-                            if(!list.isEmpty()){
-                                AppDatabaseManager.addComments(list);
-                                String date = ""+list.get(0).date;
-                                ApplicationDataManager.getInstance().getUserManager().sethasUnReadMessage(true);
-                                ApplicationDataManager.getInstance().getUserManager().setLastCommentDate(date);
-                            }
-                        }
-
-                        @Override
-                        public void onError(@NonNull Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            if(ApplicationDataManager.getInstance().getUserManager().hasUnReadMessage()){
-                                changeCommentLogo(true);
-                            }
-                            else{
-                                changeCommentLogo(false);
-                            }
-                        }
-                    });
-        }
-        else{
-            changeCommentLogo(true);
-        }
-    }
-
-
-
-    private void changeCommentLogo(boolean status){
-        if(status)
-            commentMsg.setIcon(R.drawable.ic_new_comment_1);
-        else {
-            commentMsg.setIcon(R.drawable.ic_comment_1);
-        }
     }
 
     @Override
@@ -132,9 +69,10 @@ public class RecordFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_record, container, false);
-        recordsView = (RecyclerView) rootView.findViewById(R.id.records_recyclerview);
+        View rootView = inflater.inflate(R.layout.fragment_record, container, false);
 
+        recordsView = (RecyclerView) rootView.findViewById(R.id.records_recyclerview);
+        setupRecordsView();
 
         return rootView;
     }
@@ -142,16 +80,21 @@ public class RecordFragment extends Fragment{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        setHasOptionsMenu(true);
 
+        App.getInstance().getRecordDataManager().setObserver(this);
+
+        App.getInstance().getRecordDataManager().refresh();
+    }
+
+    private void setupRecordsView(){
         recordsView.setLayoutManager(new LinearLayoutManager(getContext()));
-        final RecordsAdapter adapter = ApplicationDataManager.getInstance().getRecordDataManager().getAdapter();
+        final RecordsAdapter adapter = App.getInstance().getRecordDataManager().getAdapter();
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, Object data) {
                 Intent intent = new Intent(context,DetailActivity.class);
                 KV kv= adapter.getLocation(position);
-                Artical artical = ApplicationDataManager.getInstance().getRecordDataManager().getArtical(kv);
+                Artical artical = App.getInstance().getRecordDataManager().getArtical(kv);
                 intent.putExtra(AppContants.KEY,artical);
                 context.startActivity(intent);
             }
@@ -167,12 +110,11 @@ public class RecordFragment extends Fragment{
         });
 
         recordsView.setAdapter(adapter);
+
         recordsView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL_LIST));
-        ItemTouchCallback callback = new ItemTouchCallback(ApplicationDataManager.getInstance().getRecordDataManager().getOnSwipeListener());
+        ItemTouchCallback callback = new ItemTouchCallback(App.getInstance().getRecordDataManager().getOnSwipeListener());
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recordsView);
-
-        ApplicationDataManager.getInstance().getRecordDataManager().refresh();
     }
 
     @Override
@@ -189,18 +131,28 @@ public class RecordFragment extends Fragment{
 
         commentMsg = menu.findItem(R.id.comments);
 
-        checkNewComment();
+        App.getInstance().getRecordDataManager().checkNewComment();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.comments:
-                changeCommentLogo(false);
+                notifyNoMsg();
                 Intent intent = new Intent(context, CommentActivity.class);
                 startActivity(intent);
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void notifyNoMsg() {
+        commentMsg.setIcon(R.drawable.ic_comment_1);
+    }
+
+    @Override
+    public void notifyNewMsg() {
+        commentMsg.setIcon(R.drawable.ic_new_comment_1);
     }
 }

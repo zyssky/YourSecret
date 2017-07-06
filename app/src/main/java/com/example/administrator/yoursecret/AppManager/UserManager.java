@@ -4,13 +4,7 @@ package com.example.administrator.yoursecret.AppManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.administrator.yoursecret.AppManager.FoundationManager;
-import com.example.administrator.yoursecret.Entity.User;
 import com.example.administrator.yoursecret.utils.AppContants;
-import com.example.administrator.yoursecret.utils.FileUtils;
-import com.example.administrator.yoursecret.utils.FunctionUtils;
-
-import java.io.File;
 
 /**
  * Created by Administrator on 2017/6/8.
@@ -36,7 +30,6 @@ public class UserManager {
 
     private String tempPhoneNum;
 
-
     public UserManager(){
         // TODO: 2017/6/19 init the perference from phone local path
 //        this.password = "123456";
@@ -47,7 +40,7 @@ public class UserManager {
 //        this.iconPath = FileUtils.toRootPath()+ File.separator+"test.jpg";
 //        this.iconLocalTempPath = FileUtils.toRootPath()+ File.separator+"test.jpg";
 
-        SharedPreferences sharedPreferences = ApplicationDataManager.getInstance().
+        SharedPreferences sharedPreferences = App.getInstance().
                 getAppContext().getSharedPreferences(AppContants.packageName, Context.MODE_PRIVATE);
         phoneNum = sharedPreferences.getString(AppContants.ACCOUNT,"");
         nickName = sharedPreferences.getString(AppContants.NICKNAME,"");
@@ -106,7 +99,7 @@ public class UserManager {
 
     public void savePhoneNum(){
         this.phoneNum = tempPhoneNum;
-        SharedPreferences sharedPreferences = ApplicationDataManager.getInstance().
+        SharedPreferences sharedPreferences = App.getInstance().
                 getAppContext().getSharedPreferences(AppContants.packageName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(AppContants.ACCOUNT,phoneNum);
@@ -114,7 +107,7 @@ public class UserManager {
     }
 
     public void setNickName(String nickName) {
-        SharedPreferences sharedPreferences = ApplicationDataManager.getInstance().
+        SharedPreferences sharedPreferences = App.getInstance().
                 getAppContext().getSharedPreferences(AppContants.packageName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(AppContants.NICKNAME,nickName);
@@ -123,7 +116,7 @@ public class UserManager {
     }
 
     public void setToken(String token) {
-        SharedPreferences sharedPreferences = ApplicationDataManager.getInstance().
+        SharedPreferences sharedPreferences = App.getInstance().
                 getAppContext().getSharedPreferences(AppContants.packageName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(AppContants.TOKEN,token);
@@ -132,7 +125,7 @@ public class UserManager {
     }
 
     public void setIconPath(String iconPath) {
-        SharedPreferences sharedPreferences = ApplicationDataManager.getInstance().
+        SharedPreferences sharedPreferences = App.getInstance().
                 getAppContext().getSharedPreferences(AppContants.packageName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(AppContants.ICONPATH,iconPath);
@@ -145,7 +138,7 @@ public class UserManager {
     }
 
     public void setLastCommentDate(String str){
-        SharedPreferences sharedPreferences = ApplicationDataManager.getInstance().
+        SharedPreferences sharedPreferences = App.getInstance().
                 getAppContext().getSharedPreferences(AppContants.packageName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(AppContants.LASTCOMMENTDATE,str);
@@ -158,7 +151,7 @@ public class UserManager {
     }
 
     public void sethasUnReadMessage(boolean b) {
-        SharedPreferences sharedPreferences = ApplicationDataManager.getInstance().
+        SharedPreferences sharedPreferences = App.getInstance().
                 getAppContext().getSharedPreferences(AppContants.packageName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(AppContants.UNREAD,b);

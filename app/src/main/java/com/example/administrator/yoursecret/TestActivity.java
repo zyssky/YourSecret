@@ -13,13 +13,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.administrator.yoursecret.Home.HomeActivity;
-import com.example.administrator.yoursecret.client.ServiceManager;
 
 public class TestActivity extends AppCompatActivity {
 
     final int MY_PERMISSION_READ_PHONE_STATE = 0;
-
-    ServiceManager serviceManager;
 
     private Activity activity;
 
@@ -37,33 +34,6 @@ public class TestActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//
-//        serviceManager = new ServiceManager(this);
-//
-//        //request the permission
-//        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-//                != PackageManager.PERMISSION_GRANTED){
-//            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_PHONE_STATE}
-//                    ,MY_PERMISSION_READ_PHONE_STATE);
-//        }
-//
-//        // Start the service
-//
-//        serviceManager.setNotificationIcon(android.R.drawable.sym_def_app_icon);
-//        serviceManager.startService();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case MY_PERMISSION_READ_PHONE_STATE:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    serviceManager.setDeviceIdByDevice();
-                }
-                else{
-                    serviceManager.setDeviceIdByRandom();
-                }
-        }
-    }
 }

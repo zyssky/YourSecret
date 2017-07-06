@@ -34,9 +34,6 @@ public interface ArticalService {
     @POST("Rest/artical")
     Call<ResponseBody> test(@Part("data") String data);
 
-    @GET("Rest/artical")
-    Observable<Map<String,ArrayList<Artical>>> getArticals();//String: 类别
-
     @POST("Rest/artical/near")
     Observable<Map<String,ArrayList<Artical>>> getArticals(@Body RequestBody body);
 
@@ -46,12 +43,14 @@ public interface ArticalService {
     @POST("Rest/artical/map")
     Observable<ArrayList<Artical>> getArticalsOnMap(@Body RequestBody body);
 
-    @POST("Rest/artical")
+    @POST("Rest/artical/user")
     Observable<List<Artical>> getUserArticals(@Body RequestBody body);
 
     @POST("Rest/artical/delete")
     Observable<ResponseBody> deleteArtical(@Body RequestBody body);
 
+    @POST("Rest/artical/push")
+    Observable<ArrayList<Artical>> getPushArticals(@Body RequestBody body);
 
 
 }

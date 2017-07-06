@@ -53,9 +53,10 @@
                     <ImageView
                         android:id="@+id/touxiang1"
                         android:background="@null"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginLeft="5dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center|left"
+                        android:layout_marginLeft="10dp"
                         android:src="@drawable/ic_default_user" />
 
                     <LinearLayout
@@ -70,7 +71,8 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="20dp"
                             android:maxLines="1"
-                            android:text="mkd"
+                            android:text="zyssky"
+                            android:textSize="18dp"
                             android:textColor="#000" />
 
                         <TextView
@@ -79,7 +81,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="5dp"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:text="账号：" />
                     </LinearLayout>
 
@@ -132,14 +134,50 @@
                 </LinearLayout>
 
 
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="10dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:background="#f0f0f0" />-->
+
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/wifi"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="55dp"-->
+                    <!--android:background="@drawable/bg_btn_account_selected"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:paddingLeft="13dp">-->
+
+                    <!--<ImageView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginRight="15dp"-->
+                        <!--android:src="@drawable/ic_wifi_black_24dp" />-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="仅wifi下上传"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="18sp" />-->
+
+                    <!--<Switch-->
+                        <!--android:id="@+id/wifi_kaiguan"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginLeft="0dp" />-->
+                <!--</LinearLayout>-->
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
                     android:layout_marginTop="5dp"
                     android:background="#f0f0f0" />
 
+
                 <LinearLayout
-                    android:id="@+id/wifi"
+                    android:id="@+id/set_receive"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:background="@drawable/bg_btn_account_selected"
@@ -151,20 +189,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
-                        android:src="@drawable/ic_wifi_black_24dp" />
+                        android:src="@drawable/ic_push" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="仅wifi下上传"
+                        android:text="推送消息"
                         android:textColor="#000"
                         android:textSize="18sp" />
 
                     <Switch
-                        android:id="@+id/wifi_kaiguan"
+                        android:id="@+id/switch_push"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="0dp" />
+
                 </LinearLayout>
 
                 <View
@@ -196,6 +235,7 @@
                         android:textColor="#000"
                         android:textSize="18sp" />
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="10dp"

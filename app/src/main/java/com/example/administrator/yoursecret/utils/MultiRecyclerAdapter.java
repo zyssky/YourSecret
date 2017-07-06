@@ -48,18 +48,6 @@ public abstract class MultiRecyclerAdapter<T> extends RecyclerView.Adapter<Recyc
         notifyDataSetChanged();
     }
 
-//    public void addDatasOnTitle(String title , List<T> itemDatas){
-//        for (int i = 0; i < titles.size(); i++) {
-//            if(title.equals(titles.get(i))){
-//                datas.get(title).addAll(itemDatas);
-//            }
-//        }
-//        if(!datas.containsKey(title)){
-//            datas.put(title,itemDatas);
-//        }
-//        notifyDataSetChanged();
-//    }
-
     public Object getDataAt(int position) {
         position = position - hasFooter - hasHeader;
         for (int i = 0; i < titles.size(); i++) {

@@ -5,22 +5,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
-import com.example.administrator.yoursecret.Entity.Comment;
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.DividerItemDecoration;
 
-import java.util.List;
-
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-
-public class CommentActivity extends AppCompatActivity implements OnHasCommentsListener{
+public class CommentActivity extends AppCompatActivity implements CommentObserver{
     private RecyclerView recyclerView;
     private View view;
 
@@ -30,18 +20,23 @@ public class CommentActivity extends AppCompatActivity implements OnHasCommentsL
         setContentView(R.layout.activity_comment);
 
         view = findViewById(R.id.default_picture);
+
         recyclerView = (RecyclerView) findViewById(R.id.user_comments);
+        setupRecyclerView();
+
+        CommentDataManager.getInstance().setObserver(this);
+        CommentDataManager.getInstance().loadComments();
+
+        App.getInstance().getUserManager().sethasUnReadMessage(false);
+    }
+
+    private void setupRecyclerView(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST,0,0,0,0));
         CommentsAdapter adapter = CommentDataManager.getInstance().getAdapter();
         adapter.setContext(this);
         recyclerView.setAdapter(adapter);
-
-        CommentDataManager.getInstance().setListener(this);
-        CommentDataManager.getInstance().loadComments();
-
-        ApplicationDataManager.getInstance().getUserManager().sethasUnReadMessage(false);
     }
 
     @Override
@@ -51,11 +46,13 @@ public class CommentActivity extends AppCompatActivity implements OnHasCommentsL
     }
 
     @Override
-    public void onUIChange() {
+    public void showNoCommentHint() {
+        view.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideNoCommentHint() {
         view.setVisibility(View.GONE);
     }
 }
 
- interface OnHasCommentsListener{
-    void onUIChange();
-}

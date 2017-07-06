@@ -1,8 +1,6 @@
 package com.example.administrator.yoursecret.Home;
 
-import android.arch.persistence.room.Insert;
 import android.content.Intent;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -13,8 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.administrator.yoursecret.Account.AccountFragment;
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
-import com.example.administrator.yoursecret.Comment.CommentActivity;
+import com.example.administrator.yoursecret.AppManager.App;
+import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.Discover.DiscoverFragment;
 import com.example.administrator.yoursecret.Editor.EditorActivity;
 import com.example.administrator.yoursecret.Network.NetworkManager;
@@ -25,12 +23,9 @@ import com.example.administrator.yoursecret.Recieve.RecieveFragment;
 import com.example.administrator.yoursecret.Record.RecordDataManager;
 import com.example.administrator.yoursecret.AppManager.UserManager;
 import com.example.administrator.yoursecret.Record.RecordFragment;
-import com.example.administrator.yoursecret.TestMyActivity;
+import com.example.administrator.yoursecret.Service.PushService;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FunctionUtils;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class HomeActivity extends AppCompatActivity{
 
@@ -77,7 +72,13 @@ public class HomeActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        initManager();
+
+        App.getInstance().setAppContext(getApplicationContext());
+
+        if(FoundationManager.isAutoPush()){
+            Intent intent = new Intent(this, PushService.class);
+            startService(intent);
+        }
 
         fragments = FragmentsHouse.getInstance();
 
@@ -125,14 +126,6 @@ public class HomeActivity extends AppCompatActivity{
         outState.putString(AppContants.KEY,curFragmentPos);
     }
 
-    private void initManager(){
-        ApplicationDataManager.getInstance().setAppContext(getApplicationContext());
-        ApplicationDataManager.getInstance().setUserManager(new UserManager());
-        ApplicationDataManager.getInstance().setRecordDataManager(new RecordDataManager());
-        ApplicationDataManager.getInstance().setRecieveDataManager(new RecieveDataManager());
-        ApplicationDataManager.getInstance().setNetworkManager(new NetworkManager());
-        ApplicationDataManager.getInstance().setNetworkMonitor(new NetworkMonitor());
-    }
 
     public void switchContent(Fragment targetFragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -151,7 +144,7 @@ public class HomeActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ApplicationDataManager.onDestroy();
+//        App.onDestroy();
     }
 }
 

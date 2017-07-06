@@ -1,12 +1,9 @@
 package com.example.administrator.yoursecret.AppManager;
 
-import android.util.Log;
-
 import com.example.administrator.yoursecret.DAO.CommentDao;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Entity.Comment;
 import com.example.administrator.yoursecret.Entity.Image;
-import com.example.administrator.yoursecret.Entity.User;
 
 import java.util.List;
 
@@ -22,7 +19,7 @@ public class AppDatabaseManager {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ApplicationDataManager.getInstance().getAppDatabase().articalDao().insert(artical);
+                App.getInstance().getAppDatabase().articalDao().insert(artical);
             }
         });
         thread.start();
@@ -32,7 +29,7 @@ public class AppDatabaseManager {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ApplicationDataManager.getInstance().getAppDatabase().articalDao().update(artical);
+                App.getInstance().getAppDatabase().articalDao().update(artical);
             }
         });
         thread.start();
@@ -42,7 +39,7 @@ public class AppDatabaseManager {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ApplicationDataManager.getInstance().getAppDatabase().articalDao().update(imageUri,articalHref,uuid);
+                App.getInstance().getAppDatabase().articalDao().update(imageUri,articalHref,uuid);
             }
         });
         thread.start();
@@ -52,7 +49,7 @@ public class AppDatabaseManager {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ApplicationDataManager.getInstance().getAppDatabase().articalDao().update(finished,uuid);
+                App.getInstance().getAppDatabase().articalDao().update(finished,uuid);
             }
         });
         thread.start();
@@ -62,8 +59,8 @@ public class AppDatabaseManager {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ApplicationDataManager.getInstance().getAppDatabase().articalDao().delete(uuid);
-                ApplicationDataManager.getInstance().getAppDatabase().imageDao().deleteImages(uuid);
+                App.getInstance().getAppDatabase().articalDao().delete(uuid);
+                App.getInstance().getAppDatabase().imageDao().deleteImages(uuid);
             }
         });
         thread.start();
@@ -73,11 +70,52 @@ public class AppDatabaseManager {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ApplicationDataManager.getInstance().getAppDatabase().articalDao().deleteByHref(artical.articalHref);
+                App.getInstance().getAppDatabase().articalDao().deleteByHref(artical.articalHref);
             }
         });
         thread.start();
 
+    }
+
+//    public static void deleteCache(){
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                App.getInstance().getAppDatabase().articalDao().deleteCache();
+//            }
+//        });
+//        thread.start();
+//    }
+
+    public static Observable<List<Artical>> getCacheArticals(){
+        Observable<List<Artical>> observable = new Observable<List<Artical>>() {
+            @Override
+            protected void subscribeActual(Observer<? super List<Artical>> observer) {
+                try {
+                    List<Artical> list = App.getInstance().getAppDatabase().articalDao().getCacheArticals();
+                    observer.onNext(list);
+                }catch (Exception e){
+                    observer.onError(e);
+                }
+                observer.onComplete();
+            }
+        };
+        return observable;
+    }
+
+    public static void addCacheArticals(final List<Artical> articals){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                App.getInstance().getAppDatabase().articalDao().deleteCache();
+                for (Artical artical :
+                        articals) {
+                    artical.isCache = 1;
+                    App.getInstance().getAppDatabase().articalDao().insert(artical);
+                }
+            }
+        });
+        thread.start();
     }
 
     public static Observable<List<Artical>> getFinishedArticals(){
@@ -85,8 +123,8 @@ public class AppDatabaseManager {
             @Override
             protected void subscribeActual(Observer<? super List<Artical>> observer) {
                 try {
-                    String authorID = ApplicationDataManager.getInstance().getUserManager().getPhoneNum();
-                    List<Artical> list = ApplicationDataManager.getInstance().getAppDatabase().articalDao().getAllFinishedArtical(authorID);
+                    String authorID = App.getInstance().getUserManager().getPhoneNum();
+                    List<Artical> list = App.getInstance().getAppDatabase().articalDao().getAllFinishedArtical(authorID);
                     observer.onNext(list);
                 }catch (Exception e){
                     observer.onError(e);
@@ -102,8 +140,8 @@ public class AppDatabaseManager {
             @Override
             protected void subscribeActual(Observer<? super List<Artical>> observer) {
                 try {
-                    String authorID = ApplicationDataManager.getInstance().getUserManager().getPhoneNum();
-                    List<Artical> list = ApplicationDataManager.getInstance().getAppDatabase().articalDao().getAllTempArticals(authorID);
+                    String authorID = App.getInstance().getUserManager().getPhoneNum();
+                    List<Artical> list = App.getInstance().getAppDatabase().articalDao().getAllTempArticals(authorID);
                     observer.onNext(list);
                 }catch (Exception e){
                     observer.onError(e);
@@ -119,7 +157,7 @@ public class AppDatabaseManager {
             @Override
             protected void subscribeActual(Observer<? super List<Image>> observer) {
                 try {
-                    List<Image> list = ApplicationDataManager.getInstance().getAppDatabase().imageDao().getImages(uuid);
+                    List<Image> list = App.getInstance().getAppDatabase().imageDao().getImages(uuid);
                     observer.onNext(list);
                 }catch (Exception e){
                     observer.onError(e);
@@ -134,7 +172,7 @@ public class AppDatabaseManager {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ApplicationDataManager.getInstance().getAppDatabase().imageDao().deleteImages(uuid);
+                App.getInstance().getAppDatabase().imageDao().deleteImages(uuid);
             }
         });
         thread.start();
@@ -147,7 +185,7 @@ public class AppDatabaseManager {
                 for (Image image :
                         images) {
                     if(image.isNew)
-                        ApplicationDataManager.getInstance().getAppDatabase().imageDao().insert(image);
+                        App.getInstance().getAppDatabase().imageDao().insert(image);
                 }
             }
         });
@@ -158,7 +196,7 @@ public class AppDatabaseManager {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ApplicationDataManager.getInstance().getAppDatabase().imageDao().deleteImage(image);
+                App.getInstance().getAppDatabase().imageDao().deleteImage(image);
             }
         });
         thread.start();
@@ -171,7 +209,7 @@ public class AppDatabaseManager {
             public void run() {
                 for (Artical artical : articals) {
                     artical.finished = 1;
-                    ApplicationDataManager.getInstance().getAppDatabase().articalDao().insert(artical);
+                    App.getInstance().getAppDatabase().articalDao().insert(artical);
                 }
             }
         });
@@ -182,7 +220,7 @@ public class AppDatabaseManager {
         Observable<List<Comment>> observable = new Observable<List<Comment>>() {
             @Override
             protected void subscribeActual(Observer<? super List<Comment>> observer) {
-                List<Comment> list = ApplicationDataManager.getInstance().getAppDatabase().commentDao().getComments(authorId);
+                List<Comment> list = App.getInstance().getAppDatabase().commentDao().getComments(authorId);
                 observer.onNext(list);
                 observer.onComplete();
             }
@@ -194,7 +232,7 @@ public class AppDatabaseManager {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                CommentDao dao = ApplicationDataManager.getInstance().getAppDatabase().commentDao();
+                CommentDao dao = App.getInstance().getAppDatabase().commentDao();
                 for (Comment c :
                         list) {
                     dao.addComment(c);

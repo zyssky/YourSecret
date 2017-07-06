@@ -1,7 +1,6 @@
 package com.example.administrator.yoursecret.Account;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -14,7 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.administrator.yoursecret.AppManager.ApplicationDataManager;
+import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.Entity.UserResponse;
 import com.example.administrator.yoursecret.R;
 
@@ -78,7 +77,7 @@ public class activity_set_pas extends Activity  implements View.OnClickListener{
                 else if(old_password.length()!=0&&new_password.length()!=0) {
 
 
-                    ApplicationDataManager.getInstance().getNetworkManager().modifyPassword(old_password, new_password)
+                    App.getInstance().getNetworkManager().modifyPassword(old_password, new_password)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Observer<UserResponse>() {
