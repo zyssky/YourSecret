@@ -2,6 +2,7 @@ package com.example.administrator.yoursecret.Module.Discover;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
@@ -12,6 +13,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -38,7 +43,7 @@ import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 
-public class DiscoverFragment extends Fragment {
+public class DiscoverFragment extends Fragment{
 
     private MapView mapView;
     public ArrayList<Artical> Articals;
@@ -46,6 +51,8 @@ public class DiscoverFragment extends Fragment {
     private int LoadPageCounter = 0;
     private List<LatLng> PositionList = new ArrayList<>();
     private AMap aMap;
+    public AMapLocationClientOption mapLocationClientOption = new AMapLocationClientOption();
+    public AMapLocationClient aMapLocationClient = new AMapLocationClient(this.getContext());
     private Map<Marker, Artical> Marker_Mapper = new ArrayMap<>();
     private boolean switcher = true;
     private boolean switcher2 = true;
@@ -97,15 +104,14 @@ public class DiscoverFragment extends Fragment {
 
             @Override
             public void onComplete() {
-                System.out.println("Transmit complete.");
-                for(Artical artical : Articals){
-                    System.out.println(artical.articalHref);
-                }
-                showCenter();
+//                System.out.println("Transmit complete.");
+//                for(Artical artical : Articals){
+//                    System.out.println(artical.articalHref);
+//                }
+//                showCenter();
                 createMarker();
                 setInfoWindow();
                 setInfoWindowClickListener();
-                setCameraChangeListener();
                 //self-crafted marker.
                 setLoactionProperties();
                 pivot = 1;
@@ -121,6 +127,7 @@ public class DiscoverFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 System.out.println("ChangeGroup Clicked!");
+                switcher2 = true;
                 networkManager.getArticalsOnMap(article_observer,LoadPageCounter);
             }
         });
@@ -129,6 +136,8 @@ public class DiscoverFragment extends Fragment {
         aMap = mapView.getMap();
         setInitCameraChangeListener();
         initLocation();
+
+//        setLocationSolver();
 //        Double distanceTest = mapCalculator.GetDistance(113.4062218666,23.0484004090,113.4073430300,23.0466184288);
 //        System.out.println("[*]Distance-Test:" );
 //        System.out.println(distanceTest);
@@ -146,7 +155,10 @@ public class DiscoverFragment extends Fragment {
         aMap.moveCamera(CameraUpdateFactory.zoomTo(16.5f)); //properly set to 15-17.
         MyLocationStyle myLocationStyle;
         myLocationStyle = new MyLocationStyle();
+        myLocationStyle.radiusFillColor(Color.argb(50,100,0,0));
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
+        aMap.setMyLocationStyle(myLocationStyle);
+        aMap.setMyLocationEnabled(true);
     }
 
 
@@ -155,6 +167,7 @@ public class DiscoverFragment extends Fragment {
         aMap.moveCamera(CameraUpdateFactory.zoomTo(16.5f)); //properly set to 15-17.
         MyLocationStyle myLocationStyle;
         myLocationStyle = new MyLocationStyle();
+        myLocationStyle.radiusFillColor(Color.argb(50,100,0,0));
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
 //        myLocationStyle.interval(10000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
@@ -193,34 +206,29 @@ public class DiscoverFragment extends Fragment {
             @Override
             public void onCameraChangeFinish(CameraPosition cameraPosition) {
                 if (switcher) {
-                    LatLng currpoi = cameraPosition.target;
-                    CameraPosition position = new CameraPosition(currpoi, 17.5f, 40, 0);
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(position);
-                    aMap.moveCamera(cameraUpdate);
+                    moveCameraOperation(aMap,cameraPosition);
+                }
+                if(switcher2){
+                    initLocation();
+                    moveCameraOperation(aMap,cameraPosition);
                 }
                 switcher = false;
+                switcher2= false;
             }
         });
     }
 
-    private void setCameraChangeListener() {
-        aMap.setOnCameraChangeListener(new AMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-
-            }
-
-            @Override
-            public void onCameraChangeFinish(CameraPosition cameraPosition) {
-                if (switcher2) {
-                    LatLng currpoi = cameraPosition.target;
-                    CameraPosition position = new CameraPosition(currpoi, 17.5f, 40, 0);
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(position);
-                    aMap.moveCamera(cameraUpdate);
-                }
-                switcher2 = false;
-            }
-        });
+    private void moveCameraOperation(AMap aMap, CameraPosition cameraPosition){
+        MyLocationStyle myLocationStyle;
+        myLocationStyle = new MyLocationStyle();
+        myLocationStyle.radiusFillColor(Color.argb(50,100,0,0));
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
+        aMap.setMyLocationStyle(myLocationStyle);
+        aMap.setMyLocationEnabled(true);
+        LatLng currpoi = cameraPosition.target;
+        CameraPosition position = new CameraPosition(currpoi, 17.5f, 40, 0);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(position);
+        aMap.moveCamera(cameraUpdate);
     }
 
     private void setInfoWindowClickListener(){
@@ -280,6 +288,39 @@ public class DiscoverFragment extends Fragment {
     private void setDataChangeListener(){
 
 
+    }
+
+    private void setLocationSolver() {
+
+        aMapLocationClient.setLocationListener(new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+                if(aMapLocation != null){
+                    if(aMapLocation.getErrorCode() == 0){
+
+                        //Acquire Data Info
+                        if(switcher2){
+                            switcher2 = false;
+                            LatLng latLng = new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude());
+                            MyLocationStyle myLocationStyle;
+                            myLocationStyle = new MyLocationStyle();
+                            myLocationStyle.radiusFillColor(Color.argb(50,100,0,0));
+                            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
+                            aMap.setMyLocationStyle(myLocationStyle);
+                            aMap.setMyLocationEnabled(true);
+                            LatLng currpoi = latLng;
+                            CameraPosition position = new CameraPosition(currpoi, 17.5f, 40, 0);
+                            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(position);
+                            aMap.moveCamera(cameraUpdate);
+                        }
+                    }
+                }else{
+                    System.out.println("[*]Location Error! " + aMapLocation.getErrorInfo());
+                }
+            }
+        });
+        mapLocationClientOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//Not Energy-Saving
+        aMapLocationClient.setLocationOption(mapLocationClientOption);
     }
 
     @Override
