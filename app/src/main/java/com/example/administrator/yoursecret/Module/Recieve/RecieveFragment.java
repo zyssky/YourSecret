@@ -24,9 +24,10 @@ import com.example.administrator.yoursecret.utils.BaseRecyclerAdapter;
 import com.example.administrator.yoursecret.utils.DividerItemDecoration;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.KV;
+import com.example.administrator.yoursecret.utils.PermissionUtils;
 
 
-public class RecieveFragment extends Fragment implements ReceiveObserver {
+public class RecieveFragment extends Fragment implements ReceiveObserver ,PermissionUtils.PermissionGrant{
 
     private RecyclerView recyclerView;
 
@@ -34,6 +35,7 @@ public class RecieveFragment extends Fragment implements ReceiveObserver {
 
     private Context context;
 
+    private boolean once = false;
 
     public RecieveFragment() { }
 
@@ -45,6 +47,7 @@ public class RecieveFragment extends Fragment implements ReceiveObserver {
         FragmentsHouse.getInstance().putFragment(RecieveFragment.class.getSimpleName(),this);
 
         App.getInstance().getRecieveDataManager().setObserver(this);
+
     }
 
     @Override
@@ -73,11 +76,25 @@ public class RecieveFragment extends Fragment implements ReceiveObserver {
         super.onActivityCreated(savedInstanceState);
         setRetainInstance(true);
 
-        App.getInstance().getRecieveDataManager().loadCache();
+        execOnce();
 
         if(FoundationManager.needToRefresh()) {
-            refreshLayout.setRefreshing(true);
-            App.getInstance().getRecieveDataManager().refresh();
+            refresh();
+        }
+    }
+
+    private void refresh(){
+        App.getInstance().getPermissionHouse().putPermissionGrant(PermissionUtils.CODE_REQUEST_LOCATION,this);
+
+        PermissionUtils.checkPermission(getActivity(),PermissionUtils.CODE_REQUEST_LOCATION,this);
+
+    }
+
+    public void execOnce(){
+        if(!once){
+            App.getInstance().getRecieveDataManager().loadCache();
+
+            once = true;
         }
     }
 
@@ -86,7 +103,7 @@ public class RecieveFragment extends Fragment implements ReceiveObserver {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                App.getInstance().getRecieveDataManager().refresh();
+                refresh();
             }
         });
     }
@@ -133,6 +150,12 @@ public class RecieveFragment extends Fragment implements ReceiveObserver {
     @Override
     public void showCorrectToast() {
         Toast.makeText(context,"消息已刷到最新^.^",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPermissionGranted(int requestCoed) {
+        refreshLayout.setRefreshing(true);
+        App.getInstance().getRecieveDataManager().refresh();
     }
 }
 

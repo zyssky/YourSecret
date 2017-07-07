@@ -187,6 +187,8 @@ public class AppDatabaseManager {
                         images) {
                     if(image.isNew)
                         App.getInstance().getAppDatabase().imageDao().insert(image);
+                    else
+                        App.getInstance().getAppDatabase().imageDao().update(image);
                 }
             }
         });

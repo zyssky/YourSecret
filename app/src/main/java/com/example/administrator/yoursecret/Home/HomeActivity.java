@@ -1,8 +1,10 @@
 package com.example.administrator.yoursecret.Home;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -21,8 +23,9 @@ import com.example.administrator.yoursecret.Module.Record.RecordFragment;
 import com.example.administrator.yoursecret.Service.PushService;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.FunctionUtils;
+import com.example.administrator.yoursecret.utils.PermissionUtils;
 
-public class HomeActivity extends AppCompatActivity{
+public class HomeActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback{
 
     private BottomNavigationView navigationView;
 
@@ -140,6 +143,12 @@ public class HomeActivity extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
 //        App.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        PermissionUtils.PermissionGrant permissionGrant = App.getInstance().getPermissionHouse().removePermissionGrant(requestCode);
+        PermissionUtils.requestPermissionsResult(this,requestCode,permissions,grantResults,permissionGrant);
     }
 }
 

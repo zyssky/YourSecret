@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "dc5b67c2cc60ddbff2048305433af846",
+    "identityHash": "18ea1b336d4c53212f23ef4b55f3cf7c",
     "entities": [
       {
         "tableName": "Artical",
@@ -105,7 +105,7 @@
       },
       {
         "tableName": "Image",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `uuid` TEXT, `path` TEXT, `latitude` REAL, `longtitude` REAL, `description` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `uuid` TEXT, `path` TEXT, `cachePath` TEXT, `latitude` REAL, `longtitude` REAL, `description` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -120,6 +120,11 @@
           {
             "fieldPath": "path",
             "columnName": "path",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "cachePath",
+            "columnName": "cachePath",
             "affinity": "TEXT"
           },
           {
@@ -272,7 +277,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"dc5b67c2cc60ddbff2048305433af846\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"18ea1b336d4c53212f23ef4b55f3cf7c\")"
     ]
   }
 }

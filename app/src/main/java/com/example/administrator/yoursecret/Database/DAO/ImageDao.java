@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.example.administrator.yoursecret.Entity.Image;
 
@@ -25,4 +26,7 @@ public interface ImageDao {
 
     @Delete
     void deleteImage(Image image);
+
+    @Update
+    void update(Image image);
 }

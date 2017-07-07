@@ -78,6 +78,7 @@ dependencies {
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
     compile 'android.arch.persistence.room:runtime:1.0.0-alpha3'
     compile 'jp.wasabeef:recyclerview-animators:2.2.0'
+    compile 'top.zibin:Luban:1.1.2'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support:support-annotations:25.3.1'
     androidTestCompile 'com.android.support.test:runner:0.5'

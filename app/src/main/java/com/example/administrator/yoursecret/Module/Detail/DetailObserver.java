@@ -10,4 +10,5 @@ public interface DetailObserver {
     void setNormal();
 
     void loadUrl(String articalHref);
+
 }

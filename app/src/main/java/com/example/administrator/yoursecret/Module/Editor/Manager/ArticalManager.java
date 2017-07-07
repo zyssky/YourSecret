@@ -16,7 +16,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -26,7 +30,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ArticalManager {
     public String TAG = ArticalManager.class.getSimpleName();
 
-    private String template = "<!DOCTYPE html>\n" +
+    private static String template = "<!DOCTYPE html>\n" +
             "<html itemscope itemtype=\"http://schema.org/WebPage\">\n" +
             "    <head>\n" +
             "        <meta charset=\"UTF-8\">\n" +
@@ -143,7 +147,8 @@ public class ArticalManager {
             AppDatabaseManager.updateArtical(artical);
     }
 
-    private void saveFinishedArtical(String title,String html){
+    private void saveFinishedArtical(String title, String html){
+
         artical.finished = 1;
         save(title,html);
 
@@ -152,14 +157,47 @@ public class ArticalManager {
         saveToDatabase();
 
         //delete after confirm upload to server
-        AppDatabaseManager.saveImages(EditorDataManager.getInstance().getPhotoManager().getImages());
+        artical.images = EditorDataManager.getInstance().getPhotoManager().getImages();
 
-        //nerwork operation
-//        App.getInstance().getNetworkMonitor().pushArtical(artical);
-        EditorDataManager.getInstance().getNetworkManager().uploadArtical()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(App.getInstance().getNetworkMonitor().getUploadArticalObserver(artical));
+
+        Observer<List<Image>> observer = new Observer<List<Image>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull List<Image> images) {
+                artical.images = images;
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                Log.d(TAG, "onError: ");
+                AppDatabaseManager.saveImages(artical.images);
+
+                App.getInstance().getNetworkManager().uploadArtical(artical)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(App.getInstance().getNetworkMonitor().getUploadArticalObserver(artical));
+            }
+
+            @Override
+            public void onComplete() {
+                AppDatabaseManager.saveImages(artical.images);
+
+                //nerwork operation
+                App.getInstance().getNetworkManager().uploadArtical(artical)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(App.getInstance().getNetworkMonitor().getUploadArticalObserver(artical));
+            }
+        };
+
+        EditorDataManager.getInstance().getPhotoManager().compressPhotos(observer);
+
+
+
 
     }
 
@@ -243,28 +281,28 @@ public class ArticalManager {
 
     //provide to other model to deal with the aritcal
 
-    public String getArticalHtml(){
+    public static String getArticalHtml(Artical artical){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-        setHtmlContent(artical.html);
-        setHtmlDescriptino(artical.introduction);
-        setHtmlTimeStamp(df.format(new Date()));
+        String result = new String(template);
+
+        result = setHtmlContent(result,artical.html);
+        result = setHtmlDescriptino(result,artical.introduction);
+        result = setHtmlTimeStamp(result,df.format(new Date()));
         if(artical.locationDesc!=null)
-            setHtmlLocation(artical.locationDesc);
-        setHtmlAutohrName(App.getInstance().getUserManager().getNickName());
-        setHtmlTitle(artical.title);
-        setHtmlType(artical.articalType);
+            result = setHtmlLocation(result,artical.locationDesc);
+        result = setHtmlAutohrName(result,App.getInstance().getUserManager().getNickName());
+        result = setHtmlTitle(result,artical.title);
+        result = setHtmlType(result,artical.articalType);
 
-        setHtmlAppIcon(FoundationManager.APP_ICON_URL);
+        result = setHtmlAppIcon(result,FoundationManager.APP_ICON_URL);
         if(artical.imageUri!=null)
-            setHtmlImage(artical.imageUri);
-        setHtmlLocationIcon(FoundationManager.LOCATION_ICON_URL);
-        setHtmlAuthorIcon(App.getInstance().getUserManager().getIconPath());
+            result = setHtmlImage(result,artical.imageUri);
+        result = setHtmlLocationIcon(result,FoundationManager.LOCATION_ICON_URL);
+        result = setHtmlAuthorIcon(result,App.getInstance().getUserManager().getIconPath());
 
-//        setHtmlArticalHref("");
-
-        Log.d("html : ", "getArticalHtml: "+template);
-        return template;
+        Log.d("html : ", "getArticalHtml: "+result);
+        return result;
     }
 
     public void setLocation(Image image){
@@ -274,82 +312,63 @@ public class ArticalManager {
         artical.imageUri = image.path;
     }
 
-//    public void setImageUri(String path){
-//        artical.imageUri = path;
-//    }
-
-//    public boolean hasLocation(){
-//        if(!artical.locationDesc.isEmpty())
-//            return true;
-//        return false;
-//    }
-//
-//    public boolean hasImageUri(){
-//        if(!artical.imageUri.isEmpty()){
-//            return true;
-//        }
-//        return false;
-//    }
-
-
-
     //replace the template html
 
-    public void setHtmlContent(String value){
+    public static String setHtmlContent(String result,String value){
         String old = "{artical_content}";
-        template = template.replace(old,value);
+        return result.replace(old,value);
     }
 
-    public void setHtmlAppIcon(String value){
+    public static String setHtmlAppIcon(String result,String value){
         String old = "{app_iconUri}";
-        template = template.replace(old,value);
+        return result.replace(old,value);
     }
 
-    public void setHtmlLocationIcon(String value){
+    public static String setHtmlLocationIcon(String result,String value){
         String old = "{location_iconUri}";
-        template = template.replace(old,value);
+        return result.replace(old,value);
     }
 
-    public void setHtmlTimeStamp(String value){
+    public static String setHtmlTimeStamp(String result,String value){
         String old = "{timestamp_content}";
-        template = template.replace(old,value);
+        return result.replace(old,value);
     }
 
-    public void setHtmlAuthorIcon(String value){
+    public static String setHtmlAuthorIcon(String result,String value){
         String old = "{author_iconUri}";
-        template = template.replace(old,value);
+        return result.replace(old,value);
     }
 
-    public void setHtmlAutohrName(String value){
+    public static String setHtmlAutohrName(String result,String value){
         String old = "{author_name}";
-        template = template.replace(old,value);
+        return result.replace(old,value);
     }
 
-    public void setHtmlTitle(String value){
+    public static String setHtmlTitle(String result,String value){
         String old = "{title_content}";
         String old2 = "{browser_title_content}";
-        template = template.replace(old,value);
-        template = template.replace(old2,value+"-足迹");
+        result = result.replace(old,value);
+        return result.replace(old2,value+"-实时实地");
     }
 
-    public void setHtmlLocation(String value){
+    public static String setHtmlLocation(String result,String value){
         String old = "{location_content}";
-        template = template.replace(old,value);
+        return result.replace(old,value);
     }
 
-    public void setHtmlImage(String value){
+    public static String  setHtmlImage(String result,String value){
         String old = "{mainImageUri}";
-        template = template.replace(old,value);
+        return result.replace(old,value);
     }
 
-    public void setHtmlType(String value){
+    public static String  setHtmlType(String result,String value){
         String old = "{artical_type}";
-        template = template.replace(old,value);
+        return result.replace(old,value);
     }
 
-    public void setHtmlDescriptino(String value){
+    public static String  setHtmlDescriptino(String result,String value){
         String old = "{description_content}";
-        template = template.replace(old,value);
+        return result.replace(old,value);
     }
 
 

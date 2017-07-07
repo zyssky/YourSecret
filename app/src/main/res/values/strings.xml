@@ -38,5 +38,12 @@
     <string name="hot">热点</string>
     <string name="notice">推荐</string>
     <string name="article">简书</string>
+    <string name="permission_camera">打开照相机以拍照</string>
+    <string name="permission_location">允许定位以查找附近文章</string>
+
+    <string-array name="permissions">
+        <item>@string/permission_camera</item>
+        <item>@string/permission_location</item>
+    </string-array>
 
 </resources>

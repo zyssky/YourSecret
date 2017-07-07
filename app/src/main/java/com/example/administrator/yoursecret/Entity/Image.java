@@ -19,11 +19,13 @@ public class Image {
 
     public String path;
 
+    public String cachePath;
+
     public double latitude;
 
     public double longtitude;
 
-    public String description;
+    public String description = "";
 
     @Ignore
     public boolean isNew = false;

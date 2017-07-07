@@ -1,5 +1,6 @@
 package com.example.administrator.yoursecret.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -24,6 +25,8 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Administrator on 2017/5/27.

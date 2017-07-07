@@ -57,6 +57,9 @@ public class Artical implements Parcelable{
 
     public int isOutside = 0;
 
+//    @Ignore
+//    public String fullHtml;
+
     @Ignore
     public List<Image> images;
 

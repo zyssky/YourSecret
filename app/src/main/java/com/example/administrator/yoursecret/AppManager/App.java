@@ -8,6 +8,7 @@ import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.Network.NetworkMonitor;
 import com.example.administrator.yoursecret.Module.Recieve.RecieveDataManager;
 import com.example.administrator.yoursecret.Module.Record.RecordDataManager;
+import com.example.administrator.yoursecret.utils.PermissionGrantHouse;
 
 /**
  * Created by Administrator on 2017/6/14.
@@ -92,6 +93,16 @@ public class App {
             networkMonitor = new NetworkMonitor();
         }
         return networkMonitor;
+    }
+
+
+    private PermissionGrantHouse house;
+
+    public PermissionGrantHouse getPermissionHouse(){
+        if(house == null){
+            house = new PermissionGrantHouse();
+        }
+        return house;
     }
 
 

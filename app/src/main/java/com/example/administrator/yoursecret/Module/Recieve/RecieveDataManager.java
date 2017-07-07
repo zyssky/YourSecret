@@ -37,6 +37,7 @@ public class RecieveDataManager {
 
     private ReceiveObserver mobserver;
 
+
     public void setObserver(ReceiveObserver observer){
         this.mobserver = observer;
     }

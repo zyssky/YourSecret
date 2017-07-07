@@ -20,11 +20,8 @@ import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.Module.Editor.Adapter.InsertImageAdapter;
 import com.example.administrator.yoursecret.Module.Editor.Adapter.WriteImagesAdapter;
 import com.example.administrator.yoursecret.Module.Editor.Manager.AdapterManager;
-import com.example.administrator.yoursecret.Module.Editor.Manager.ArticalManager;
 import com.example.administrator.yoursecret.Module.Editor.Manager.EditorDataManager;
-import com.example.administrator.yoursecret.Module.Editor.Manager.PhotoManager;
 import com.example.administrator.yoursecret.Entity.Artical;
-import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.Module.Editor.Photo.PhotosActivity;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.R;
@@ -51,15 +48,9 @@ public class EditorActivity extends AppCompatActivity {
 
     private TypeDialog curTypeDialog;
 
-    private ArticalManager articalManager;
-
-    private PhotoManager photoManager;
-
     private WriteImagesAdapter adapter;
 
     private InsertImageAdapter insertImageAdapter;
-
-    private NetworkManager networkManager;
 
     private MyImageButton insertImageButton;
 
@@ -101,7 +92,8 @@ public class EditorActivity extends AppCompatActivity {
         insertImageButton = (MyImageButton) findViewById(R.id.insert_image_btn);
         titleEditor = (EditText) findViewById(R.id.editor_title);
 
-        initModels();
+        EditorDataManager.getInstance().getArticalManager().setArticalType(AppContants.ARTICLE_TYPE_ARTICLE);
+
 
         Intent intent = getIntent();
         if(intent.getExtras()!=null) {
@@ -110,8 +102,8 @@ public class EditorActivity extends AppCompatActivity {
             editor.setHtml(artical.html);
             titleEditor.setText(artical.title);
 
-            articalManager.setArticalFromRecord(artical);
-            TypeDialog.setChoosed(articalManager.getArtical().articalType);
+            EditorDataManager.getInstance().getArticalManager().setArticalFromRecord(artical);
+            TypeDialog.setChoosed(EditorDataManager.getInstance().getArticalManager().getArtical().articalType);
 
         }
 
@@ -128,25 +120,12 @@ public class EditorActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
     }
 
-    private void initModels(){
-        EditorDataManager editorDataManager = EditorDataManager.getInstance();
-
-        articalManager = new ArticalManager();
-        articalManager.setArticalType(AppContants.ARTICLE_TYPE_ARTICLE);
-
-        photoManager = new PhotoManager();
-        networkManager = new NetworkManager();
-
-        editorDataManager.setNetworkManager(networkManager);
-        editorDataManager.setArticalManager(articalManager);
-        editorDataManager.setPhotoManager(photoManager);
-    }
 
     private void initAdapters(){
         AdapterManager adapterManager = AdapterManager.getInstance();
 
         adapter = new WriteImagesAdapter();
-        adapter.setmDatas(photoManager.getImages());
+        adapter.setmDatas(EditorDataManager.getInstance().getPhotoManager().getImages());
 
         insertImageAdapter = new InsertImageAdapter();
         insertImageAdapter.setContext(this);
@@ -175,7 +154,7 @@ public class EditorActivity extends AppCompatActivity {
         super.onBackPressed();
 
         if(!isEmpty())
-            articalManager.saveTempArtical(titleEditor.getText().toString(),editor.getHtml());
+            EditorDataManager.getInstance().getArticalManager().saveTempArtical(titleEditor.getText().toString(),editor.getHtml());
 
     }
 
@@ -238,21 +217,21 @@ public class EditorActivity extends AppCompatActivity {
                 boolean finished = true;
                 switch (v.getId()){
                     case R.id.save_delete:
-                        articalManager.deleteArtical();
+                        EditorDataManager.getInstance().getArticalManager().deleteArtical();
                         break;
                     case R.id.save_public:
                         if(!publishable()){
                             finished = false;
                             break;
                         }
-                        articalManager.saveAsPublic(titleEditor.getText().toString(),editor.getHtml());
+                        EditorDataManager.getInstance().getArticalManager().saveAsPublic(titleEditor.getText().toString(),editor.getHtml());
                         break;
                     case R.id.save_private:
                         if(!publishable()){
                             finished = false;
                             break;
                         }
-                        articalManager.saveAsPrivate(titleEditor.getText().toString(),editor.getHtml());
+                        EditorDataManager.getInstance().getArticalManager().saveAsPrivate(titleEditor.getText().toString(),editor.getHtml());
                         break;
                 }
                 dialog.dismiss();
@@ -269,7 +248,7 @@ public class EditorActivity extends AppCompatActivity {
             flag = false;
         if(editor.getHtml()!= null && !editor.getHtml().isEmpty())
             flag = false;
-        if(!photoManager.getImages().isEmpty())
+        if(!EditorDataManager.getInstance().getPhotoManager().getImages().isEmpty())
             flag = false;
         return flag;
     }
@@ -284,7 +263,7 @@ public class EditorActivity extends AppCompatActivity {
             if(editor.getHtml().isEmpty())
                 flag = false;
         }
-        if(photoManager.getImages().isEmpty())
+        if(EditorDataManager.getInstance().getPhotoManager().getImages().isEmpty())
             flag = false;
 
         if(flag){
@@ -360,19 +339,19 @@ public class EditorActivity extends AppCompatActivity {
     //类型选择按钮
 
     public void onSceneryClick(View view){
-        articalManager.setArticalType(AppContants.ARTICLE_TYPE_HOT);
+        EditorDataManager.getInstance().getArticalManager().setArticalType(AppContants.ARTICLE_TYPE_HOT);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }
 
     public void onPersonClick(View view){
-        articalManager.setArticalType(AppContants.ARTICLE_TYPE_NOTICE);
+        EditorDataManager.getInstance().getArticalManager().setArticalType(AppContants.ARTICLE_TYPE_NOTICE);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }
 
     public void onThingClick(View view){
-        articalManager.setArticalType(AppContants.ARTICLE_TYPE_ARTICLE);
+        EditorDataManager.getInstance().getArticalManager().setArticalType(AppContants.ARTICLE_TYPE_ARTICLE);
         curTypeDialog.clearSelected();
         view.setSelected(true);
     }

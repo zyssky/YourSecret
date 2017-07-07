@@ -5,9 +5,11 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.AppManager.UserManager;
+import com.example.administrator.yoursecret.Module.Editor.Manager.ArticalManager;
 import com.example.administrator.yoursecret.Module.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.Entity.Artical;
@@ -16,6 +18,7 @@ import com.example.administrator.yoursecret.Entity.Comment;
 import com.example.administrator.yoursecret.Entity.Image;
 import com.example.administrator.yoursecret.Entity.UserResponse;
 import com.example.administrator.yoursecret.utils.BitmapExtra;
+import com.example.administrator.yoursecret.utils.FileUtils;
 import com.example.administrator.yoursecret.utils.FunctionUtils;
 
 import java.io.File;
@@ -41,6 +44,9 @@ import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import top.zibin.luban.Luban;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Administrator on 2017/6/12.
@@ -72,8 +78,9 @@ public class NetworkManager {
         return commentService;
     }
 
-    public Observable<ArticalResponse> uploadArtical(){
-        Observable<ArticalResponse> observable = getArticalService().uploadArtical(getFormBody(),getHtml(),getImagesUploadMap()).retry(3);
+    public Observable<ArticalResponse> uploadArtical(Artical artical){
+        Observable<ArticalResponse> observable = getArticalService().uploadArtical(getFormBody(artical)
+                ,getHtml(artical),getImagesUploadMap(artical)).retry(3);
         return observable;
     }
 
@@ -95,24 +102,33 @@ public class NetworkManager {
         return retrofit;
     }
 
-    public RequestBody getHtml(){
-        String html = EditorDataManager.getInstance().getArticalManager().getArticalHtml();
+    public RequestBody getHtml(Artical artical){
+        String html = ArticalManager.getArticalHtml(artical);
+        //EditorDataManager.getInstance().getArticalManager().getArticalHtml();
         RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"),html);
         return requestBody;
     }
 
-    public Map<String, RequestBody> getImagesUploadMap(){
+    public Map<String, RequestBody> getImagesUploadMap(Artical artical){
         Map<String, RequestBody> map = new HashMap<>();
-        List<Image> imageList = EditorDataManager.getInstance().getPhotoManager().getImages();
+        List<Image> imageList = artical.images;
         for (Image image :
                 imageList) {
-            String path = image.path;
-            RequestBody requestBody= getFileRequestBody(path);
+            String path = image.cachePath;
+            RequestBody requestBody ;
+            if(FileUtils.fileExists(path))
+                requestBody = getFileRequestBody(path);
+            else
+                requestBody = getFileRequestBody(image.path);
             map.put("image:"+image.path,requestBody);
 
         }
         return map;
     }
+
+//    public void test(){
+//        Luban.with(App.getInstance().getAppContext()).
+//    }
 
 
     public RequestBody getFileRequestBody(String path){
@@ -123,8 +139,8 @@ public class NetworkManager {
         return requestBody;
     }
 
-    public RequestBody getFormBody(){
-        Artical artical = EditorDataManager.getInstance().getArticalManager().getArtical();
+    public RequestBody getFormBody(Artical artical){
+//        Artical artical = EditorDataManager.getInstance().getArticalManager().getArtical();
         RequestBody formBody = new FormBody.Builder()
                 .add("authorId",artical.authorId)
                 .add("introduction",artical.introduction)
@@ -360,17 +376,17 @@ public class NetworkManager {
 
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
-
+                Log.d(TAG, "onStatusChanged: ");
             }
 
             @Override
             public void onProviderEnabled(String provider) {
-
+                Log.d(TAG, "onProviderEnabled: ");
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-
+                Log.d(TAG, "onProviderDisabled: ");
             }
         };
         com.example.administrator.yoursecret.AppManager.LocationManager.getLocation(listener);

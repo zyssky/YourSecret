@@ -25,32 +25,22 @@ public class EditorDataManager {
     //the resources and their getter and setter
 
     public ArticalManager getArticalManager() {
+        if(articalManager == null){
+            articalManager = new ArticalManager();
+        }
         return articalManager;
     }
 
-    public void setArticalManager(ArticalManager articalManager) {
-        this.articalManager = articalManager;
-    }
 
     private ArticalManager articalManager;
 
     private PhotoManager photoManager;
 
-    private NetworkManager networkManager;
-
-    public NetworkManager getNetworkManager() {
-        return networkManager;
-    }
-
-    public void setNetworkManager(NetworkManager networkManager) {
-        this.networkManager = networkManager;
-    }
-
     public PhotoManager getPhotoManager() {
+        if(photoManager == null){
+            photoManager = new PhotoManager();
+        }
         return photoManager;
     }
 
-    public void setPhotoManager(PhotoManager photoManager) {
-        this.photoManager = photoManager;
-    }
 }

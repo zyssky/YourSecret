@@ -1,12 +1,17 @@
 package com.example.administrator.yoursecret.AppManager;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
+import android.support.v4.app.ActivityCompat;
 
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
+
+import java.security.Permission;
 
 /**
  * Created by Administrator on 2017/6/29.
@@ -41,5 +46,14 @@ public class LocationManager {
         geo.setOnGeocodeSearchListener(listener);
         RegeocodeQuery query = new RegeocodeQuery(new LatLonPoint(latitude,longitude),100,GeocodeSearch.AMAP);
         geo.getFromLocationAsyn(query);
+    }
+
+    public static void checkPermission(){
+        if(ActivityCompat.checkSelfPermission(App.getInstance().getAppContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+
+        }else{
+
+        }
     }
 }
