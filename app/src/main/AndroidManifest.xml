@@ -34,11 +34,7 @@
             android:name="com.amap.api.v2.apikey"
             android:value="ae7c799c265efac59946d28dd09075dd" />
 
-        <activity android:name=".TestActivity"></activity>
-        <activity android:name=".Login.LoginActivity" />
-        <activity
-            android:name=".Login.WaitingActivity"
-            android:theme="@style/TransparentNoBar" />
+
         <activity
             android:name=".Home.HomeActivity"
             android:launchMode="singleTask">
@@ -48,52 +44,51 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity
-            android:name=".Editor.Photo.ViewPagerActivity"
-            android:theme="@style/TransparentNoBar" />
-        <activity
-            android:name=".Detail.DetailActivity"
+            android:name=".Module.Detail.DetailActivity"
             android:label="详情" />
         <activity
-            android:name=".Editor.EditorActivity"
+            android:name=".Module.Editor.EditorActivity"
             android:label="写文章"
             android:launchMode="singleTop" />
         <activity
-            android:name=".Editor.Photo.PhotosActivity"
+            android:name=".Module.Editor.Photo.PhotosActivity"
             android:label="图集"
-            android:parentActivityName=".Editor.EditorActivity" />
+            android:parentActivityName=".Module.Editor.EditorActivity" />
         <activity
-            android:name=".Recieve.Category.CategoryActivity"
+            android:name=".Module.Recieve.Category.CategoryActivity"
             android:parentActivityName=".Home.HomeActivity" />
+        <activity
+            android:name=".Module.Account.LoginActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Module.Account.RegisterActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Module.Editor.Photo.ViewPagerActivity"
+            android:theme="@style/TransparentNoBar" />
+        <activity
+            android:name=".Module.Account.activity_setBasic"
+            android:label="修改资料"
+            android:launchMode="singleTask"
+            android:parentActivityName=".Home.HomeActivity" />
+        <activity
+            android:name=".Module.Account.activity_setItem"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".Module.Comment.CommentActivity"
+            android:label="我的评论" />
+        <activity
+            android:name=".Module.Account.activity_set_pas"
+            android:launchMode="singleTask" />
 
         <service android:name="com.amap.api.location.APSService" />
         <service
             android:name=".Service.LocationService"
             android:enabled="true"
             android:exported="true" />
-
-        <activity android:name=".TestMyActivity" />
-        <activity
-            android:name=".Account.LoginActivity"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".Account.RegisterActivity"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".Account.activity_setBasic"
-            android:label="修改资料"
-            android:launchMode="singleTask"
-            android:parentActivityName=".Home.HomeActivity" />
-        <activity
-            android:name=".Account.activity_setItem"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".Comment.CommentActivity"
-            android:label="我的评论" />
-        <activity
-            android:name=".Account.activity_set_pas"
-            android:launchMode="singleTask" />
-
         <service
             android:name=".Service.PushService"
             android:enabled="true"

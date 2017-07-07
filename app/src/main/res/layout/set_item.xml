@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-<com.example.administrator.yoursecret.Account.NavigationView
+<com.example.administrator.yoursecret.Module.Account.NavigationView
     android:id="@+id/nav"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"></com.example.administrator.yoursecret.Account.NavigationView>
+    android:background="@color/colorPrimary"></com.example.administrator.yoursecret.Module.Account.NavigationView>
 
 
     <View

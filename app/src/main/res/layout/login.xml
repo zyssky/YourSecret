@@ -7,7 +7,7 @@
         android:clipToPadding="true"
         android:background="@color/color_ffffff"
         android:orientation="vertical">-->
-<com.example.administrator.yoursecret.Account.KeyboardLayout
+<com.example.administrator.yoursecret.Module.Account.KeyboardLayout
     android:id="@+id/main_ll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -177,4 +177,4 @@
             </LinearLayout>
 
         </ScrollView>
-</com.example.administrator.yoursecret.Account.KeyboardLayout>
+</com.example.administrator.yoursecret.Module.Account.KeyboardLayout>

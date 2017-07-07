@@ -3,13 +3,9 @@ package com.example.administrator.yoursecret.utils;
 import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
-import com.example.administrator.yoursecret.R;
-import com.example.administrator.yoursecret.Record.RecordDataManager;
-import com.example.administrator.yoursecret.Record.RecordsAdapter;
+import com.example.administrator.yoursecret.Module.Record.RecordDataManager;
+import com.example.administrator.yoursecret.Module.Record.RecordsAdapter;
 
 /**
  * Created by Administrator on 2017/6/22.

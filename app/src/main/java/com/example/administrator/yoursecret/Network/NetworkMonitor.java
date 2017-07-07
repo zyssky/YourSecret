@@ -4,7 +4,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.App;
-import com.example.administrator.yoursecret.AppManager.AppDatabaseManager;
+import com.example.administrator.yoursecret.Database.AppDatabaseManager;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Entity.ArticalResponse;
 

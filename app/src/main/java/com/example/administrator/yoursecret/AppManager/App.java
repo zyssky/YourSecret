@@ -3,10 +3,11 @@ package com.example.administrator.yoursecret.AppManager;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 
+import com.example.administrator.yoursecret.Database.AppDatabase;
 import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.Network.NetworkMonitor;
-import com.example.administrator.yoursecret.Recieve.RecieveDataManager;
-import com.example.administrator.yoursecret.Record.RecordDataManager;
+import com.example.administrator.yoursecret.Module.Recieve.RecieveDataManager;
+import com.example.administrator.yoursecret.Module.Record.RecordDataManager;
 
 /**
  * Created by Administrator on 2017/6/14.
@@ -38,6 +39,10 @@ public class App {
         FoundationManager.setup(context);
     }
 
+
+
+    private UserManager userManager;
+
     public UserManager getUserManager() {
         if(userManager==null){
             userManager = new UserManager();
@@ -45,13 +50,8 @@ public class App {
         return userManager;
     }
 
-//    public void setUserManager(UserManager userManager) {
-//        this.userManager = userManager;
-//    }
 
-    private UserManager userManager;
 
-    private RecordDataManager recordDataManager;
 
     private RecieveDataManager recieveDataManager;
 
@@ -62,9 +62,9 @@ public class App {
         return recieveDataManager;
     }
 
-//    public void setRecieveDataManager(RecieveDataManager recieveDataManager) {
-//        this.recieveDataManager = recieveDataManager;
-//    }
+
+
+    private RecordDataManager recordDataManager;
 
     public RecordDataManager getRecordDataManager() {
         if(recordDataManager == null){
@@ -73,9 +73,7 @@ public class App {
         return recordDataManager;
     }
 
-//    public void setRecordDataManager(RecordDataManager recordDataManager) {
-//        this.recordDataManager = recordDataManager;
-//    }
+
 
     private NetworkManager networkManager;
 
@@ -86,9 +84,8 @@ public class App {
         return networkManager;
     }
 
-//    public void setNetworkManager(NetworkManager networkManager) {
-//        this.networkManager = networkManager;
-//    }
+
+    private NetworkMonitor networkMonitor;
 
     public NetworkMonitor getNetworkMonitor() {
         if(networkMonitor == null){
@@ -96,12 +93,6 @@ public class App {
         }
         return networkMonitor;
     }
-
-//    public void setNetworkMonitor(NetworkMonitor networkMonitor) {
-//        this.networkMonitor = networkMonitor;
-//    }
-
-    private NetworkMonitor networkMonitor;
 
 
 
@@ -114,12 +105,14 @@ public class App {
         return db;
     }
 
+
+
     public static void onDestroy() {
         instance = null;
     }
 
     public void refresh(){
-        recordDataManager.refresh();
+        getRecordDataManager().refresh();
     }
 
 }

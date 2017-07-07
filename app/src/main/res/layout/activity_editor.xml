@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_light_background"
-    tools:context="com.example.administrator.yoursecret.Editor.EditorActivity">
+    tools:context=".Module.Editor.EditorActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,6 +30,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"></jp.wasabeef.richeditor.RichEditor>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
+
         </LinearLayout>
 
     </ScrollView>
@@ -41,7 +45,7 @@
         android:layout_gravity="bottom">
 
         <LinearLayout
-            android:layout_width="368dp"
+            android:layout_width="match_parent"
             android:layout_gravity="bottom"
             android:layout_height="40dp"
             android:background="@color/layout_background"

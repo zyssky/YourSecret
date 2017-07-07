@@ -2,12 +2,11 @@ package com.example.administrator.yoursecret.Home;
 
 import android.support.v4.app.Fragment;
 
-import com.example.administrator.yoursecret.Account.AccountFragment;
-import com.example.administrator.yoursecret.Record.RecordFragment;
-import com.example.administrator.yoursecret.Discover.DiscoverFragment;
-import com.example.administrator.yoursecret.Recieve.RecieveFragment;
+import com.example.administrator.yoursecret.Module.Account.AccountFragment;
+import com.example.administrator.yoursecret.Module.Record.RecordFragment;
+import com.example.administrator.yoursecret.Module.Discover.DiscoverFragment;
+import com.example.administrator.yoursecret.Module.Recieve.RecieveFragment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

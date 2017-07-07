@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.AppManager.UserManager;
-import com.example.administrator.yoursecret.Editor.Manager.EditorDataManager;
+import com.example.administrator.yoursecret.Module.Editor.Manager.EditorDataManager;
 import com.example.administrator.yoursecret.AppManager.FoundationManager;
 import com.example.administrator.yoursecret.Entity.Artical;
 import com.example.administrator.yoursecret.Entity.ArticalResponse;
@@ -73,7 +73,7 @@ public class NetworkManager {
     }
 
     public Observable<ArticalResponse> uploadArtical(){
-        Observable<ArticalResponse> observable = getArticalService().uploadArtical(getFormBody(),getHtml(),getImagesUploadMap());
+        Observable<ArticalResponse> observable = getArticalService().uploadArtical(getFormBody(),getHtml(),getImagesUploadMap()).retry(3);
         return observable;
     }
 
@@ -150,13 +150,13 @@ public class NetworkManager {
     public Observable<UserResponse> register(String phoneNum , String password,String nickName  ){
         String identifier = FunctionUtils.getSHA256String(phoneNum+password);
         UserService service = getUserService();
-        return service.register(getTextRequestBody(phoneNum),getTextRequestBody(nickName),getTextRequestBody(identifier));
+        return service.register(getTextRequestBody(phoneNum),getTextRequestBody(nickName),getTextRequestBody(identifier)).retry(3);
     }
 
     public Observable<UserResponse> login(String phoneNum,String password){
         String identifier = FunctionUtils.getSHA256String(phoneNum+password);
         RequestBody requestBody = new FormBody.Builder().add("identifier",identifier).build();
-        return getUserService().login(requestBody);
+        return getUserService().login(requestBody).retry(3);
     }
 
     public Observable<UserResponse> modify(String nickName,String iconLocalTempPath) {
@@ -166,7 +166,7 @@ public class NetworkManager {
         RequestBody requestBody = getFileRequestBody(iconLocalTempPath);
 
         UserService service = getUserService();
-        return service.modify(getTextRequestBody(token),getTextRequestBody(nickName),requestBody);
+        return service.modify(getTextRequestBody(token),getTextRequestBody(nickName),requestBody).retry(3);
     }
 
     public Observable<UserResponse> modifyPassword(String oldPassword,String newPassword){
@@ -176,7 +176,7 @@ public class NetworkManager {
 
         RequestBody requestBody = new FormBody.Builder().add("phoneNum",phoneNum)
                 .add("theold",theOld).add("thenew",theNew).build();
-        return getUserService().modifyPassword(requestBody);
+        return getUserService().modifyPassword(requestBody).retry(3);
     }
 
 
@@ -184,7 +184,7 @@ public class NetworkManager {
         RequestBody requestBody = new FormBody.Builder()
                 .add("commentPage",""+commentPage)
                 .add("articalHref",articalHref).build();
-        return getCommentService().getComments(requestBody);
+        return getCommentService().getComments(requestBody).retry(3);
     }
 
     public Observable<ResponseBody> putComment(Comment comment){
@@ -194,7 +194,7 @@ public class NetworkManager {
                 .add("nickName",comment.nickName)
                 .add("authorId",comment.authorId)
                 .add("iconPath",comment.iconPath).build();
-        return getCommentService().putComment(requestBody);
+        return getCommentService().putComment(requestBody).retry(3);
     }
 
     public Observable<List<Comment>> getUserComments(String lastDate) {
@@ -203,7 +203,7 @@ public class NetworkManager {
         RequestBody requestBody = new FormBody.Builder()
                 .add("lastDate",lastDate)
                 .add("token",token).build();
-        return getCommentService().getUserComments(requestBody);
+        return getCommentService().getUserComments(requestBody).retry(3);
     }
 
 
@@ -214,7 +214,7 @@ public class NetworkManager {
 
     public Observable<ResponseBody> deleteArtical(String token,String articalHref) {
         RequestBody requestBody = new FormBody.Builder().add("token",token).add("articalHref",articalHref).build();
-        return getArticalService().deleteArtical(requestBody);
+        return getArticalService().deleteArtical(requestBody).retry(3);
 
     }
 
@@ -231,6 +231,7 @@ public class NetworkManager {
                         .add("pageNO",""+pageNo)
                         .build();
                 getArticalService().getArticalsOnType(articalType,requestBody)
+                        .retry(3)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(observer);
@@ -348,6 +349,7 @@ public class NetworkManager {
                         .add("longitude",""+location.getLongitude())
                         .build();
                 getArticalService().getArticals(requestBody)
+                        .retry(3)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(observer);
