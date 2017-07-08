@@ -191,4 +191,8 @@ public class DetailDataManager {
         this.list.addAll(list);
         adapter.notifyDataSetChanged();
     }
+
+    public Artical getArtical() {
+        return artical;
+    }
 }

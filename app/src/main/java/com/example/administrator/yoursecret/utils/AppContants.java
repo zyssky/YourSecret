@@ -48,4 +48,5 @@ public class AppContants {
 
     public static String PUSH = "PUSH";
     public static String LASTREFRESH = "lastRefresh";
+    public static String FRANMENT_NAME = "fragmentName";
 }

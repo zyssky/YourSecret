@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <com.amap.api.maps.MapView
         android:id="@+id/map"
@@ -13,18 +14,17 @@
 
     <ImageButton
         android:id="@+id/traffic"
-        android:text="换一批"
-        android:background="@null"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_swap"
         android:layout_width="40dp"
-        android:alpha="0.70"
         android:layout_height="40dp"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="60dp"
-        ></ImageButton>
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="50dp"
+        android:alpha="0.70"
+        android:background="@drawable/bg_map_swap"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_swap4"
+        android:text="换一批"></ImageButton>
 
 
 </RelativeLayout>

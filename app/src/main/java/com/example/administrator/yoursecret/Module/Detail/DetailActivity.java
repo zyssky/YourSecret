@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.Entity.Artical;
+import com.example.administrator.yoursecret.Module.Discover.DiscoverFragment;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.DividerItemDecoration;
@@ -61,6 +62,13 @@ public class DetailActivity extends AppCompatActivity implements DetailObserver 
                 else
                     inputLayout.setVisibility(View.VISIBLE);
                 editText.setText("");
+                break;
+            case R.id.go:
+                Artical artical = DetailDataManager.getInstance().getArtical();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(AppContants.KEY,artical);
+                App.getInstance().startFragment(this,DiscoverFragment.class,bundle);
+                App.getInstance().getDiscoverDataManager().setToShowArtical(artical);
                 break;
         }
         return true;

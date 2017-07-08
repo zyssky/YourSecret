@@ -1,13 +1,24 @@
 package com.example.administrator.yoursecret.AppManager;
 
+import android.app.Activity;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+
 
 import com.example.administrator.yoursecret.Database.AppDatabase;
+import com.example.administrator.yoursecret.Entity.Artical;
+import com.example.administrator.yoursecret.Home.HomeActivity;
+import com.example.administrator.yoursecret.Module.Detail.DetailActivity;
+import com.example.administrator.yoursecret.Module.Discover.DiscoverDataManager;
+import com.example.administrator.yoursecret.Module.Discover.DiscoverFragment;
 import com.example.administrator.yoursecret.Network.NetworkManager;
 import com.example.administrator.yoursecret.Network.NetworkMonitor;
 import com.example.administrator.yoursecret.Module.Recieve.RecieveDataManager;
 import com.example.administrator.yoursecret.Module.Record.RecordDataManager;
+import com.example.administrator.yoursecret.utils.AppContants;
 import com.example.administrator.yoursecret.utils.PermissionGrantHouse;
 
 /**
@@ -105,6 +116,15 @@ public class App {
         return house;
     }
 
+    private DiscoverDataManager discoverDataManager;
+
+    public DiscoverDataManager getDiscoverDataManager(){
+        if(discoverDataManager == null){
+            discoverDataManager = new DiscoverDataManager();
+        }
+        return discoverDataManager;
+    }
+
 
 
     private AppDatabase db ;
@@ -126,4 +146,11 @@ public class App {
         getRecordDataManager().refresh();
     }
 
+
+    public void startFragment(Activity activity, Class<? extends Fragment> fragmentClass, Bundle bundle) {
+        Intent intent = new Intent(activity, HomeActivity.class);
+        intent.putExtras(bundle);
+        intent.putExtra(AppContants.FRANMENT_NAME,fragmentClass.getSimpleName());
+        activity.startActivity(intent);
+    }
 }

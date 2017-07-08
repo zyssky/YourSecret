@@ -14,6 +14,8 @@
             android:id="@+id/inforwindow_text"
             android:text="那些年，我们的足迹"
             android:gravity="center"
+            android:lines="1"
+            android:ellipsize="end"
             android:textSize="11sp"
             android:textStyle="bold"
             android:typeface="monospace"

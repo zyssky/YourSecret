@@ -2,7 +2,10 @@ package com.example.administrator.yoursecret.Home;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -125,18 +128,58 @@ public class HomeActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+//        super.onNewIntent(intent);
+        Bundle bundle = intent.getExtras();
+        if(bundle!=null){
+            String fragmentName = bundle.getString(AppContants.FRANMENT_NAME,"");
+            if(!fragmentName.isEmpty()){
+                final int selectedId = getNavigationSelectedId(fragmentName);
+                if(selectedId!=0) {
+                    curFragmentPos = fragmentName;
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            navigationView.setSelectedItemId(selectedId);
+                        }
+                    });
+
+                }
+            }
+
+        }
+    }
+
+    private int getNavigationSelectedId(String fragmentName){
+        if(fragmentName.equals(RecieveFragment.class.getSimpleName())){
+            return R.id.nav_recieve;
+        }
+        if(fragmentName.equals(DiscoverFragment.class.getSimpleName())){
+            return R.id.nav_discover;
+        }
+        if(fragmentName.equals(RecordFragment.class.getSimpleName())){
+            return R.id.nav_record;
+        }
+        if(fragmentName.equals(AccountFragment.class.getSimpleName())){
+            return R.id.nav_account;
+        }
+        return 0;
+    }
+
     public void switchContent(Fragment targetFragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if(!currentFragment.isAdded()){
-            transaction.add(R.id.container, currentFragment);
-        }
-        if(currentFragment != targetFragment && !targetFragment.isAdded() ){
-            transaction.add(R.id.container, targetFragment);
-        }
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            if(!currentFragment.isAdded()){
+                transaction.add(R.id.container, currentFragment);
+            }
+            if(currentFragment != targetFragment && !targetFragment.isAdded() ){
+                transaction.add(R.id.container, targetFragment);
+            }
 
-        transaction.hide(currentFragment).show(targetFragment).commit();
+            transaction.hide(currentFragment).show(targetFragment).commit();
 
-        currentFragment = targetFragment;
+            currentFragment = targetFragment;
+
     }
 
     @Override
