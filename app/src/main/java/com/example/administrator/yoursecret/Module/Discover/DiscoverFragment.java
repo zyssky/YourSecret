@@ -65,11 +65,6 @@ public class DiscoverFragment extends Fragment implements DiscoverObserver{
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static DiscoverFragment newInstance() {
-        DiscoverFragment fragment = new DiscoverFragment();
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,14 +104,11 @@ public class DiscoverFragment extends Fragment implements DiscoverObserver{
 
             @Override
             public void onComplete() {
-//                System.out.println("Transmit complete.");
-//                for(Artical artical : Articals){
-//                    System.out.println(artical.articalHref);
-//                }
-//                showCenter();
+
                 createMarker();
                 setInfoWindow();
                 setInfoWindowClickListener();
+
                 //self-crafted marker.
                 setLoactionProperties();
                 pivot = 1;
@@ -145,13 +137,8 @@ public class DiscoverFragment extends Fragment implements DiscoverObserver{
         setInitCameraChangeListener();
         initLocation();
 
-//        setLocationSolver();
-//        Double distanceTest = mapCalculator.GetDistance(113.4062218666,23.0484004090,113.4073430300,23.0466184288);
-//        System.out.println("[*]Distance-Test:" );
-//        System.out.println(distanceTest);
-
-
         networkManager.getArticalsOnMap(article_observer,LoadPageCounter);
+
         return rootView;
     }
 
@@ -164,9 +151,6 @@ public class DiscoverFragment extends Fragment implements DiscoverObserver{
         }
     }
 
-    private void showCenter(){
-
-    }
 
     private void initLocation(){
 
@@ -174,6 +158,7 @@ public class DiscoverFragment extends Fragment implements DiscoverObserver{
         MyLocationStyle myLocationStyle;
         myLocationStyle = new MyLocationStyle();
         myLocationStyle.radiusFillColor(Color.argb(50,100,0,0));
+        myLocationStyle.strokeColor(Color.argb(50,100,0,0));
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
         aMap.setMyLocationStyle(myLocationStyle);
         aMap.setMyLocationEnabled(true);
@@ -193,8 +178,6 @@ public class DiscoverFragment extends Fragment implements DiscoverObserver{
         aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
 
-        //Set Some test cases:
-        //MyLocationStyle myLocationIcon(BitmapDescriptor myLocationIcon);//设置定位蓝点的icon图标方法，需要用到BitmapDescriptor类对象作为参数。
     }
 
     private void setInfoWindow(){
@@ -241,6 +224,7 @@ public class DiscoverFragment extends Fragment implements DiscoverObserver{
         MyLocationStyle myLocationStyle;
         myLocationStyle = new MyLocationStyle();
         myLocationStyle.radiusFillColor(Color.argb(50,100,0,0));
+        myLocationStyle.strokeColor(Color.argb(50,100,0,0));
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
         aMap.setMyLocationStyle(myLocationStyle);
         aMap.setMyLocationEnabled(true);
@@ -258,8 +242,6 @@ public class DiscoverFragment extends Fragment implements DiscoverObserver{
 
                 //Set a jump to information detail here:
                 Artical artical = Marker_Mapper.get(marker);
-//                System.out.println("Am i really here?");debuggable;
-//                System.out.println(artical.articalHref);
                 Intent intent = new Intent(getContext(), DetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(AppContants.KEY,artical);
@@ -301,11 +283,6 @@ public class DiscoverFragment extends Fragment implements DiscoverObserver{
             Marker_Mapper.put(optmarker,artical);
             optmarker.showInfoWindow();
         }
-
-    }
-
-    private void setDataChangeListener(){
-
 
     }
 
