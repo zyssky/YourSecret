@@ -267,7 +267,7 @@ public class NetworkManager {
 
             @Override
             public void onProviderDisabled(String provider) {
-
+                observer.onError(new Throwable("can not use the location service!"));
             }
         };
 
@@ -307,6 +307,7 @@ public class NetworkManager {
 
             @Override
             public void onProviderDisabled(String provider) {
+                observer.onError(new Throwable("can not use the location service!"));
 
             }
         };
@@ -344,6 +345,7 @@ public class NetworkManager {
 
             @Override
             public void onProviderDisabled(String provider) {
+                observer.onError(new Throwable("can not use the location service!"));
 
             }
         };
@@ -387,6 +389,8 @@ public class NetworkManager {
             @Override
             public void onProviderDisabled(String provider) {
                 Log.d(TAG, "onProviderDisabled: ");
+                observer.onError(new Throwable("can not use the location service!"));
+
             }
         };
         com.example.administrator.yoursecret.AppManager.LocationManager.getLocation(listener);

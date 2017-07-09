@@ -143,7 +143,7 @@ public class RecieveFragment extends Fragment implements ReceiveObserver ,Permis
 
     @Override
     public void showErrorToast() {
-        Toast.makeText(context,"无法连接到服务器-_-",Toast.LENGTH_SHORT).show();
+        Toast.makeText(context,"无法连接到服务器或无法定位-_-",Toast.LENGTH_SHORT).show();
 
     }
 

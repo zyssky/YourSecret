@@ -23,7 +23,7 @@ public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<Artical> {
 
     @Override
     public RecyclerView.ViewHolder onCreateTitleViewHolder(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_record_title,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_receive_title,parent,false);
         return new RecieveRecyclerAdapter.TitleViewHolder(view);
     }
 
@@ -73,11 +73,11 @@ public class RecieveRecyclerAdapter extends MultiRecyclerAdapter<Artical> {
 
     class TitleViewHolder extends RecyclerView.ViewHolder{
         TextView textView ;
-        View title_divider;
+//        View title_divider;
         public TitleViewHolder(View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.record_title);
-            title_divider = itemView.findViewById(R.id.title_divider);
+            textView = (TextView) itemView.findViewById(R.id.receive_title);
+//            title_divider = itemView.findViewById(R.id.title_divider);
         }
     }
 

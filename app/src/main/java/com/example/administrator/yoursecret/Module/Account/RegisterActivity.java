@@ -41,7 +41,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-
     private void initView() {
         r_clean_id=(ImageView)findViewById(R.id.register_clean_id);
         r_register=(Button) findViewById(R.id.register_btn_register);

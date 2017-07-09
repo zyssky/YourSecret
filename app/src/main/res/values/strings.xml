@@ -2,7 +2,8 @@
     <string name="app_name">实时实地</string>
     <string name="hello">Hello Android, DemoAppActivity!</string>
     <string name="settings">Settings</string>
-    <string name="hint_login_username">请输入账号</string>
+    <string name="hint_register_username">请输入手机号</string>
+    <string name="hint_login_username">请输入手机号</string>
     <string name="hint_login_password">输入密码</string>
     <string name="login_forget_pwd">忘记密码</string>
     <string name="please_input_limit_pwd">请输入数字或字母</string>

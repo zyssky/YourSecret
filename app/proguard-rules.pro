@@ -24,6 +24,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontwarn retrofit2.**
+-dontwarn okhttp3.**
+-dontwarn okio.**
 -keep class retrofit2.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
