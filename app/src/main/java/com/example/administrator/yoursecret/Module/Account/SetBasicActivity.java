@@ -1,5 +1,6 @@
 package com.example.administrator.yoursecret.Module.Account;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,7 +20,7 @@ import android.widget.Toast;
 
 import com.example.administrator.yoursecret.AppManager.App;
 import com.example.administrator.yoursecret.AppManager.UserManager;
-import com.example.administrator.yoursecret.Entity.UserResponse;
+import com.example.administrator.yoursecret.Module.Detail.DetailDataManager;
 import com.example.administrator.yoursecret.R;
 import com.example.administrator.yoursecret.utils.BitmapUtils;
 import com.example.administrator.yoursecret.utils.FileUtils;
@@ -27,27 +28,29 @@ import com.example.administrator.yoursecret.utils.GlideImageLoader;
 
 import java.io.File;
 
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-
 /**
  * Created by j on 2017/6/19.
  */
 
-public class activity_setBasic extends AppCompatActivity implements View.OnClickListener {
+public class SetBasicActivity extends AppCompatActivity implements View.OnClickListener,SetBasicObserver {
     static final int RG_REQUEST = 0;
     private Context context;
     private ImageView touxiang;
-    private LinearLayout nicheng,click_touxiang;
+    private LinearLayout nicheng;
     private TextView m_nic,m_zhanghao;
     String s ;
     String parent = FileUtils.toRootPath();
     String savepath = parent+File.separator+"icon.png" ;
+    public static SetBasicActivity Instance;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DetailDataManager.onDestroy();
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Instance = this;
         setContentView(R.layout.account_set);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
@@ -67,7 +70,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
 
 
     private void initView() {
-        getView();
+//        getView();
         touxiang=(ImageView) findViewById(R.id.touxiang2) ;
         nicheng=(LinearLayout)findViewById(R.id.nic);
         m_nic =(TextView)findViewById(R.id.set_basic_nic) ;
@@ -85,7 +88,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.nic:
                 Intent intent1=new Intent();
-                intent1.setClass(this,activity_setItem.class);
+                intent1.setClass(this,SetItemActivity.class);
                 intent1.putExtra("title","昵称");
                 startActivity(intent1);
                 break;
@@ -158,17 +161,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
 
 
     public void startPhotoZoom(Uri uri) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-// 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
-        intent.putExtra("crop", "true");
-// aspectX aspectY 是宽高的比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-// outputX outputY 是裁剪图片宽高
-        intent.putExtra("outputX", 150);
-        intent.putExtra("outputY", 150);
-        intent.putExtra("return-data", true);
+        Intent intent = SetBasicDataManager.getInstance().PhotoZoom(uri);
         startActivityForResult(intent, 3);
     }
     /**
@@ -185,43 +178,7 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
             touxiang.setImageBitmap(photo);
 //            touxiang.setImageDrawable(drawable);
            FileUtils.saveAsPng(savepath,photo);
-            App.getInstance().getNetworkManager().modify(null,savepath)
-                   .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<UserResponse>() {
-                        @Override
-                        public void onSubscribe(@NonNull Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onNext(@NonNull UserResponse userResponse) {
-                            if(userResponse.code==200)
-                            {
-                                UserManager usermanager = App.getInstance().getUserManager();
-                                usermanager.setIconLocalPath(savepath);
-                                usermanager.setIconPath(userResponse.userIconPath);
-                                Toast.makeText(activity_setBasic.this,"修改成功",Toast.LENGTH_LONG).show();
-                                onResume();
-                            }
-                            else
-                            {
-                                Toast.makeText(activity_setBasic.this,"修改失败",Toast.LENGTH_LONG).show();
-                            }
-
-                        }
-
-                        @Override
-                        public void onError(@NonNull Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
-            //saveImage(photo);
+            SetBasicDataManager.getInstance().modifyImage();
 
 
         }
@@ -233,51 +190,11 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
         String IconLocalTempath =userManager.getIconLocalTempPath();
         return Uri.fromFile(new File(IconLocalTempath));
     }
-    /*private void saveImage(Bitmap bitmap) {
-        File filesDir;
-        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){//判断sd卡是否挂载
-            //路径1：storage/sdcard/Android/data/包名/files
-            filesDir = getApplicationContext().getExternalFilesDir("");
-
-        }else{//手机内部存储
-            //路径：data/data/包名/files
-            filesDir = getApplicationContext().getFilesDir();
-
-        }
-        FileOutputStream fos = null;
-        try {
-            File file = new File(filesDir,"icon.png");
-            fos = new FileOutputStream(file);
-
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100,fos);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }finally{
-            if(fos != null){
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }*/
 
     //如果本地有,就不需要再去联网去请求
 
     private boolean readImage() {
-        String filesDir;
-        filesDir = FileUtils.toRootPath();
-        /*if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){//判断sd卡是否挂载
-            //路径1：storage/sdcard/Android/data/包名/files
-            filesDir = getApplicationContext().getExternalFilesDir("");
-
-        }else{//手机内部存储
-            //路径：data/data/包名/files
-            filesDir = getApplicationContext().getFilesDir();
-
-        }*/
-        File file = new File(filesDir,"icon.png");
+        File file = SetBasicDataManager.getInstance().isFile();
         if(file.exists()){
             //存储--->内存
             Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -299,31 +216,16 @@ public class activity_setBasic extends AppCompatActivity implements View.OnClick
 @Override
     public void onResume() {
         super.onResume();
-    /*    if(readImage()){
-            return;
-        }else{*/
      initView2();
     UserManager usermanager = App.getInstance().getUserManager();
     if(usermanager.hasLogin()){
         String iconPath = usermanager.getIconPath();
         GlideImageLoader.loadImageNail(this,iconPath,touxiang);
     }
-    /*String filesDir = App.getInstance().getUserManager().getIconPath();
-    File file = new File(filesDir);
-            if(file.exists())
-                
-            {
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                touxiang.setImageBitmap(bitmap);
-                
-            }*/
 
         }
-    
-    //}
-
-    public void getView() {
 
 
-    }
+
+
 }

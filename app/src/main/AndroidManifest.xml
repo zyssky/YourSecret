@@ -70,18 +70,18 @@
             android:name=".Module.Editor.Photo.ViewPagerActivity"
             android:theme="@style/TransparentNoBar" />
         <activity
-            android:name=".Module.Account.activity_setBasic"
+            android:name=".Module.Account.SetBasicActivity"
             android:label="修改资料"
             android:launchMode="singleTask"
             android:parentActivityName=".Home.HomeActivity" />
         <activity
-            android:name=".Module.Account.activity_setItem"
+            android:name=".Module.Account.SetItemActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".Module.Comment.CommentActivity"
             android:label="我的评论" />
         <activity
-            android:name=".Module.Account.activity_set_pas"
+            android:name=".Module.Account.SetPassActivity"
             android:launchMode="singleTask" />
 
         <service android:name="com.amap.api.location.APSService" />

@@ -92,7 +92,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
         switch (v.getId()) {
             case R.id.basics_set:
                 Intent intent1=new Intent();
-                intent1.setClass(getActivity(),activity_setBasic.class);
+                intent1.setClass(getActivity(),SetBasicActivity.class);
                 startActivity(intent1 );
                 break;
             case R.id.denglu:
@@ -105,7 +105,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener , 
                 break;
             case R.id.set_pas:
                 Intent intent3=new Intent();
-                intent3.setClass(getActivity(),activity_set_pas.class);
+                intent3.setClass(getActivity(),SetPassActivity.class);
                 startActivity(intent3 );
                break;
         }
