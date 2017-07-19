@@ -13,29 +13,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.administrator.yoursecret.AppManager.App;
-import com.example.administrator.yoursecret.AppManager.UserManager;
-import com.example.administrator.yoursecret.Entity.UserResponse;
 import com.example.administrator.yoursecret.R;
-
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by j on 2017/6/20.
  */
 
-public class activity_setItem extends Activity {
+public class SetItemActivity extends Activity implements SetItemObserver{
     private NavigationView navigationView;
     private EditText editText;
     private ImageView left,right,clan;
+    public static SetItemActivity Instance;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.set_item);
+        Instance = this;
         initView();
         initListener();
         super.onCreate(savedInstanceState);
@@ -68,45 +61,12 @@ public class activity_setItem extends Activity {
                 if (nic.length()==0)
                 {
 
-                    Toast.makeText(activity_setItem.this,"昵称不能为空",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SetItemActivity.this,"昵称不能为空",Toast.LENGTH_SHORT).show();
 
                 }
                 else {
-                    App.getInstance().getNetworkManager().modify(nic,null )
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Observer<UserResponse>() {
-                                @Override
-                                public void onSubscribe(@NonNull Disposable d) {
+                    SetItemDataManager.getInstance().modifynic(nic);
 
-                                }
-
-                                @Override
-                                public void onNext(@NonNull UserResponse userResponse) {
-
-                                    if (userResponse.code == 200) {
-                                        UserManager usermanager = App.getInstance().getUserManager();
-                                        usermanager.setNickName(nic);
-                                        Toast.makeText(activity_setItem.this, "修改成功", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent();
-                                        finish();
-
-                                    } else {
-                                        Toast.makeText(activity_setItem.this, "修改失败", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }
-
-                                @Override
-                                public void onError(@NonNull Throwable e) {
-
-                                }
-
-                                @Override
-                                public void onComplete() {
-
-                                }
-                            });
                 }
             }
         });
@@ -133,7 +93,7 @@ public class activity_setItem extends Activity {
                 }
                 else if (!s.toString().matches("[\\u4e00-\\u9fa5\\w]+")) {
                     String temp = s.toString();
-                    Toast.makeText(activity_setItem.this, R.string.please_input_limt_setitem, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SetItemActivity.this, R.string.please_input_limt_setitem, Toast.LENGTH_SHORT).show();
                     s.delete(temp.length() - 1, temp.length());
                     editText.setSelection(s.length());
                 }
