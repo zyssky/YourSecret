@@ -66,6 +66,4 @@ public class WriteImagesAdapter extends BaseRecyclerAdapter<Image> {
             imageView = (ImageView) itemView;
         }
     }
-
-
 }

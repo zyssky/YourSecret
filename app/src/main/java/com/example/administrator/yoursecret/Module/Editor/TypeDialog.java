@@ -65,6 +65,4 @@ public class TypeDialog extends Dialog {
             button.setSelected(false);
         }
     }
-
-
 }
